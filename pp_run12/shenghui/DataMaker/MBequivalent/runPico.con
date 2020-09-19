@@ -1,0 +1,9 @@
+Universe       = vanilla
+Notification   = never
+Requirements   = (CPU_Type != "crs") && (CPU_Experiment == "star")
++Experiment     = "star"
+Priority        = +10
++Job_Type       = "cas"
+GetEnv          = true
+Initialdir      = /star/u/shenghui/shenghui/lbl/Run12/NPE/analysiscode/notecode/HT/RawYield/DataMaker/MBequivalent/
+Executable      = runPico.csh

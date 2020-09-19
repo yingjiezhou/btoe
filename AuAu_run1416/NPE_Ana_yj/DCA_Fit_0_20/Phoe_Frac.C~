@@ -1,0 +1,57 @@
+void Phoe_Frac()
+{//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+    int const numPtBins=9;
+    double constraint[numPtBins]={0.444,0.344,0.260,0.203,0.160,0.140,0.124,0.134,0.128};
+    double cons2[numPtBins]={0,0,0,0,0.266,0.188,0.165,0.169,0.144};
+    double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+    double binning2[numPtBins+1]={0.7,1.1,1.3,1.6,2.1,2.6,3.6,4.6,5.6,8.6};
+    TH1F *hrat = new TH1F("hrat","hrat",numPtBins,binning);
+    TH1F *hrat2 = new TH1F("hrat2","hrat2",numPtBins,binning2);
+    double eff[numPtBins]={0.45,0.43,0.38,0.36,0.34,0.35,0.37,0.41,0.41};
+    TFile *f_D = new TFile("../production/NPE_Tuples_TuneB12.root");
+    h01_2D = (TH2F*)f_D->Get("hDcaLog3D_1");//2      
+    h01_2D_HT = (TH2F*)f_D->Get("hDcaLog3D_5");//2      
+    h01_2D_pre = (TH2F*)f_D->Get("hDcaLog3D_6");//2                                                                                                                                                              
+    h01_2D_HT_pre = (TH2F*)f_D->Get("hDcaLog3D_7");//2           
+
+    for(int i = 1;i<10;i++){
+	h01_2D->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	h01_2D_HT->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	h01_2D_pre->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	h01_2D_HT_pre->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	htemp1 = h01_2D->ProjectionY();
+	htemp11 = h01_2D_pre->ProjectionY();
+	htemp2 = h01_2D_HT->ProjectionY();
+	htemp22 = h01_2D_HT_pre->ProjectionY();
+	int bin = htemp1->FindBin(-1);
+	
+	double dn1 = htemp11->Integral(-1,bin) - htemp1->Integral(-1,bin);
+	double dn2 = htemp22->Integral(-1,bin) - htemp2->Integral(-1,bin); 
+
+	hrat->SetBinContent(i,dn1/(1-eff[i-1]) * eff[i-1] / htemp1->Integral(-1,bin));
+//	hrat->SetBinContent(i,constraint[i-1]);
+	hrat->SetBinError(i,0.05);
+	if(i>4)hrat2->SetBinContent(i,dn2/(1-eff[i-1]) * eff[i-1] / htemp2->Integral(-1,bin));
+//	if(i>5)hrat2->SetBinContent(i,cons2[i-1]);
+        if(i>4)hrat2->SetBinError(i,0.05);
+    }
+    hrat2->SetLineColor(kRed);
+    hrat2->SetMarkerColor(kRed);
+    hrat2->SetMarkerStyle(25);
+    TLegend *leg = new TLegend(0.5,0.6,0.9,0.9);
+    leg->AddEntry(hrat,"Minimum Bias Trigger","PLE");
+    leg->AddEntry(hrat2,"High Tower Trigger","PLE");
+
+    hrat->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hrat->GetYaxis()->SetTitle("Photonic Electron Fraction");
+    hrat->GetXaxis()->SetRangeUser(0,8.5);
+    hrat->GetYaxis()->SetRangeUser(0,1);  
+    TCanvas *c1 = new TCanvas ("c1","fbs");
+    hrat->Draw("E1X0");
+    hrat2->Draw("same E1X0");
+    leg->Draw("same");
+}//End
+

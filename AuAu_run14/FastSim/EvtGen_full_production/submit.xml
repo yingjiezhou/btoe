@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job maxFilesPerProcess="1" filesPerHour="1" fileListSyntax="paths" simulateSubmission="false">
+<command>
+starver SL16d
+cp /star/u/xiao00/Run14_Analysis/FastSim/setup.csh .
+cp -r /star/u/xiao00/Run14_Analysis/FastSim/.sl64_gcc482/ .
+cp -r /star/u/xiao00/Run14/work_AuAu200_NPE/Simulation_NPE/Event_Gen/evtgen/1.3.0/ .
+source setup.csh
+ln -s /star/u/xiao00/Run14_Analysis/FastSim/StRoot/macros/run_StEvtGenDecayMaker.C
+root -l -b -q  /star/u/xiao00/Run14_Analysis/FastSim/StRoot/macros/run_StEvtGenDecayMaker.C\(&typeID;,&nevent;,\"TypeID&typeID;_&runnumber;.root\"\)
+</command>
+        <stdout URL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/log/Type_ID_&typeID;_&runnumber;.log"/>
+        <stderr URL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/err/Type_ID_&typeID;_&runnumber;.err"/>
+	<Generator>
+          <Location>/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/report/</Location>
+          <ScriptLocation>/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/csh/</ScriptLocation>
+          <ListLocation>/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/list/</ListLocation>
+	</Generator>
+	<output fromScratch="*.root" toURL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_OutPut/production/"/>
+</job>

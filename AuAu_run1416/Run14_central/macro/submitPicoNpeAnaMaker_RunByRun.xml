@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Author: Kunsu OH (code maintainer, kunsuoh@gmail.com), Mustafa Mustafa (mmustafa@lbl.gov) -->
+
+<!--<job fileListSyntax="xrootd" maxFilesPerProcess="50" simulateSubmission="false" filesPerHour="10">-->
+<job fileListSyntax="xrootd" maxFilesPerProcess="10" simulateSubmission="false" filesPerHour="5">
+        <stdout discard="true" />
+        <stderr URL="file:./err/$JOBID.err" />
+                
+        <Generator>
+        <Location>./report/</Location>
+        <ScriptLocation>./csh/</ScriptLocation>
+        <ListLocation>./list/</ListLocation>
+        </Generator>
+                                                
+
+<command>
+starver SL19b
+cp $FILELIST in.list
+python runHftTree.py in.list
+<!--root4star -q -b -l runPicoNpeAnaMaker.C\(\"in.list\",\"$JOBID.root\"\) &gt;&amp; ${JOBID}.log-->
+</command>
+
+<input URL = "catalog:star.bnl.gov?production=P16id,filetype=daq_reco_picoDst,trgsetupname=AuAu_200_production_low_2014||AuAu_200_production_mid_2014||AuAu_200_production_high_2014||AuAu_200_production_2014,library=SL18f,storage!=HPSS,runnumber=&RUN;" preferStorage="local" singleCopy="true" nFiles="all" />
+
+<output fromScratch="$JOBID*.root" toURL="/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/production/&RUN;/" />
+<output fromScratch="$JOBID*.log" toURL="/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/log/&RUN;/" />
+<!-- Define locations of log/elog files -->
+<stdout URL="file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/log_tmp/$JOBID.std.log"/>
+<stderr URL="file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/log_tmp/$JOBID.std.elog"/>
+
+<SandBox installer="ZIP">
+	<Package name="LocalLibraries">
+        <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/StRoot/</File>
+        <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/goodruns_wpxl.txt</File>
+        <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/.sl73_gcc485/</File>
+		        <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/Likelihood/root/weights_electron.root</File>	
+		        <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/Likelihood/root/weights_pion.root</File> 
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_corr.root</File>
+		        <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_res.root</File>	
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_corr_new.root</File>
+		        <File>file:/gpfs01/star/pwg/mkelsey/Run14/zdcsmdBeamCenter.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/Run14/fZdcEPResolution.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/Run14/eprecenter.root</File>
+                <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/runPicoNpeAnaMaker.C</File>
+                <File>file:/star/data01/pwg/yjzhou19/Local/prod_Matt_LL_Run14_Central/runHftTree.py</File>
+	</Package>
+</SandBox>
+
+</job>

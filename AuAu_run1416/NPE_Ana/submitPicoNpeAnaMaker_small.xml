@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Author: Kunsu OH (code maintainer, kunsuoh@gmail.com), Mustafa Mustafa (mmustafa@lbl.gov) -->
+
+<job fileListSyntax="paths" maxFilesPerProcess="75" simulateSubmission="false" filesPerHour="5">
+
+        <stdout discard="true" />
+        <stderr URL="file:./err/$JOBID.err" />
+                
+        <Generator>
+        <Location>./report/</Location>
+        <ScriptLocation>./csh/</ScriptLocation>
+        <ListLocation>./list/</ListLocation>
+        </Generator>
+                                                
+<command>
+starver SL16d
+cp $FILELIST in.list
+root4star -q -b -l runPicoNpeAnaMaker.C\(\"in.list\",\"$JOBID.root\"\) &gt;&amp; /project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/log_tmp/${JOBID}.log
+tar -zcvf ${JOBID}.log.tgz /project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/log_tmp/${JOBID}.log
+</command>
+
+    <input URL="filelist:/project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/&listOfFiles;" />
+    <output fromScratch="*.root" toURL="/project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/production/" />
+    <output fromScratch="*.log.tgz" toURL="/project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/log/" />
+<!-- Define locations of log/elog files -->
+<stdout URL="file:/project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/log_tmp/$JOBID.std.log"/>
+<stderr URL="file:/project/projectdirs/starprod/rnc/mkelsey/NPE_Ana/log_tmp/$JOBID.std.elog"/>
+
+<SandBox installer="ZIP">
+	<Package name="LocalLibraries">
+		<File>file:./StRoot/</File>
+		<File>file:./run14AuAu200GeVPrescales/</File>
+                <File>file:./picoList_bad_MB.list</File>
+           	<File>file:./.sl64_gcc482/</File>
+		<File>file:./MVA/LowPT/weights/TMVAClassification_Likelihood.weights.xml</File>
+                <File>file:./MVA/BKGHyp/weights/TMVAClassification_Likelihood.weights.xml</File>
+		<File>file:./Likelihood/root/weights_electron.root</File>	
+		<File>file:./Likelihood/root/weights_pion.root</File> 
+                <File>file:./Likelihood/root/weights_electron_highpt.root</File>
+                <File>file:./Likelihood/root/weights_pion_highpt.root</File>
+                <File>file:./Likelihood/HighTower/root/weights_electron_HT.root</File>
+                <File>file:./Likelihood/HighTower/root/weights_pion_HT.root</File>
+                <File>file:./EventPlane/root/event_corr.root</File>
+		<File>file:./EventPlane/root/event_res.root</File>	
+		<File>file:./runPicoNpeAnaMaker.C</File>
+	</Package>
+</SandBox>
+
+</job>

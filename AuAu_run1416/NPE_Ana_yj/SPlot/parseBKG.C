@@ -1,0 +1,53 @@
+/////////////////////////////////////////////////////////////////////////
+// SPlot for NPE analysis
+// author: Matthew Kelsey
+// date Aug. 7 
+/////////////////////////////////////////////////////////////////////////
+#ifndef __CINT__
+#include "RooGlobalFunc.h"
+#endif
+#include "RooRealVar.h"
+#include "RooStats/SPlot.h"
+#include "RooDataSet.h"
+#include "RooRealVar.h"
+void parseBKG()
+{
+
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples2.root");
+    TFile *f_D = new TFile(dFile);
+    TTree *t = f_D->Get("BKG");    
+ 
+    TFile out("BKG.root","RECREATE");
+    TTree* BKG_lowPT_pi = t->CopyTree("probe_pt<2.5 && probe_bkgcat==1 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_lowPT_2pi = t->CopyTree("probe_pt<2.5 && probe_bkgcat==2 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_lowPT_k = t->CopyTree("probe_pt<2.5 && probe_bkgcat==3 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_lowPT_p = t->CopyTree("probe_pt<2.5 && probe_bkgcat==4 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_highPT_pi = t->CopyTree("probe_pt>=2.5 && probe_bkgcat==1 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_highPT_2pi = t->CopyTree("probe_pt>=2.5 && probe_bkgcat==2 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_highPT_k = t->CopyTree("probe_pt>=2.5 && probe_bkgcat==3 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    TTree* BKG_highPT_p = t->CopyTree("probe_pt>=2.5 && probe_bkgcat==4 && probe_beta>0 && probe_nsige<13 && probe_emc0>0");
+    BKG_lowPT_pi->SetName("BKG_lowPT_pi");
+    BKG_highPT_pi->SetName("BKG_highPT_pi");
+    BKG_lowPT_2pi->SetName("BKG_lowPT_2pi");
+    BKG_highPT_2pi->SetName("BKG_highPT_2pi");
+    BKG_lowPT_k->SetName("BKG_lowPT_k");
+    BKG_highPT_k->SetName("BKG_highPT_k");
+    BKG_lowPT_p->SetName("BKG_lowPT_p");
+    BKG_highPT_p->SetName("BKG_highPT_p");
+
+
+    BKG_lowPT_pi->Write();
+    BKG_highPT_pi->Write();
+    BKG_lowPT_2pi->Write();
+    BKG_highPT_2pi->Write();
+    BKG_lowPT_k->Write();
+    BKG_highPT_k->Write();
+    BKG_lowPT_p->Write();
+    BKG_highPT_p->Write();
+    out.Close();
+    out.Delete(); 
+}
+
+
+

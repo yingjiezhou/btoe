@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job maxFilesPerProcess="70" filesPerHour="50" simulateSubmission="false">
+
+ <SandBox installer="ZIP">
+	<Package name="LocalPackage">
+	<File>file:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/StRoot</File>
+        <File>file:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/.sl73_gcc485</File>
+   </Package>
+</SandBox>
+
+<command>
+starver SL18f
+<!--echo $INPUTFILE0
+set filename=`basename $INPUTFILE0`
+echo $SCRATCH-->
+<!--root4star -q -b -l StRoot/macros/makeTree.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+<!--root4star -q -b -l StRoot/macros/readAll.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+root4star -q -b -l StRoot/macros/readAll.C\(\"$FILELIST\",\"${JOBID}_anaTree.root\"\) &gt;&amp; ${JOBID}.log
+<!--root4star -q -b -l StRoot/macros/makeAnaTree.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+<!--root4star -q -b -l StRoot/macros/run_StNpeMaker.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+
+
+</command>
+    <stderr URL="file:&path;/log/log_&ver;/&run;/$JOBID.err" />
+    <stdout URL="file:&path;/log/log_&ver;/&run;/$JOBID.out" />
+    <input URL="filelist:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/&listOfFiles;"/>
+    <output fromScratch="*.log" toURL="&path;/log/log_&ver;/&run;/"/>
+    <output fromScratch="*ana.root" toURL="&path;/out/out_&ver;/&run;/" />
+</job>

@@ -1,0 +1,1 @@
+../../../../../StRoot/StTriggerUtilities/L2Emulator/StL2_2006EmulatorMaker.h

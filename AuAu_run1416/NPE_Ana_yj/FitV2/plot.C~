@@ -1,0 +1,382 @@
+void plot(){
+    double x_s1[5]={2.5,3.5,4.5,5.5,7};
+    double y_s1[5]={0.096,0.093,0.071,0.134,0.176};
+    double y_s1e[5]={0.041,0.023,0.022,0.029,0.045};
+    double y_s1e_s[5]={0.006,0.004,0.006,0.003,0.01};
+    double x_s1e[5]={0.1,0.1,0.1,0.1,0.1};
+    TGraphErrors *gs1 = new TGraphErrors(5,x_s1,y_s1,x_s1e,y_s1e);
+    TGraphErrors *gs1_sys = new TGraphErrors(5,x_s1,y_s1,x_s1e,y_s1e_s);
+    gs1->SetLineColor(kRed);
+    gs1->SetMarkerColor(kRed);
+    gs1->SetMarkerStyle(25);
+    gs1_sys->SetLineColor(kRed);
+    gs1_sys->SetMarkerColor(kRed);
+    gs1_sys->SetMarkerStyle(25);
+    double x_s2[3]={2.407,4.562,6.801};
+    double y_s2[3]={0.083,0.139,0.172};
+    double y_s2e[3]={0.018,0.018,0.040};
+    double y_s2e_s[3]={0.015,0.005,0.007};
+    double x_s2e[3]={0.1,0.1,0.1};
+    TGraphErrors *gs2 = new TGraphErrors(3,x_s2,y_s2,x_s2e,y_s2e);
+    TGraphErrors *gs2_sys = new TGraphErrors(3,x_s2,y_s2,x_s2e,y_s2e_s);
+    gs2->SetLineColor(kMagenta);
+    gs2->SetMarkerColor(kMagenta);
+    gs2->SetMarkerStyle(24);
+    gs2_sys->SetLineColor(kMagenta);
+    gs2_sys->SetMarkerColor(kMagenta);
+    gs2_sys->SetMarkerStyle(24);
+    double x_s3[6]={0.279,0.623,1.32,1.603,1.855,2.407};
+    double y_s3[6]={0.033,0.064,0.085,0.095,0.084,0.103};
+    double y_s3e[6]={0.003,0.006,0.012,0.011,0.014,0.011};
+    double y_s3e_s[6]={0.009,0.011,0.010,0.008,0.008,0.006};
+    double x_s3e[6]={0.1,0.1,0.1,0.1,0.1,0.1};
+    TGraphErrors *gs3 = new TGraphErrors(6,x_s3,y_s3,x_s3e,y_s3e);
+    TGraphErrors *gs3_sys = new TGraphErrors(6,x_s3,y_s3,x_s3e,y_s3e_s);
+    gs3->SetLineColor(kOrange);
+    gs3->SetMarkerColor(kOrange);
+    gs3->SetMarkerStyle(26);
+    gs3_sys->SetLineColor(kOrange);
+    gs3_sys->SetMarkerColor(kOrange);
+    gs3_sys->SetMarkerStyle(26);
+    double x_s4[4]={0.279,0.623,1.433,2.407};
+    double y_s4[4]={0.017,0.040,0.060,0.058};
+    double y_s4e[4]={0.009,0.02,0.033,0.058};
+    double y_s4e_s[4]={0.006,0.004,0.006,0.003};
+    double x_s4e[4]={0.1,0.1,0.1,0.1};
+    TGraphErrors *gs4 = new TGraphErrors(4,x_s4,y_s4,x_s4e,y_s4e);
+    TGraphErrors *gs4_sys = new TGraphErrors(4,x_s4,y_s4,x_s4e,y_s4e_s);
+    gs4->SetLineColor(kGreen-2);
+    gs4->SetMarkerColor(kGreen-2);
+    gs4->SetMarkerStyle(27);
+    gs4_sys->SetLineColor(kGreen-2);
+    gs4_sys->SetMarkerColor(kGreen-2);
+    gs4_sys->SetMarkerStyle(7);
+
+
+
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    int const numPtBins=9;
+    double binning[numPtBins+1]={0.,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+    double pt_center[numPtBins]={0.8,1.1,1.35,1.75,2.25,2.75,4,5,7};
+    double pt_center1[numPtBins]={0.8-0.2,1.1-0.2,1.35-0.2,1.75-0.2,2.25-0.2,2.75-0.2,4-0.2,5-0.2,7-0.2};
+    double binning1[numPtBins+1]={0.,1+0.1,1.2+0.1,1.5+0.1,2.0+0.1,2.5+0.1,3.5+0.1,4.5+0.1,5.5+0.1,8.5+0.1};
+    double binning2[numPtBins+1]={0.,1-0.1,1.2-0.1,1.5-0.1,2.0-0.1,2.5-0.1,3.5-0.1,4.5-0.1,5.5-0.1,8.5-0.1};
+    double b;
+    double b_e;
+    double c;
+    double c_e;
+    double pT;
+    double pts[9]={3.37281,3.18564,3.18809,3.41617,3.88013,4.73717,6.08789,7.30479,8.36769};
+    double bins3[numPtBins+1]={0,0.985408, 0.886659, 0.887925, 1.00886, 1.2725, 1.81374, 2.77878, 3.73346 ,4.61453};
+    double B_M = (5.27929+5.27961)/2;
+    for(int i = 0;i<9;i++){
+	//cout << (sqrt(pts[i]*pts[i]+B_M*B_M)-B_M)/2. << " " ;
+    }
+    double D_M = 1.86484;
+    double pts_d0[8]={1.25,1.73,2.22,2.72,3.22,3.73,4.4,5.99};
+    double x_d0[8];
+    double xe_d0[8];
+    double xe1_d0[8];
+    double y_d0[8]={-0.004/2.,0.074/2.,0.095/2.,0.13/2.,0.172/2.,0.129/2.,0.091/2.,0.113/2.};
+    double e_d0[8]={0.025,0.019,0.016,0.016,0.019,0.024,0.024,0.031};
+    double e1_d0[8]={0.016,0.005,0.004,0.008,0.014,0.015,0.010,0.021};
+    for(int i = 0;i<8;i++){
+	x_d0[i] = (sqrt(pts_d0[i]*pts_d0[i]+D_M*D_M)-D_M)/2.;
+	xe_d0[i]=0;
+	xe1_d0[i]=0.02;
+
+    }
+    double x_p[3]={1.5,2.5,4.0};
+    double y_p[3]={0.0546,0.0408,0.0806};
+    double y_pe[3]={0.0265,0.0309,0.0645};
+    double y_pe_s[3]={0.0442,0.0298,0.0513};
+    double x_pe[3]={0.1,0.1,0.1};
+    TGraphErrors *gp = new TGraphErrors(3,x_p,y_p,x_pe,y_pe);
+    TGraphErrors *gp_sys = new TGraphErrors(3,x_p,y_p,x_pe,y_pe_s);
+    gp->SetLineColor(kBlue);
+    gp->SetMarkerColor(kBlue);
+    gp->SetMarkerStyle(21);
+    gp_sys->SetFillColor(kBlue);
+    gp_sys->SetFillStyle(3004);
+    gp_sys->SetMarkerStyle(21);
+    TGraphErrors *g2 = new TGraphErrors(8,x_d0,y_d0,xe_d0,e_d0);
+    TGraphErrors *g2_sys = new TGraphErrors(8,x_d0,y_d0,xe1_d0,e1_d0); 
+    TH1F *hb = new TH1F("hb","",numPtBins,binning2);
+    TH1F *hb1 = new TH1F("hb1","",numPtBins,binning2);
+    TH1F *hb2 = new TH1F("hb2","",numPtBins,binning2);
+    TH1F *hb3 = new TH1F("hb3","",numPtBins,binning2);
+    TH1F *hb4 = new TH1F("hb4","",numPtBins,binning2);
+    TH1F *hb_sys = new TH1F("hb_sys","",numPtBins,binning2);
+    TH1F *hb_sys1 = new TH1F("hb_sys1","",numPtBins,binning2);
+    TH1F *hc = new TH1F("hc","",numPtBins,binning1);
+    TH1F *hc1 = new TH1F("hc1","",numPtBins,binning2);
+    TH1F *hc2 = new TH1F("hc2","",numPtBins,binning2);
+    TH1F *hc3 = new TH1F("hc3","",numPtBins,binning2);
+    TH1F *hc4 = new TH1F("hc4","",numPtBins,binning2);
+    TH1F *hc_sys = new TH1F("hc_sys","",numPtBins,binning1);
+    TH1F *hc_sys1 = new TH1F("hc_sys1","",numPtBins,binning1);
+    TH1F *h = new TH1F("h","",numPtBins,binning);
+    TH1F *h_sys = new TH1F("h_sys","",numPtBins,binning); 
+    TH1F *ht = new TH1F("ht","",numPtBins,binning);
+    TH1F *ht_sys = new TH1F("ht_sys","",numPtBins,binning); 
+    TH1F *sig = new TH1F("sig","",numPtBins,binning);
+    getData(hb,hb_sys,"./100/yields.dat");
+    getData(hc,hc_sys,"./101/yields.dat");
+    getData(hb1,hb_sys1,"./102/yields.dat");//tight dca
+    getData(hc1,hc_sys1,"./103/yields.dat");//tight dca
+ 
+
+    TGraphErrors *g1 = new TGraphErrors(9);
+    TGraphErrors *g1_sys = new TGraphErrors(9);   
+    TGraphErrors *g3 = new TGraphErrors(9);
+    TGraphErrors *g3_sys = new TGraphErrors(9);   
+    TGraphErrors *g11 = new TGraphErrors(9);
+    TGraphErrors *g11_sys = new TGraphErrors(9);   
+    TGraphErrors *g33 = new TGraphErrors(9);
+    TGraphErrors *g33_sys = new TGraphErrors(9);   
+    
+    for(int i =5; i<10;i++){
+	double temp1 = hb->GetBinContent(i);
+	double temp2 = hb->GetBinError(i);
+	double temp22 = hb_sys->GetBinError(i);
+	double temp3 = hc->GetBinContent(i);       
+	double temp4 = hc->GetBinError(i);
+	double temp44 = hc_sys->GetBinError(i);
+	if(temp1>0 && temp3>0){
+	    double temp = temp1/temp2/temp2 + temp3/temp4/temp4;
+	    double er = 1/temp2/temp2 + 1/temp4/temp4;
+	    double temp_er = temp22/temp2/temp2 + temp44/temp4/temp4;
+	    h->SetBinContent(i,temp/er);
+	    h_sys->SetBinContent(i,temp/er);
+	    h->SetBinError(i,sqrt(1/er));
+	    h_sys->SetBinError(i,temp_er/er);	
+	    double err = sqrt(1/er + temp_er/er*temp_er/er);
+	    sig->SetBinContent(i,(temp/er)/err);
+	    cout << err << " " << temp/er<<endl;
+	    g1->SetPoint(i,bins3[i]/2,temp/er/2.);
+	    g1_sys->SetPoint(i,bins3[i]/2,temp/er/2.);
+	    g1->SetPointError(i,0,sqrt(1/er)/2.);
+	    g1_sys->SetPointError(i,0.02,temp_er/er/2.);
+	    g3->SetPoint(i,pt_center[i-1],temp/er);
+	    g3_sys->SetPoint(i,pt_center[i-1],temp/er);
+	    g3->SetPointError(i,0,sqrt(1/er));
+	    g3_sys->SetPointError(i,0.1,temp_er/er);
+
+	
+	}else if(temp1>0 && temp3==0){
+	    h->SetBinContent(i,temp1);
+	    h_sys->SetBinContent(i,temp1);
+	    h->SetBinError(i,temp2);
+	    h_sys->SetBinError(i,temp22);  
+	    double err = sqrt(temp2*temp2+temp22*temp22);
+	    sig->SetBinContent(i,(temp1)/err);
+	    g1->SetPoint(i,bins3[i]/2.,temp1/2.);
+	    g1_sys->SetPoint(i,bins3[i]/2.,temp1/2.);
+	    g1->SetPointError(i,0,temp2/2.);
+	    g1_sys->SetPointError(i,0.02,temp22/2.);
+	    g3->SetPoint(i,pt_center[i-1],temp1);
+	    g3_sys->SetPoint(i,pt_center[i-1],temp1);
+	    g3->SetPointError(i,0,temp2);
+	    g3_sys->SetPointError(i,0.1,temp22);
+
+	}
+	else if(temp1==0 && temp3>0){
+	    h->SetBinContent(i,temp3);
+	    h_sys->SetBinContent(i,temp3);
+	    h->SetBinError(i,temp4);
+	    h_sys->SetBinError(i,temp44);
+	    double err = sqrt(temp4*temp4+temp44*temp44);
+	    sig->SetBinContent(i,(temp3)/err);
+	    g1->SetPoint(i,bins3[i]/2,temp3/2.);
+	    g1_sys->SetPoint(i,bins3[i]/2,temp3/2.);
+	    g1->SetPointError(i,0,temp4/2.);
+	    g1_sys->SetPointError(i,0.02,temp44/2.);
+	    g3->SetPoint(i,pt_center[i-1],temp3);
+	    g3_sys->SetPoint(i,pt_center[i-1],temp3);
+	    g3->SetPointError(i,0,temp4);
+	    g3_sys->SetPointError(i,0.1,temp44);	    
+	}
+    }
+    for(int i =5; i<10;i++){
+	double temp1 = hb1->GetBinContent(i);
+	double temp2 = hb1->GetBinError(i);
+	double temp22 = hb_sys1->GetBinError(i);
+	double temp3 = hc1->GetBinContent(i);       
+	double temp4 = hc1->GetBinError(i);
+	double temp44 = hc_sys1->GetBinError(i);
+	if(temp1>0 && temp3>0){
+	    double temp = temp1/temp2/temp2 + temp3/temp4/temp4;
+	    double er = 1/temp2/temp2 + 1/temp4/temp4;
+	    double temp_er = temp22/temp2/temp2 + temp44/temp4/temp4;
+	    g11->SetPoint(i,bins3[i]/2,temp/er/2.);
+	    g11_sys->SetPoint(i,bins3[i]/2,temp/er/2.);
+	    g11->SetPointError(i,0,sqrt(1/er)/2.);
+	    g11_sys->SetPointError(i,0.02,temp_er/er/2.);
+	    g33->SetPoint(i,pt_center1[i-1],temp/er);
+	    g33_sys->SetPoint(i,pt_center1[i-1],temp/er);
+	    g33->SetPointError(i,0,sqrt(1/er));
+	    g33_sys->SetPointError(i,0.1,temp_er/er);
+
+	
+	}else if(temp1>0 && temp3==0){
+	    g11->SetPoint(i,bins3[i]/2.,temp1/2.);
+	    g11_sys->SetPoint(i,bins3[i]/2.,temp1/2.);
+	    g11->SetPointError(i,0,temp2/2.);
+	    g11_sys->SetPointError(i,0.02,temp22/2.);
+	    g33->SetPoint(i,pt_center1[i-1],temp1);
+	    g33_sys->SetPoint(i,pt_center1[i-1],temp1);
+	    g33->SetPointError(i,0,temp2);
+	    g33_sys->SetPointError(i,0.1,temp22);
+	}
+	else if(temp1==0 && temp3>0){	
+	    g11->SetPoint(i,bins3[i]/2,temp3/2.);
+	    g11_sys->SetPoint(i,bins3[i]/2,temp3/2.);
+	    g11->SetPointError(i,0,temp4/2.);
+	    g11_sys->SetPointError(i,0.02,temp44/2.);
+	    g33->SetPoint(i,pt_center1[i-1],temp3);
+	    g33_sys->SetPoint(i,pt_center1[i-1],temp3);
+	    g33->SetPointError(i,0,temp4);
+	    g33_sys->SetPointError(i,0.1,temp44);	    
+	}
+    }
+
+
+
+
+    TLegend *leg = new TLegend(0.2,0.6,0.4,0.9);
+    hc_sys->SetMarkerStyle(25);
+    hc_sys->SetLineColor(kBlue);
+    hc_sys->SetMarkerColor(kBlue);
+    hc_sys->SetFillColor(kBlue);
+    hc_sys->SetFillStyle(3004);
+    hb_sys->SetMarkerStyle(26);
+    hb_sys->SetLineColor(kRed);
+    hb_sys->SetMarkerColor(kRed);
+    hb_sys->SetFillColor(kRed);
+    hb_sys->SetFillStyle(3005);
+    hc->SetMarkerStyle(25);
+    hc->SetLineColor(kBlue);
+    hc->SetMarkerColor(kBlue);
+    hb->SetMarkerStyle(26);
+    hb->SetLineColor(kRed);
+    hb->SetMarkerColor(kRed);
+    g33->SetMarkerColor(kBlue);
+    g33->SetLineColor(kBlue);
+    g33->SetMarkerStyle(25);
+    g11->SetMarkerColor(kMagenta);
+    g11->SetLineColor(kMagenta);
+    g11->SetMarkerStyle(25);
+    g33_sys->SetFillColor(kBlue);
+    g33_sys->SetFillStyle(3005);
+    //leg->AddEntry(hb,"log_{10}n(|DCA|/cm) #in [-1.5,-1]","PLE");
+    //leg->AddEntry(hc,"ln(|DCA|/cm) #in [-5,-4]","PEL");
+    leg->AddEntry(hb,"Min. Bias","PLE");
+    leg->AddEntry(hc,"High Tower","PEL");
+    //leg->AddEntry(h,"Weighted Ave.","PEL");
+    TCanvas *c1 = new TCanvas("c1","c1");
+    hb->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hb->GetYaxis()->SetTitle("#it{v}_{2}(#it{b}#rightarrow#it{e})");
+    hb->GetXaxis()->SetRangeUser(0,8.5);
+    hb->GetYaxis()->SetRangeUser(0,0.25);
+    hb->Draw();
+    hc->Draw("same");
+    hc_sys->Draw("same E2");
+    hb_sys->Draw("same E2");
+    hc->Draw("same E1");
+    hb->Draw("same E1");
+    leg->Draw("same");
+    TCanvas *c2 = new TCanvas("c2","average");
+    g3->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    g3->GetYaxis()->SetTitle("v_{2}");//(#it{b}#rightarrow#it{e})");
+    g3->Draw("APE");
+    g3_sys->SetFillColor(kGray);
+    g3_sys->Draw("same E2");
+   g33_sys->Draw("same E2");    
+   //gs1_sys->Draw("same pe");
+   //gs2_sys->Draw("same pe");
+   //gs3_sys->Draw("same pe");
+   //gs4_sys->Draw("same pe");
+    g3->Draw("same p"); 
+    //gs1->Draw("same pe");    
+    g33->Draw("same pe"); 
+    //gs2->Draw("same pe");
+    //gs3->Draw("same pe");
+    //gs4->Draw("same pe");
+    TLegend *leg2 = new TLegend(0.2,0.6,0.4,0.9);
+    leg2->AddEntry(gs3,"NPE v_{2}{2} Min. Bias","PLE");
+    leg2->AddEntry(gs4,"NPE v_{2}{4} Min. Bias","PLE");
+    leg2->AddEntry(gs2,"NPE v_{2}{2} High Tower","PLE");
+    leg2->AddEntry(gs1,"NPE v_{2}{EP} Min. Bias","PLE");
+    leg2->AddEntry(gp,"PHENIX b#rightarrow e v_{2} Prel. QM18","PLE");
+    leg2->AddEntry(g3,"This Analysis","PLE");
+    //leg2->Draw("same");
+    gPad->RedrawAxis();
+    TCanvas *c3 = new TCanvas("c3","average mt-m0");
+    TLegend *leg1 = new TLegend(0.2,0.75,0.55,0.9);
+    leg1->AddEntry(g1,"#it{b}#rightarrow#it{e}","PLE");
+    leg1->AddEntry(g2,"#it{D}^{0} PhysRevLett.118.212301","PEL");
+    g1->GetXaxis()->SetTitle("(m_{T}-m_{0})/n_{q} [GeV]");
+    g1->GetYaxis()->SetTitle("#it{v}_{2}(#it{b}#rightarrow#it{e})/n_{q}");
+    g1->GetYaxis()->SetRangeUser(0,0.145);
+    g1->Draw("APE");
+    g1_sys->SetFillColor(kGray);
+    g2_sys->SetFillColor(kRed);
+    g2_sys->SetFillStyle(3004);   
+    g2->SetLineColor(kRed);
+    g2->SetMarkerColor(kRed);
+    g1_sys->Draw("same E2");
+    g2_sys->Draw("same E2");
+    g1->Draw("same P");
+    g2->Draw("same P");
+    leg1->Draw("same");
+    gPad->RedrawAxis();
+    TCanvas *c33 = new TCanvas("c33","sig");
+    sig->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    sig->GetYaxis()->SetTitle("Significance");
+    sig->Draw();
+}
+void getData(TH1F *hb, TH1F*hb_sys,char file[]){
+    ifstream data(file);
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    double c = 0;
+	    double c_e= 0 ;	    
+	    data >> pT >> b >> b_e >> c;
+	    hb->SetBinContent(pT,b);
+	    hb->SetBinError(pT,b_e);
+	    hb_sys->SetBinContent(pT,b);
+	    hb_sys->SetBinError(pT,c);
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}
+void getData1(TH1F *hbd,TH1F *hb, TH1F*hb_sys,char file[]){
+    ifstream data(file);
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    double c = 0;
+	    double c_e= 0 ;	    
+	    data >> pT >> b >> b_e >> c;
+	    double temp = hb_sys->GetBinError(pT);
+	    double temp1 = hbd->GetBinContent(pT);
+	    cout << temp1 << " " << b << " " << (temp1-b) << " " << temp << endl;
+	    double error = sqrt((temp1-b)*(temp1-b)+temp*temp);
+	    hb->SetBinContent(pT,b);
+	    hb->SetBinError(pT,b_e);
+	    hb_sys->SetBinError(pT,error);
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}

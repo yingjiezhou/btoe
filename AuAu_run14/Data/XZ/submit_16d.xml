@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job fileListSyntax="paths" minFilesPerProcess="2" maxFilesPerProcess="50" simulateSubmission="false">
+  <command>
+starver SL16d
+root4star -l -b &lt;&lt;EOF
+.L StRoot/macros/readAnaTree.C
+readAnaTree("$FILELIST","npe_tree_$JOBID.root")
+.q
+EOF
+  </command>
+  <stdout URL="file:/star/data01/pwg/xiao00/Run14_Data/log/pid_$JOBID.log"/>
+  <stderr URL="file:/star/data01/pwg/xiao00/Run14_Data/err/pid_$JOBID.err"/>
+
+  <Generator>
+    <Location>/star/data01/pwg/xiao00/Run14_Data/report/</Location>
+    <ScriptLocation>/star/data01/pwg/xiao00/Run14_Data/csh/</ScriptLocation>
+    <ListLocation>/star/data01/pwg/xiao00/Run14_Data/list/</ListLocation>
+  </Generator>
+
+  <input URL="filelist:/star/data01/pwg/xiao00/Run14_Data/Ana_ht_16d.list"/>
+
+  <SandBox installer="ZIP">
+    <Package name="LocalLibraries_hists">
+      <File>file:/star/data01/pwg/xiao00/Run14_Data/StRoot/</File>
+      <File>file:/star/data01/pwg/xiao00/Run14_Data/.sl64_gcc482/</File>
+    </Package>
+  </SandBox>
+  <output fromScratch="*.root" toURL="file:/star/data01/pwg/xiao00/Run14_Data/production/"/>
+</job>

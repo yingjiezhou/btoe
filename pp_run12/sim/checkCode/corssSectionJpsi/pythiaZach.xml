@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<job maxFilesPerProcess="10" >
+  <command>
+    set outputdir = /star/data01/pwg/yjzhou19/Non-flow/Zach
+    <!--setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}":/global/u1/z/zamiller/simu/lhapdf5.8.1/lib
+    echo $LD_LIBRARY_PATH -->
+    source /star/data01/pwg/yjzhou19/Non-flow/Zach/NPEhCorrelations_v3/setenv.csh
+    $outputdir/NPEhCorrelations_v3/pmainHF2e $outputdir/minBiasTemplates121619/macro/bc_total/starTunes/star_hf_tune_v1.1.cmnd_test $outputdir/minBiasTemplates121619/output/pythia$JOBID.root
+  </command>
+  <stdout URL="file:/star/data01/pwg/yjzhou19/Non-flow/Zach/minBiasTemplates121619/out/pythia$JOBID.out" />
+  <stderr URL="file:/star/data01/pwg/yjzhou19/Non-flow/Zach/minBiasTemplates121619/err/pythia$JOBID.err" />
+  <Generator>
+    <Location>/star/data01/pwg/yjzhou19/Non-flow/Zach/minBiasTemplates121619/report/</Location>
+    <ScriptLocation>/star/data01/pwg/yjzhou19/Non-flow/Zach/minBiasTemplates121619/csh/</ScriptLocation>
+    <ListLocation>/star/data01/pwg/yjzhou19/Non-flow/Zach/minBiasTemplates121619/list/</ListLocation>
+  </Generator>
+
+</job>

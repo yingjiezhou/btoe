@@ -1,0 +1,104 @@
+Universe       = vanilla
+Notification   = never
+Requirements   = (CPU_Type != "crs") && (CPU_Experiment == "star")
++Experiment    = "star"
+Priority       = +10
++Job_Type      = "cas"
+GetEnv         = true
+Executable       = readByRun.sh
+Arguments        = mb 15129007 
+Output           = log/log_mb_purity/run_15129007.out
+Error            = log/log_mb_purity/run_15129007.err
+Log              = log/log_mb_purity/run_15129007.olog
+Queue
+     
+Arguments        = mb 15133039 
+Output           = log/log_mb_purity/run_15133039.out
+Error            = log/log_mb_purity/run_15133039.err
+Log              = log/log_mb_purity/run_15133039.olog
+Queue
+     
+Arguments        = mb 15135010 
+Output           = log/log_mb_purity/run_15135010.out
+Error            = log/log_mb_purity/run_15135010.err
+Log              = log/log_mb_purity/run_15135010.olog
+Queue
+     
+Arguments        = mb 15136006 
+Output           = log/log_mb_purity/run_15136006.out
+Error            = log/log_mb_purity/run_15136006.err
+Log              = log/log_mb_purity/run_15136006.olog
+Queue
+     
+Arguments        = mb 15138062 
+Output           = log/log_mb_purity/run_15138062.out
+Error            = log/log_mb_purity/run_15138062.err
+Log              = log/log_mb_purity/run_15138062.olog
+Queue
+     
+Arguments        = mb 15138063 
+Output           = log/log_mb_purity/run_15138063.out
+Error            = log/log_mb_purity/run_15138063.err
+Log              = log/log_mb_purity/run_15138063.olog
+Queue
+     
+Arguments        = mb 15138064 
+Output           = log/log_mb_purity/run_15138064.out
+Error            = log/log_mb_purity/run_15138064.err
+Log              = log/log_mb_purity/run_15138064.olog
+Queue
+     
+Arguments        = mb 15139046 
+Output           = log/log_mb_purity/run_15139046.out
+Error            = log/log_mb_purity/run_15139046.err
+Log              = log/log_mb_purity/run_15139046.olog
+Queue
+     
+Arguments        = mb 15139050 
+Output           = log/log_mb_purity/run_15139050.out
+Error            = log/log_mb_purity/run_15139050.err
+Log              = log/log_mb_purity/run_15139050.olog
+Queue
+     
+Arguments        = mb 15140007 
+Output           = log/log_mb_purity/run_15140007.out
+Error            = log/log_mb_purity/run_15140007.err
+Log              = log/log_mb_purity/run_15140007.olog
+Queue
+     
+Arguments        = mb 15159021 
+Output           = log/log_mb_purity/run_15159021.out
+Error            = log/log_mb_purity/run_15159021.err
+Log              = log/log_mb_purity/run_15159021.olog
+Queue
+     
+Arguments        = mb 15159029 
+Output           = log/log_mb_purity/run_15159029.out
+Error            = log/log_mb_purity/run_15159029.err
+Log              = log/log_mb_purity/run_15159029.olog
+Queue
+     
+Arguments        = mb 15159051 
+Output           = log/log_mb_purity/run_15159051.out
+Error            = log/log_mb_purity/run_15159051.err
+Log              = log/log_mb_purity/run_15159051.olog
+Queue
+     
+Arguments        = mb 15159054 
+Output           = log/log_mb_purity/run_15159054.out
+Error            = log/log_mb_purity/run_15159054.err
+Log              = log/log_mb_purity/run_15159054.olog
+Queue
+     
+Arguments        = mb 15166014 
+Output           = log/log_mb_purity/run_15166014.out
+Error            = log/log_mb_purity/run_15166014.err
+Log              = log/log_mb_purity/run_15166014.olog
+Queue
+     
+Arguments        = mb 15166015 
+Output           = log/log_mb_purity/run_15166015.out
+Error            = log/log_mb_purity/run_15166015.err
+Log              = log/log_mb_purity/run_15166015.olog
+Queue
+     

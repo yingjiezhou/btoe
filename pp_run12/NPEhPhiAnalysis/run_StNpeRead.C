@@ -1,0 +1,30 @@
+
+//void run_StNpeRead(TString filelist="/global/homes/z/zamiller/NPEhPhiAnalysis2015/Interactive.list",TString outFileName="/global/homes/z/zamiller/NPEhPhiAnalysis2015/production/testOut.root")
+void run_StNpeRead(TString filelist="local.list",TString outFileName="testOutput_small.root")
+{
+	gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
+	loadSharedLibraries();
+
+	gSystem->Load("StPicoEvent");
+	gSystem->Load("StPicoDstMaker");
+	gSystem->Load("StDmesonMaker");
+gSystem->Load("StPicoPrescales");
+	gSystem->Load("StNpeRead");
+
+	StNpeRead* dMesonRead = new StNpeRead(outFileName.Data());
+	dMesonRead->bookObjects();
+
+	char filename[1000];
+	ifstream fstream(filelist.Data());
+	int ifile = 0;
+	while (fstream >> filename)
+	{
+	    ++ifile;
+	    // - DEBUG cout <<"sngl_file: "<<ifile<<" : "<<filename<<endl;
+	    dMesonRead->read(filename);
+	    cout <<"read end: "<<ifile<<" : "<<filename<<endl;
+	}
+
+	cout<<"haha"<<endl;
+	dMesonRead->writeObjects();
+}

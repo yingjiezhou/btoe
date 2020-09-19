@@ -1,0 +1,26 @@
+/README.txt/1.3/Tue Oct  9 18:20:34 2001//
+/RunStiMaker.C/1.86/Tue Aug 15 21:42:25 2006//
+/RunStiMaker2.C/1.7/Tue Aug 15 21:42:26 2006//
+/TestEvalIT.C/1.15/Tue Aug 15 21:42:27 2006//
+/TestIOMaker.C/1.4/Fri Nov  2 14:09:20 2001//
+/WriteStiEvents.C/1.2/Sun Sep 15 15:54:35 2002//
+/chi2.C/1.1/Wed Dec  8 19:38:00 2004//
+/layerOcc.C/1.1/Wed Dec  8 19:38:03 2004//
+/make_FZD.kumac/1.2/Tue Aug 15 21:42:28 2006//
+/mult_gen.in/1.1/Tue Oct  9 18:20:34 2001//
+/proton.kumac/1.2/Tue Oct  9 12:56:39 2001//
+/protonstart.g/1.2/Tue Oct  9 12:56:39 2001//
+/pulls.C/1.1/Wed Dec  8 19:38:07 2004//
+/res.C/1.1/Wed Dec  8 19:38:09 2004//
+/res2.C/1.1/Wed Dec  8 19:38:10 2004//
+/residu.C/1.1/Wed Dec  8 19:38:11 2004//
+/standardPlots.C/1.6/Mon Aug 26 22:17:15 2002//
+/standardPlots.h/1.7/Tue Sep  2 18:00:00 2003//
+/standardPlotsClaude.C/1.2/Thu Sep  5 21:27:18 2002//
+/standardPlotsClaude.h/1.2/Tue Sep  2 18:00:00 2003//
+/svt.C/1.1/Wed Dec  8 19:38:11 2004//
+/svtInputFile.dat/1.1/Thu Feb 19 22:50:05 2004//
+/tpcInputFile.dat/1.1/Thu Feb 19 22:50:06 2004//
+/trackFinderPars.dat/1.1/Thu Feb 19 22:50:06 2004//
+/trackFitterPars.dat/1.1/Thu Feb 19 22:50:07 2004//
+D

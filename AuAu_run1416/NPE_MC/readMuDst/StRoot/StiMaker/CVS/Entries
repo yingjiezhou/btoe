@@ -1,0 +1,31 @@
+/MuPrmVtx.C/2.3/Wed Apr 10 22:14:20 2013//
+/PACKAGE/2.1/Wed Aug 31 13:27:54 2005//
+/StAnneling.cxx/2.1/Mon May  7 14:56:14 2012//
+/StAnneling.h/2.1/Mon May  7 14:56:14 2012//
+/StKFEvent.cxx/2.5/Sun Dec 20 01:35:12 2015//
+/StKFEvent.h/2.5/Sun Dec 20 01:35:12 2015//
+/StKFTrack.cxx/2.2/Mon Jun 11 15:33:41 2012//
+/StKFTrack.h/2.2/Mon Jun 11 15:33:41 2012//
+/StKFVertex.cxx/2.4/Wed Apr 10 22:14:20 2013//
+/StKFVertex.h/2.4/Wed Apr 10 22:14:20 2013//
+/StKFVertexMaker.cxx/2.7/Wed Jun  8 23:32:46 2016//
+/StKFVertexMaker.h/2.5/Wed Jan  3 21:23:36 2018//
+/StKFVerticesCollection.cxx/2.4/Wed Apr 10 22:14:20 2013//
+/StKFVerticesCollection.h/2.2/Mon Jun 11 15:33:41 2012//
+/StMuDstVtxT.cxx/2.6/Sun Dec 20 01:35:12 2015//
+/StMuDstVtxT.h/2.6/Sun Dec 20 01:35:12 2015//
+/StPhiEtaHitList.cxx/2.6/Tue Apr 19 01:37:22 2016//
+/StPhiEtaHitList.h/2.4/Thu Jan 17 15:57:26 2013//
+/StTrack2FastDetectorMatcher.cxx/2.6/Wed Jan  3 21:24:14 2018//
+/StTrack2FastDetectorMatcher.h/2.3/Fri Jan 18 15:03:37 2013//
+/StVertexP.h/2.5/Sun Dec 20 01:35:12 2015//
+/StVertexT.h/2.5/Sun Dec 20 01:35:12 2015//
+/StiDetectorVolume.cxx/2.9/Tue Jan 16 22:46:15 2018//
+/StiDetectorVolume.h/2.6/Tue Jan 16 22:46:15 2018//
+/StiMaker.cxx/1.235/Wed Jan  3 21:24:21 2018//
+/StiMaker.h/2.39/Wed Jan  3 21:24:21 2018//
+/StiMakerLinkDef.h/2.5/Wed Jun  8 23:32:47 2016//
+/StiStEventFiller.cxx/2.119/Thu Jun 30 18:33:48 2016//
+/StiStEventFiller.h/2.28/Fri Mar 27 20:12:58 2015//
+D/RunTimeParameters////
+D/macros////

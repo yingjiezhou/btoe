@@ -1,0 +1,40 @@
+Decay Lambda_c+
+0.0109 Delta++ K- PYTHIA 0;
+0.013180 anti-K*0 p+ PYTHIA 0;
+0.03436 p+  K-  pi+   PHSP;
+0.00506 Lambda(1520)0  pi+  PHSP;
+Enddecay
+CDecay anti-Lambda_c-
+# #
+Decay Delta++
+1.0000    p+  pi+                       PHSP;
+Enddecay
+CDecay anti-Delta--
+# ##
+Decay anti-K*0
+0.6657      K-  pi+                        VSS;
+# #0.3323      anti-K0   pi0                        VSS;
+# #0.0020      anti-K0   gamma                       VSP_PWAVE;
+Enddecay
+Decay K*0
+0.6657      K+  pi-                        VSS;
+# #0.3323      anti-K0   pi0                        VSS;
+# #0.0020      anti-K0   gamma                       VSP_PWAVE;
+Enddecay
+# #
+Decay Lambda(1520)0
+0.23   p+     K-    PHSP;
+# #0.23   n0   anti-K0    PHSP;
+# #0.14    Sigma+   pi-    PHSP;
+# #0.14    Sigma-   pi+    PHSP;
+# #0.14   Sigma0   pi0    PHSP;
+# #0.0333  Lambda0  pi0  pi0                       PHSP;
+# #0.0667  Lambda0  pi+  pi-                       PHSP;
+# #0.003   Sigma+   pi-  pi0   PHSP;
+# #0.003   Sigma-   pi+  pi0   PHSP;
+# #0.001   Sigma0   pi0  pi0   PHSP;
+# #0.002   Sigma0   pi+  pi-   PHSP;
+# #0.011   Lambda0  gamma    PHSP;
+Enddecay
+CDecay anti-Lambda(1520)0
+End

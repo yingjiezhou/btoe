@@ -1,0 +1,489 @@
+%!PS-Adobe-2.0
+%%Title: mesons_baryons_noOmega_080: c1
+%%Creator: ROOT Version 5.12/00g
+%%CreationDate: Fri Jan 11 23:02:22 2013
+%%Orientation: Portrait
+%%EndComments
+%%BeginProlog
+/s {stroke} def /l {lineto} def /m {moveto} def /t {translate} def
+/sw {stringwidth} def /r {rotate} def /rl {roll}  def /R {repeat} def
+/d {rlineto} def /rm {rmoveto} def /gr {grestore} def /f {eofill} def
+/c {setrgbcolor} def /black {0 setgray} def /sd {setdash} def
+/cl {closepath} def /sf {scalefont setfont} def /lw {setlinewidth} def
+/box {m dup 0 exch d exch 0 d 0 exch neg d cl} def
+/NC{systemdict begin initclip end}def/C{NC box clip newpath}def
+/bl {box s} def /bf {box f} def /Y { 0 exch d} def /X { 0 d} def 
+/mp {newpath /y exch def /x exch def} def
+/side {[w .77 mul w .23 mul] .385 w mul sd w 0 l currentpoint t -144 r} def
+/mr {mp x y w2 0 360 arc} def /m24 {mr s} def /m20 {mr f} def
+/mb {mp x y w2 add m w2 neg 0 d 0 w neg d w 0 d 0 w d cl} def
+/mt {mp x y w2 add m w2 neg w neg d w 0 d cl} def
+/m21 {mb f} def /m25 {mb s} def /m22 {mt f} def /m26{mt s} def
+/m23 {mp x y w2 sub m w2 w d w neg 0 d cl f} def
+/m27 {mp x y w2 add m w3 neg w2 neg d w3 w2 neg d w3 w2 d cl s} def
+/m28 {mp x w2 sub y w2 sub w3 add m w3 0 d  0 w3 neg d w3 0 d 0 w3 d w3 0 d  0 w3 d w3 neg 0 d 0 w3 d w3 neg 0 d
+ 0 w3 neg d w3 neg 0 d cl s } def
+/m29 {mp gsave x w2 sub y w2 add w3 sub m currentpoint t
+ 4 {side} repeat cl fill gr} def
+/m30 {mp gsave x w2 sub y w2 add w3 sub m currentpoint t
+ 4 {side} repeat cl s gr} def
+/m31 {mp x y w2 sub m 0 w d x w2 sub y m w 0 d x w2 sub y w2 add m w w neg d x w2 sub y w2
+ sub m w w d s} def
+/m2 {mp x y w2 sub m 0 w d x w2 sub y m w 0 d s} def
+/m5 {mp x w2 sub y w2 sub m w w d x w2 sub y w2 add m w w neg d s} def
+/reencdict 24 dict def /ReEncode {reencdict begin /nco&na exch def
+/nfnam exch def /basefontname exch def /basefontdict basefontname findfont def
+/newfont basefontdict maxlength dict def basefontdict {exch dup /FID ne
+{dup /Encoding eq {exch dup length array copy newfont 3 1 roll put} {exch 
+newfont 3 1 roll put} ifelse} {pop pop} ifelse } forall newfont
+/FontName nfnam put nco&na aload pop nco&na length 2 idiv {newfont
+/Encoding get 3 1 roll put} repeat nfnam newfont definefont pop end } def
+/accvec [ 176 /agrave 181 /Agrave 190 /acircumflex 192 /Acircumflex
+201 /adieresis 204 /Adieresis 209 /ccedilla 210 /Ccedilla 211 /eacute
+212 /Eacute 213 /egrave 214 /Egrave 215 /ecircumflex 216 /Ecircumflex
+217 /edieresis 218 /Edieresis 219 /icircumflex 220 /Icircumflex
+221 /idieresis 222 /Idieresis 223 /ntilde 224 /Ntilde 226 /ocircumflex
+228 /Ocircumflex 229 /odieresis 230 /Odieresis 231 /ucircumflex 236 /Ucircumflex
+237 /udieresis 238 /Udieresis 239 /aring 242 /Aring 243 /ydieresis
+244 /Ydieresis 246 /aacute 247 /Aacute 252 /ugrave 253 /Ugrave] def
+/Times-Roman /Times-Roman accvec ReEncode
+/Times-Italic /Times-Italic accvec ReEncode
+/Times-Bold /Times-Bold accvec ReEncode
+/Times-BoldItalic /Times-BoldItalic accvec ReEncode
+/Helvetica /Helvetica accvec ReEncode
+/Helvetica-Oblique /Helvetica-Oblique accvec ReEncode
+/Helvetica-Bold /Helvetica-Bold accvec ReEncode
+/Helvetica-BoldOblique /Helvetica-BoldOblique  accvec ReEncode
+/Courier /Courier accvec ReEncode
+/Courier-Oblique /Courier-Oblique accvec ReEncode
+/Courier-Bold /Courier-Bold accvec ReEncode
+/Courier-BoldOblique /Courier-BoldOblique accvec ReEncode
+/oshow {gsave [] 0 sd true charpath stroke gr} def
+/stwn { /fs exch def /fn exch def /text exch def fn findfont fs sf
+ text sw pop xs add /xs exch def} def
+/stwb { /fs exch def /fn exch def /nbas exch def /textf exch deftextf length /tlen exch def nbas tlen gt {/nbas tlendef} iffn findfont fs sf textf dup length nbas sub nbas getinterval sw
+pop neg xs add /xs exch def} def
+/accspe [ 65 /plusminus  66 /bar  67 /existential  68 /universal 
+69 /exclam  70 /numbersign 71 /greater  72 /question  73 /integral 
+74 /colon  75 /semicolon  76 /less  77 /bracketleft  78 /bracketright
+79 /greaterequal 80 /braceleft 81 /braceright 82 /radical
+83 /spade 84 /heart 85 /diamond 86 /club 87 /lessequal
+88 /multiply 89 /percent 90 /infinity 48 /circlemultiply 49 /circleplus
+50 /emptyset  51 /lozenge 52 /bullet 53 /arrowright 54 /arrowup
+55 /arrowleft 56 /arrowdown 57 /arrowboth 48 /degree 44 /comma 43 /plus 45 /angle 42 /angleleft 47 /divide 61 /notequal 40 /equivalence 41 /second 97 /approxequal 98 /congruent 99 /perpendicular 100 /partialdiff 101 /florin 102 /intersection
+ 103 /union 104 /propersuperset 105 /reflexsuperset 106 /notsubset 107 /propersubset 108 /reflexsubset 109 /element 110 /notelement 111 /gradient 112 /logicaland 113 /logicalor 114 /arrowdblboth 115 /arrowdblleft 116 /arrowdblup 117 /arrowdblright
+ 118 /arrowdbldown 119 /ampersand 120 /omega1 121 /similar 122 /aleph ] def
+/Symbol /Special accspe ReEncode
+/Zone {/iy exch def /ix exch def  ix 1 sub  2224 mul  1 iy sub  3144
+ mul t} def
+%%EndProlog
+%%BeginSetup
+%%EndSetup
+newpath  gsave  20 28 t .25 .25 scale  gsave 
+%%Page: number 1
+ gsave  gsave 
+ 1 1 Zone
+ gsave  0 0 t black[  ] 0 sd 3 lw 0.999 0.999 0.999 c 2268 2937 0 0 bf black 0.999 0.999 0.999 c 2243 2905 2 3 bf black 0.999 0.999 0.999 c 1925 2353 318 526 bf black 1925 2353 318 526 bl 1 1 1 c black 319 526 m 9 X s 328 526 m 9 X s 337 526 m 10 X
+ s 347 526 m 9 X s 356 526 m 10 X s 366 526 m 9 X s 375 526 m 10 X s 385 526 m 9 X s 394 526 m 9 X s 403 526 m 10 X s 413 526 m 9 X s 422 526 m 10 X s 432 526 m 9 X s 441 526 m 10 X s 451 526 m 9 X s 460 526 m 9 X s 469 526 m 10 X s 479 526 m 9 X s
+ 488 526 m 10 X s 498 526 m 9 X s 507 526 m 10 X s 517 526 m 9 X s 526 526 m 9 X s 535 526 m 10 X s 545 526 m 9 X s 554 526 m 10 X s 564 526 m 9 X s 573 526 m 10 X s 583 526 m 9 X s 592 526 m 9 X s 601 526 m 10 X s 611 526 m 9 X s 620 526 m 10 X s
+ 630 526 m 9 X s 639 526 m 10 X s 649 526 m 9 X s 658 526 m 9 X s 667 526 m 10 X s 677 526 m 9 X s 686 526 m 10 X s 696 526 m 9 X s 705 526 m 10 X s 715 526 m 9 X s 724 526 m 9 X s 733 526 m 10 X s 743 526 m 9 X s 752 526 m 10 X s 762 526 m 9 X s
+ 771 526 m 10 X s 781 526 m 9 X s 790 526 m 9 X s 799 526 m 10 X s 809 526 m 9 X s 818 526 m 10 X s 828 526 m 9 X s 837 526 m 10 X s 847 526 m 9 X s 856 526 m 9 X s 865 526 m 10 X s 875 526 m 9 X s 884 526 m 10 X s 894 526 m 9 X s 903 526 m 10 X s
+ 913 526 m 9 X s 922 526 m 9 X s 931 526 m 10 X s 941 526 m 9 X s 950 526 m 10 X s 960 526 m 9 X s 969 526 m 10 X s 979 526 m 9 X s 988 526 m 9 X s 997 526 m 10 X s 1007 526 m 9 X s 1016 526 m 10 X s 1026 526 m 9 X s 1035 526 m 10 X s 1045 526 m 9 X
+ s 1054 526 m 9 X s 1063 526 m 10 X s 1073 526 m 9 X s 1082 526 m 10 X s 1092 526 m 9 X s 1101 526 m 10 X s 1111 526 m 9 X s 1120 526 m 9 X s 1129 526 m 10 X s 1139 526 m 9 X s 1148 526 m 10 X s 1158 526 m 9 X s 1167 526 m 10 X s 1177 526 m 9 X s
+ 1186 526 m 9 X s 1195 526 m 10 X s 1205 526 m 9 X s 1214 526 m 10 X s 1224 526 m 9 X s 1233 526 m 10 X s 1243 526 m 9 X s 1252 526 m 10 X s 1262 526 m 9 X s 1271 526 m 9 X s 1280 526 m 10 X s 1290 526 m 9 X s 1299 526 m 10 X s 1309 526 m 9 X s 1318
+ 526 m 10 X s 1328 526 m 9 X s 1337 526 m 9 X s 1346 526 m 10 X s 1356 526 m 9 X s 1365 526 m 10 X s 1375 526 m 9 X s 1384 526 m 10 X s 1394 526 m 9 X s 1403 526 m 9 X s 1412 526 m 10 X s 1422 526 m 9 X s 1431 526 m 10 X s 1441 526 m 9 X s 1450 526
+ m 10 X s 1460 526 m 9 X s 1469 526 m 9 X s 1478 526 m 10 X s 1488 526 m 9 X s 1497 526 m 10 X s 1507 526 m 9 X s 1516 526 m 10 X s 1526 526 m 9 X s 1535 526 m 9 X s 1544 526 m 10 X s 1554 526 m 9 X s 1563 526 m 10 X s 1573 526 m 9 X s 1582 526 m 10
+ X s 1592 526 m 9 X s 1601 526 m 9 X s 1610 526 m 10 X s 1620 526 m 9 X s 1629 526 m 10 X s 1639 526 m 9 X s 1648 526 m 10 X s 1658 526 m 9 X s 1667 526 m 9 X s 1676 526 m 10 X s 1686 526 m 9 X s 1695 526 m 10 X s 1705 526 m 9 X s 1714 526 m 10 X s
+ 1724 526 m 9 X s 1733 526 m 9 X s 1742 526 m 10 X s 1752 526 m 9 X s 1761 526 m 10 X s 1771 526 m 9 X s 1780 526 m 10 X s 1790 526 m 9 X s 1799 526 m 9 X s 1808 526 m 10 X s 1818 526 m 9 X s 1827 526 m 10 X s 1837 526 m 9 X s 1846 526 m 10 X s 1856
+ 526 m 9 X s 1865 526 m 9 X s 1874 526 m 10 X s 1884 526 m 9 X s 1893 526 m 10 X s 1903 526 m 9 X s 1912 526 m 10 X s 1922 526 m 9 X s 1931 526 m 9 X s 1940 526 m 10 X s 1950 526 m 9 X s 1959 526 m 10 X s 1969 526 m 9 X s 1978 526 m 10 X s 1988 526
+ m 9 X s 1997 526 m 9 X s 2006 526 m 10 X s 2016 526 m 9 X s 2025 526 m 10 X s 2035 526 m 9 X s 2044 526 m 10 X s 2054 526 m 9 X s 2063 526 m 9 X s 2072 526 m 10 X s 2082 526 m 9 X s 2091 526 m 10 X s 2101 526 m 9 X s 2110 526 m 10 X s 2120 526 m 9
+ X s 2129 526 m 9 X s 2138 526 m 10 X s 2148 526 m 9 X s 2157 526 m 10 X s 2167 526 m 9 X s 2176 526 m 10 X s 2186 526 m 9 X s 2195 526 m 9 X s 2204 526 m 10 X s 2214 526 m 9 X s 2223 526 m 10 X s 2233 526 m 9 X s 2242 526 m 1 X s 318 526 m 1925 X s
+ gsave  1621 76
+ t 0 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (\)) show  gr 
+ gsave  1568 141
+ t 0 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (2) show  gr 
+ gsave  1073 76
+ t 0 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m ( \(GeV/c) show  gr 
+ gsave  1012 34
+ t 0 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (T) show  gr 
+ gsave  890 76
+ t 0 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (m) show  gr  356 588 m -62 Y s 393 557 m -31 Y s 431 557 m -31 Y s 468 557 m -31 Y s 505 557 m -31 Y s 543 588 m -62 Y s 580 557 m -31 Y s 617 557 m -31 Y s 655 557 m -31 Y s 692 557 m -31 Y s
+ 730 588 m -62 Y s 767 557 m -31 Y s 804 557 m -31 Y s 842 557 m -31 Y s 879 557 m -31 Y s 916 588 m -62 Y s 954 557 m -31 Y s 991 557 m -31 Y s 1028 557 m -31 Y s 1066 557 m -31 Y s 1103 588 m -62 Y s 1141 557 m -31 Y s 1178 557 m -31 Y s 1215 557
+ m -31 Y s 1253 557 m -31 Y s 1290 588 m -62 Y s 1327 557 m -31 Y s 1365 557 m -31 Y s 1402 557 m -31 Y s 1439 557 m -31 Y s 1477 588 m -62 Y s 1514 557 m -31 Y s 1552 557 m -31 Y s 1589 557 m -31 Y s 1626 557 m -31 Y s 1664 588 m -62 Y s 1701 557 m
+ -31 Y s 1738 557 m -31 Y s 1776 557 m -31 Y s 1813 557 m -31 Y s 1850 588 m -62 Y s 1888 557 m -31 Y s 1925 557 m -31 Y s 1963 557 m -31 Y s 2000 557 m -31 Y s 2037 588 m -62 Y s 2075 557 m -31 Y s 2112 557 m -31 Y s 2149 557 m -31 Y s 2187 557 m
+ -31 Y s 2224 588 m -62 Y s 356 588 m -62 Y s 318 557 m -31 Y s 2224 588 m -62 Y s
+ gsave  301 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (0) show  gr 
+ gsave  498 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (1) show  gr 
+ gsave  673 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (2) show  gr 
+ gsave  860 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (3) show  gr 
+ gsave  1046 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (4) show  gr 
+ gsave  1237 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (5) show  gr 
+ gsave  1423 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (6) show  gr 
+ gsave  1609 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (7) show  gr 
+ gsave  1796 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (8) show  gr 
+ gsave  1982 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (9) show  gr 
+ gsave  2116 304
+ t 0 r 0 0 m /Helvetica-Bold findfont 198.004 sf 0 0 m (10) show  gr  318 526 m 2353 Y s
+ gsave  133 2838
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (\)) show  gr 
+ gsave  68 2785
+ t 90 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (2) show  gr 
+ gsave  133 2450
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (/GeV) show  gr 
+ gsave  68 2397
+ t 90 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (4) show  gr 
+ gsave  133 1975
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (dy\)  \(c) show  gr 
+ gsave  179 1914
+ t 90 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (T) show  gr 
+ gsave  133 1705
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (dm) show  gr 
+ gsave  179 1644
+ t 90 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (T) show  gr 
+ gsave  133 1522
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (m) show  gr 
+ gsave  133 1442
+ t 90 r 0 0 m /Symbol findfont 144.695 sf 0 0 m (p) show  gr 
+ gsave  133 1176
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (N/\(2) show  gr 
+ gsave  68 1122
+ t 90 r 0 0 m /Helvetica-Bold findfont 99.0018 sf 0 0 m (2) show  gr 
+ gsave  133 1043
+ t 90 r 0 0 m /Helvetica-Bold findfont 144.695 sf 0 0 m (d) show  gr  382 526 m -64 X s
+ gsave  240 517
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-9) show  gr 
+ gsave  118 460
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 595 m -32 X s 350 635 m -32 X s 350 663 m -32 X s 350 686 m -32 X s 350 704 m -32 X s 350 719 m -32 X s 350 732 m -32 X s 350 744 m -32 X s 382 754 m -64 X s
+ gsave  240 746
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-8) show  gr 
+ gsave  118 689
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 823 m -32 X s 350 863 m -32 X s 350 892 m -32 X s 350 914 m -32 X s 350 932 m -32 X s 350 947 m -32 X s 350 961 m -32 X s 350 972 m -32 X s 382 983 m -64 X s
+ gsave  240 970
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-7) show  gr 
+ gsave  118 917
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 1051 m -32 X s 350 1092 m -32 X s 350 1120 m -32 X s 350 1142 m -32 X s 350 1160 m -32 X s 350 1176 m -32 X s 350 1189 m -32 X s 350 1201 m -32 X s 382 1211 m -64 X s
+ gsave  236 1202
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-6) show  gr 
+ gsave  114 1145
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 1280 m -32 X s 350 1320 m -32 X s 350 1349 m -32 X s 350 1371 m -32 X s 350 1389 m -32 X s 350 1404 m -32 X s 350 1417 m -32 X s 350 1429 m -32 X s 382 1440 m -64 X s
+ gsave  236 1431
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-5) show  gr 
+ gsave  114 1374
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 1508 m -32 X s 350 1549 m -32 X s 350 1577 m -32 X s 350 1599 m -32 X s 350 1617 m -32 X s 350 1633 m -32 X s 350 1646 m -32 X s 350 1658 m -32 X s 382 1668 m -64 X s
+ gsave  236 1655
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-4) show  gr 
+ gsave  114 1602
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 1737 m -32 X s 350 1777 m -32 X s 350 1806 m -32 X s 350 1828 m -32 X s 350 1846 m -32 X s 350 1861 m -32 X s 350 1874 m -32 X s 350 1886 m -32 X s 382 1896 m -64 X s
+ gsave  240 1887
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-3) show  gr 
+ gsave  118 1830
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 1965 m -32 X s 350 2005 m -32 X s 350 2034 m -32 X s 350 2056 m -32 X s 350 2074 m -32 X s 350 2090 m -32 X s 350 2103 m -32 X s 350 2114 m -32 X s 382 2125 m -64 X s
+ gsave  240 2112
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-2) show  gr 
+ gsave  118 2058
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 2194 m -32 X s 350 2234 m -32 X s 350 2262 m -32 X s 350 2285 m -32 X s 350 2303 m -32 X s 350 2318 m -32 X s 350 2331 m -32 X s 350 2343 m -32 X s 382 2353 m -64 X s
+ gsave  247 2340
+ t 0 r 0 0 m /Helvetica-Bold findfont 76.1552 sf 0 0 m (-1) show  gr 
+ gsave  126 2287
+ t 0 r 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  350 2422 m -32 X s 350 2462 m -32 X s 350 2491 m -32 X s 350 2513 m -32 X s 350 2531 m -32 X s 350 2546 m -32 X s 350 2560 m -32 X s 350 2571 m -32 X s 382 2582 m -64 X s
+ /xs 0 def (1) /Helvetica-Bold 114.233 stwn  gsave  308 2533
+ t 0 r  xs neg 0 t 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (1) show  gr  350 2651 m -32 X s 350 2691 m -32 X s 350 2719 m -32 X s 350 2741 m -32 X s 350 2760 m -32 X s 350 2775 m -32 X s 350 2788 m -32 X s 350 2800 m -32 X s 382 2810 m -64 X
+ s
+ /xs 0 def (10) /Helvetica-Bold 114.233 stwn  gsave  308 2761
+ t 0 r  xs neg 0 t 0 0 m /Helvetica-Bold findfont 114.233 sf 0 0 m (10) show  gr  0.999 0.999 0.999 c 2243 1733 2 1175 bf black 0.999 0.999 0.999 c 1907 1729 271 1177 bf black 1907 1729 271 1177 bl 1 1 1 c black 271 1177 m 10 X s 281 1177 m 9 X s
+ 290 1177 m 10 X s 300 1177 m 9 X s 309 1177 m 9 X s 318 1177 m 10 X s 328 1177 m 9 X s 337 1177 m 9 X s 346 1177 m 10 X s 356 1177 m 9 X s 365 1177 m 9 X s 374 1177 m 10 X s 384 1177 m 9 X s 393 1177 m 9 X s 402 1177 m 10 X s 412 1177 m 9 X s 421
+ 1177 m 9 X s 430 1177 m 10 X s 440 1177 m 9 X s 449 1177 m 9 X s 458 1177 m 10 X s 468 1177 m 9 X s 477 1177 m 9 X s 486 1177 m 10 X s 496 1177 m 9 X s 505 1177 m 9 X s 514 1177 m 10 X s 524 1177 m 9 X s 533 1177 m 9 X s 542 1177 m 10 X s 552 1177
+ m 9 X s 561 1177 m 9 X s 570 1177 m 10 X s 580 1177 m 9 X s 589 1177 m 9 X s 598 1177 m 10 X s 608 1177 m 9 X s 617 1177 m 9 X s 626 1177 m 10 X s 636 1177 m 9 X s 645 1177 m 9 X s 654 1177 m 10 X s 664 1177 m 9 X s 673 1177 m 10 X s 683 1177 m 9 X
+ s 692 1177 m 9 X s 701 1177 m 10 X s 711 1177 m 9 X s 720 1177 m 9 X s 729 1177 m 10 X s 739 1177 m 9 X s 748 1177 m 9 X s 757 1177 m 10 X s 767 1177 m 9 X s 776 1177 m 9 X s 785 1177 m 10 X s 795 1177 m 9 X s 804 1177 m 9 X s 813 1177 m 10 X s 823
+ 1177 m 9 X s 832 1177 m 9 X s 841 1177 m 10 X s 851 1177 m 9 X s 860 1177 m 9 X s 869 1177 m 10 X s 879 1177 m 9 X s 888 1177 m 9 X s 897 1177 m 10 X s 907 1177 m 9 X s 916 1177 m 9 X s 925 1177 m 10 X s 935 1177 m 9 X s 944 1177 m 9 X s 953 1177 m
+ 10 X s 963 1177 m 9 X s 972 1177 m 9 X s 981 1177 m 10 X s 991 1177 m 9 X s 1000 1177 m 9 X s 1009 1177 m 10 X s 1019 1177 m 9 X s 1028 1177 m 9 X s 1037 1177 m 10 X s 1047 1177 m 9 X s 1056 1177 m 9 X s 1065 1177 m 10 X s 1075 1177 m 9 X s 1084
+ 1177 m 10 X s 1094 1177 m 9 X s 1103 1177 m 9 X s 1112 1177 m 10 X s 1122 1177 m 9 X s 1131 1177 m 9 X s 1140 1177 m 10 X s 1150 1177 m 9 X s 1159 1177 m 9 X s 1168 1177 m 10 X s 1178 1177 m 9 X s 1187 1177 m 9 X s 1196 1177 m 10 X s 1206 1177 m 9
+ X s 1215 1177 m 9 X s 1224 1177 m 10 X s 1234 1177 m 9 X s 1243 1177 m 9 X s 1252 1177 m 10 X s 1262 1177 m 9 X s 1271 1177 m 9 X s 1280 1177 m 10 X s 1290 1177 m 9 X s 1299 1177 m 9 X s 1308 1177 m 10 X s 1318 1177 m 9 X s 1327 1177 m 9 X s 1336
+ 1177 m 10 X s 1346 1177 m 9 X s 1355 1177 m 9 X s 1364 1177 m 10 X s 1374 1177 m 9 X s 1383 1177 m 9 X s 1392 1177 m 10 X s 1402 1177 m 9 X s 1411 1177 m 9 X s 1420 1177 m 10 X s 1430 1177 m 9 X s 1439 1177 m 9 X s 1448 1177 m 10 X s 1458 1177 m 9
+ X s 1467 1177 m 10 X s 1477 1177 m 9 X s 1486 1177 m 9 X s 1495 1177 m 10 X s 1505 1177 m 9 X s 1514 1177 m 9 X s 1523 1177 m 10 X s 1533 1177 m 9 X s 1542 1177 m 9 X s 1551 1177 m 10 X s 1561 1177 m 9 X s 1570 1177 m 9 X s 1579 1177 m 10 X s 1589
+ 1177 m 9 X s 1598 1177 m 9 X s 1607 1177 m 10 X s 1617 1177 m 9 X s 1626 1177 m 9 X s 1635 1177 m 10 X s 1645 1177 m 9 X s 1654 1177 m 9 X s 1663 1177 m 10 X s 1673 1177 m 9 X s 1682 1177 m 9 X s 1691 1177 m 10 X s 1701 1177 m 9 X s 1710 1177 m 9 X
+ s 1719 1177 m 10 X s 1729 1177 m 9 X s 1738 1177 m 9 X s 1747 1177 m 10 X s 1757 1177 m 9 X s 1766 1177 m 9 X s 1775 1177 m 10 X s 1785 1177 m 9 X s 1794 1177 m 9 X s 1803 1177 m 10 X s 1813 1177 m 9 X s 1822 1177 m 9 X s 1831 1177 m 10 X s 1841
+ 1177 m 9 X s 1850 1177 m 9 X s 1859 1177 m 10 X s 1869 1177 m 9 X s 1878 1177 m 10 X s 1888 1177 m 9 X s 1897 1177 m 9 X s 1906 1177 m 10 X s 1916 1177 m 9 X s 1925 1177 m 9 X s 1934 1177 m 10 X s 1944 1177 m 9 X s 1953 1177 m 9 X s 1962 1177 m 10
+ X s 1972 1177 m 9 X s 1981 1177 m 9 X s 1990 1177 m 10 X s 2000 1177 m 9 X s 2009 1177 m 9 X s 2018 1177 m 10 X s 2028 1177 m 9 X s 2037 1177 m 9 X s 2046 1177 m 10 X s 2056 1177 m 9 X s 2065 1177 m 9 X s 2074 1177 m 10 X s 2084 1177 m 9 X s 2093
+ 1177 m 9 X s 2102 1177 m 10 X s 2112 1177 m 9 X s 2121 1177 m 9 X s 2130 1177 m 10 X s 2140 1177 m 9 X s 2149 1177 m 9 X s 2158 1177 m 10 X s 2168 1177 m 9 X s 2177 1177 m 1 X s 271 1177 m 1907 X s 308 1214 m -37 Y s 345 1195 m -18 Y s 382 1195 m
+ -18 Y s 419 1195 m -18 Y s 456 1195 m -18 Y s 494 1214 m -37 Y s 531 1195 m -18 Y s 568 1195 m -18 Y s 605 1195 m -18 Y s 642 1195 m -18 Y s 679 1214 m -37 Y s 716 1195 m -18 Y s 753 1195 m -18 Y s 790 1195 m -18 Y s 827 1195 m -18 Y s 864 1214 m
+ -37 Y s 901 1195 m -18 Y s 938 1195 m -18 Y s 975 1195 m -18 Y s 1012 1195 m -18 Y s 1049 1214 m -37 Y s 1086 1195 m -18 Y s 1123 1195 m -18 Y s 1160 1195 m -18 Y s 1197 1195 m -18 Y s 1234 1214 m -37 Y s 1271 1195 m -18 Y s 1308 1195 m -18 Y s
+ 1345 1195 m -18 Y s 1382 1195 m -18 Y s 1419 1214 m -37 Y s 1456 1195 m -18 Y s 1493 1195 m -18 Y s 1530 1195 m -18 Y s 1567 1195 m -18 Y s 1604 1214 m -37 Y s 1641 1195 m -18 Y s 1678 1195 m -18 Y s 1715 1195 m -18 Y s 1752 1195 m -18 Y s 1789
+ 1214 m -37 Y s 1826 1195 m -18 Y s 1863 1195 m -18 Y s 1900 1195 m -18 Y s 1937 1195 m -18 Y s 1974 1214 m -37 Y s 2011 1195 m -18 Y s 2048 1195 m -18 Y s 2085 1195 m -18 Y s 2122 1195 m -18 Y s 2159 1214 m -37 Y s 308 1214 m -37 Y s 2159 1214 m
+ -37 Y s 271 2906 m 1907 X s 308 2869 m 37 Y s 345 2888 m 18 Y s 382 2888 m 18 Y s 419 2888 m 18 Y s 456 2888 m 18 Y s 494 2869 m 37 Y s 531 2888 m 18 Y s 568 2888 m 18 Y s 605 2888 m 18 Y s 642 2888 m 18 Y s 679 2869 m 37 Y s 716 2888 m 18 Y s 753
+ 2888 m 18 Y s 790 2888 m 18 Y s 827 2888 m 18 Y s 864 2869 m 37 Y s 901 2888 m 18 Y s 938 2888 m 18 Y s 975 2888 m 18 Y s 1012 2888 m 18 Y s 1049 2869 m 37 Y s 1086 2888 m 18 Y s 1123 2888 m 18 Y s 1160 2888 m 18 Y s 1197 2888 m 18 Y s 1234 2869 m
+ 37 Y s 1271 2888 m 18 Y s 1308 2888 m 18 Y s 1345 2888 m 18 Y s 1382 2888 m 18 Y s 1419 2869 m 37 Y s 1456 2888 m 18 Y s 1493 2888 m 18 Y s 1530 2888 m 18 Y s 1567 2888 m 18 Y s 1604 2869 m 37 Y s 1641 2888 m 18 Y s 1678 2888 m 18 Y s 1715 2888 m
+ 18 Y s 1752 2888 m 18 Y s 1789 2869 m 37 Y s 1826 2888 m 18 Y s 1863 2888 m 18 Y s 1900 2888 m 18 Y s 1937 2888 m 18 Y s 1974 2869 m 37 Y s 2011 2888 m 18 Y s 2048 2888 m 18 Y s 2085 2888 m 18 Y s 2122 2888 m 18 Y s 2159 2869 m 37 Y s 308 2869 m 37
+ Y s 2159 2869 m 37 Y s 271 1177 m 1729 Y s
+ gsave  76 2873
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (\)) show  gr 
+ gsave  23 2831
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.1781 sf 0 0 m (2) show  gr 
+ gsave  76 2564
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (/GeV) show  gr 
+ gsave  23 2523
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.1781 sf 0 0 m (4) show  gr 
+ gsave  76 2188
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (dy\)  \(c) show  gr 
+ gsave  114 2142
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.1781 sf 0 0 m (T) show  gr 
+ gsave  76 1975
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (dm) show  gr 
+ gsave  114 1929
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.1781 sf 0 0 m (T) show  gr 
+ gsave  76 1834
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (m) show  gr 
+ gsave  76 1773
+ t 90 r 0 0 m /Symbol findfont 114.267 sf 0 0 m (p) show  gr 
+ gsave  76 1560
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (N/\(2) show  gr 
+ gsave  23 1518
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.1781 sf 0 0 m (2) show  gr 
+ gsave  76 1453
+ t 90 r 0 0 m /Helvetica-Bold findfont 114.267 sf 0 0 m (d) show  gr  350 1177 m -79 X s 311 1227 m -40 X s 311 1257 m -40 X s 311 1278 m -40 X s 311 1294 m -40 X s 311 1307 m -40 X s 311 1319 m -40 X s 311 1328 m -40 X s 311 1337 m -40 X s 350 1345
+ m -79 X s
+ gsave  205 1339
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-8) show  gr 
+ gsave  110 1294
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 1395 m -40 X s 311 1425 m -40 X s 311 1446 m -40 X s 311 1462 m -40 X s 311 1475 m -40 X s 311 1486 m -40 X s 311 1496 m -40 X s 311 1505 m -40 X s 350 1512 m -79 X s
+ gsave  205 1503
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-7) show  gr 
+ gsave  110 1461
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 1563 m -40 X s 311 1593 m -40 X s 311 1614 m -40 X s 311 1630 m -40 X s 311 1643 m -40 X s 311 1654 m -40 X s 311 1664 m -40 X s 311 1673 m -40 X s 350 1680 m -79 X s
+ gsave  205 1674
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-6) show  gr 
+ gsave  110 1628
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 1731 m -40 X s 311 1761 m -40 X s 311 1781 m -40 X s 311 1798 m -40 X s 311 1811 m -40 X s 311 1822 m -40 X s 311 1832 m -40 X s 311 1841 m -40 X s 350 1848 m -79 X s
+ gsave  205 1842
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-5) show  gr 
+ gsave  110 1796
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 1899 m -40 X s 311 1928 m -40 X s 311 1949 m -40 X s 311 1966 m -40 X s 311 1979 m -40 X s 311 1990 m -40 X s 311 2000 m -40 X s 311 2009 m -40 X s 350 2016 m -79 X s
+ gsave  205 2005
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-4) show  gr 
+ gsave  110 1963
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 2067 m -40 X s 311 2096 m -40 X s 311 2117 m -40 X s 311 2134 m -40 X s 311 2147 m -40 X s 311 2158 m -40 X s 311 2168 m -40 X s 311 2176 m -40 X s 350 2184 m -79 X s
+ gsave  205 2180
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-3) show  gr 
+ gsave  110 2135
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 2235 m -40 X s 311 2264 m -40 X s 311 2285 m -40 X s 311 2301 m -40 X s 311 2315 m -40 X s 311 2326 m -40 X s 311 2336 m -40 X s 311 2344 m -40 X s 350 2352 m -79 X s
+ gsave  205 2344
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-2) show  gr 
+ gsave  110 2302
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 2403 m -40 X s 311 2432 m -40 X s 311 2453 m -40 X s 311 2469 m -40 X s 311 2483 m -40 X s 311 2494 m -40 X s 311 2504 m -40 X s 311 2512 m -40 X s 350 2520 m -79 X s
+ gsave  213 2511
+ t 0 r 0 0 m /Helvetica-Bold findfont 60.9425 sf 0 0 m (-1) show  gr 
+ gsave  118 2469
+ t 0 r 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 2570 m -40 X s 311 2600 m -40 X s 311 2621 m -40 X s 311 2637 m -40 X s 311 2651 m -40 X s 311 2662 m -40 X s 311 2672 m -40 X s 311 2680 m -40 X s 350 2688 m -79 X s
+ /xs 0 def (1) /Helvetica-Bold 87.6049 stwn  gsave  261 2650
+ t 0 r  xs neg 0 t 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (1) show  gr  311 2738 m -40 X s 311 2768 m -40 X s 311 2789 m -40 X s 311 2805 m -40 X s 311 2818 m -40 X s 311 2830 m -40 X s 311 2839 m -40 X s 311 2848 m -40 X s 350 2856 m -79 X
+ s
+ /xs 0 def (10) /Helvetica-Bold 87.6049 stwn  gsave  261 2818
+ t 0 r  xs neg 0 t 0 0 m /Helvetica-Bold findfont 87.6049 sf 0 0 m (10) show  gr  311 2906 m -40 X s 2178 1177 m 1729 Y s 2099 1177 m 79 X s 2139 1227 m 39 X s 2139 1257 m 39 X s 2139 1278 m 39 X s 2139 1294 m 39 X s 2139 1307 m 39 X s 2139 1319 m
+ 39 X s 2139 1328 m 39 X s 2139 1337 m 39 X s 2099 1345 m 79 X s 2139 1395 m 39 X s 2139 1425 m 39 X s 2139 1446 m 39 X s 2139 1462 m 39 X s 2139 1475 m 39 X s 2139 1486 m 39 X s 2139 1496 m 39 X s 2139 1505 m 39 X s 2099 1512 m 79 X s 2139 1563 m
+ 39 X s 2139 1593 m 39 X s 2139 1614 m 39 X s 2139 1630 m 39 X s 2139 1643 m 39 X s 2139 1654 m 39 X s 2139 1664 m 39 X s 2139 1673 m 39 X s 2099 1680 m 79 X s 2139 1731 m 39 X s 2139 1761 m 39 X s 2139 1781 m 39 X s 2139 1798 m 39 X s 2139 1811 m
+ 39 X s 2139 1822 m 39 X s 2139 1832 m 39 X s 2139 1841 m 39 X s 2099 1848 m 79 X s 2139 1899 m 39 X s 2139 1928 m 39 X s 2139 1949 m 39 X s 2139 1966 m 39 X s 2139 1979 m 39 X s 2139 1990 m 39 X s 2139 2000 m 39 X s 2139 2009 m 39 X s 2099 2016 m
+ 79 X s 2139 2067 m 39 X s 2139 2096 m 39 X s 2139 2117 m 39 X s 2139 2134 m 39 X s 2139 2147 m 39 X s 2139 2158 m 39 X s 2139 2168 m 39 X s 2139 2176 m 39 X s 2099 2184 m 79 X s 2139 2235 m 39 X s 2139 2264 m 39 X s 2139 2285 m 39 X s 2139 2301 m
+ 39 X s 2139 2315 m 39 X s 2139 2326 m 39 X s 2139 2336 m 39 X s 2139 2344 m 39 X s 2099 2352 m 79 X s 2139 2403 m 39 X s 2139 2432 m 39 X s 2139 2453 m 39 X s 2139 2469 m 39 X s 2139 2483 m 39 X s 2139 2494 m 39 X s 2139 2504 m 39 X s 2139 2512 m
+ 39 X s 2099 2520 m 79 X s 2139 2570 m 39 X s 2139 2600 m 39 X s 2139 2621 m 39 X s 2139 2637 m 39 X s 2139 2651 m 39 X s 2139 2662 m 39 X s 2139 2672 m 39 X s 2139 2680 m 39 X s 2099 2688 m 79 X s 2139 2738 m 39 X s 2139 2768 m 39 X s 2139 2789 m
+ 39 X s 2139 2805 m 39 X s 2139 2818 m 39 X s 2139 2830 m 39 X s 2139 2839 m 39 X s 2139 2848 m 39 X s 2099 2856 m 79 X s 2139 2906 m 39 X s 9 lw 271 1177 m 1907 X s 271 2906 m 1907 X s 271 1177 m 1729 Y s 2178 1177 m 1729 Y s 3 lw 1 1 1 c black 332
+ 2906 m 95 X -3 Y 2 X -6 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -4 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3
+ Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X
+ -3 Y 2 X -3 Y 2 X -2 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y
+ 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X
+ -2 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -3 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y
+ 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X
+ -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y
+ 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X
+ -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y
+ 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X
+ -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y
+ 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y
+ 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X
+ -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y
+ 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X
+ -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y
+ 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X
+ -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y
+ 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 34 X s 0 0 1 c 1 1 1 c black 0 0 1 c 399 2869 m 2
+ X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -4 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -4 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -4 Y 2 X -2 Y 2 X -2 Y 2 X -4 Y 2 X -3 Y 1 X -2 Y 2 X -4 Y 2 X -2 Y 2 X -2
+ Y 2 X -5 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -5 Y 2 X -2 Y 2 X
+ -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y
+ 2 X -5 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X
+ -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y
+ 1 X -3 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y
+ 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y
+ 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -4 Y 1 X -1 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y
+ 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y
+ 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X
+ -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X
+ -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X
+ -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -3 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X
+ -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X
+ -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y
+ 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 89 X s 1 0 0 c 1 1 1 c black 1 0 0 c 408 2867 m 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 1 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -3 Y 2 X -4 Y 2 X -3 Y 1 X -2 Y 2 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -4 Y 2
+ X -2 Y 2 X -4 Y 1 X -2 Y 2 X -4 Y 2 X -2 Y 2 X -4 Y 2 X -3 Y 2 X -2 Y 1 X -4 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -4
+ Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -5 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -5 Y 1 X
+ -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -5 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -3 Y
+ 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -5 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -5 Y 1 X -2 Y 2 X
+ -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -4 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -4 Y 1 X -3 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 1 X -4 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -4 Y 2 X -3 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y
+ 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X
+ -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y
+ 2 X -4 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X
+ -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y
+ 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y
+ 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X
+ -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -3 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X
+ -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y
+ 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X
+ -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X
+ -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y
+ 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y
+ 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X
+ -1 Y 1 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 1 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y
+ 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 1 X
+ -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 2 X -1 Y 2 X -2 Y 2 X -1 Y 1 X -1 Y 2 X -1 Y 2 X -1 Y 91 X s black /w 24 def /w2 {w 2 div} def /w3 {w 3 div} def 431 2892 450 2859 468 2827 486 2796 504 2767 523 2738 550 2696 587 2643 624 2591 661 2540 698 2499 744
+ 2439 818 2364 795 2390 841 2340 887 2292 934 2246 980 2203 1026 2162 1095 2107 1188 2039 1280 1977 1373 1918 1501 1850 1688 1762 1943 1671 26 { m20} R 0 0 1 c black 0 0 1 c 432 2818 445 2801 459 2777 475 2754 490 2737 507 2711 523 2691 540 2664 557
+ 2637 574 2612 592 2592 609 2571 627 2548 645 2525 663 2514 681 2497 16 { m25} R 1 0 0 c black 1 0 0 c 737 2369 827 2283 918 2175 1010 2078 1147 1984 1331 1858 1516 1755 1700 1677 1885 1615 2070 1543 10 { m21} R 737 2384 m 5 Y s 729 2389 m 16 X s
+ 737 2354 m -14 Y s 729 2340 m 16 X s 827 2299 m 5 Y s 820 2304 m 15 X s 827 2268 m -13 Y s 820 2255 m 15 X s 918 2190 m 1 Y s 911 2191 m 15 X s 918 2159 m -5 Y s 911 2154 m 15 X s 1010 2093 m 2 Y s 1002 2095 m 15 X s 1010 2063 m -8 Y s 1002 2055 m
+ 15 X s 1147 1999 m 4 Y s 1140 2003 m 15 X s 1147 1969 m -10 Y s 1140 1959 m 15 X s 1331 1873 m 3 Y s 1324 1876 m 15 X s 1331 1843 m -9 Y s 1324 1834 m 15 X s 1516 1771 m 9 Y s 1508 1780 m 15 X s 1516 1740 m -23 Y s 1508 1717 m 15 X s 1700 1693 m 5
+ Y s 1693 1698 m 15 X s 1700 1662 m -13 Y s 1693 1649 m 15 X s 1885 1630 m 14 Y s 1877 1644 m 15 X s 1885 1600 m -33 Y s 1877 1567 m 15 X s 2070 1558 m 18 Y s 2062 1576 m 15 X s 2070 1527 m -47 Y s 2062 1480 m 15 X s black 0.999 0.999 0.999 c 2243
+ 1175 2 0 bf black 0.999 0.999 0.999 c 1907 1045 271 129 bf black 1907 1045 271 129 bl 1 1 1 c black 271 129 m 10 X s 281 129 m 9 X s 290 129 m 10 X s 300 129 m 9 X s 309 129 m 9 X s 318 129 m 10 X s 328 129 m 9 X s 337 129 m 9 X s 346 129 m 10 X s
+ 356 129 m 9 X s 365 129 m 9 X s 374 129 m 10 X s 384 129 m 9 X s 393 129 m 9 X s 402 129 m 10 X s 412 129 m 9 X s 421 129 m 9 X s 430 129 m 10 X s 440 129 m 9 X s 449 129 m 9 X s 458 129 m 10 X s 468 129 m 9 X s 477 129 m 9 X s 486 129 m 10 X s 496
+ 129 m 9 X s 505 129 m 9 X s 514 129 m 10 X s 524 129 m 9 X s 533 129 m 9 X s 542 129 m 10 X s 552 129 m 9 X s 561 129 m 9 X s 570 129 m 10 X s 580 129 m 9 X s 589 129 m 9 X s 598 129 m 10 X s 608 129 m 9 X s 617 129 m 9 X s 626 129 m 10 X s 636 129
+ m 9 X s 645 129 m 9 X s 654 129 m 10 X s 664 129 m 9 X s 673 129 m 10 X s 683 129 m 9 X s 692 129 m 9 X s 701 129 m 10 X s 711 129 m 9 X s 720 129 m 9 X s 729 129 m 10 X s 739 129 m 9 X s 748 129 m 9 X s 757 129 m 10 X s 767 129 m 9 X s 776 129 m 9
+ X s 785 129 m 10 X s 795 129 m 9 X s 804 129 m 9 X s 813 129 m 10 X s 823 129 m 9 X s 832 129 m 9 X s 841 129 m 10 X s 851 129 m 9 X s 860 129 m 9 X s 869 129 m 10 X s 879 129 m 9 X s 888 129 m 9 X s 897 129 m 10 X s 907 129 m 9 X s 916 129 m 9 X s
+ 925 129 m 10 X s 935 129 m 9 X s 944 129 m 9 X s 953 129 m 10 X s 963 129 m 9 X s 972 129 m 9 X s 981 129 m 10 X s 991 129 m 9 X s 1000 129 m 9 X s 1009 129 m 10 X s 1019 129 m 9 X s 1028 129 m 9 X s 1037 129 m 10 X s 1047 129 m 9 X s 1056 129 m 9
+ X s 1065 129 m 10 X s 1075 129 m 9 X s 1084 129 m 10 X s 1094 129 m 9 X s 1103 129 m 9 X s 1112 129 m 10 X s 1122 129 m 9 X s 1131 129 m 9 X s 1140 129 m 10 X s 1150 129 m 9 X s 1159 129 m 9 X s 1168 129 m 10 X s 1178 129 m 9 X s 1187 129 m 9 X s
+ 1196 129 m 10 X s 1206 129 m 9 X s 1215 129 m 9 X s 1224 129 m 10 X s 1234 129 m 9 X s 1243 129 m 9 X s 1252 129 m 10 X s 1262 129 m 9 X s 1271 129 m 9 X s 1280 129 m 10 X s 1290 129 m 9 X s 1299 129 m 9 X s 1308 129 m 10 X s 1318 129 m 9 X s 1327
+ 129 m 9 X s 1336 129 m 10 X s 1346 129 m 9 X s 1355 129 m 9 X s 1364 129 m 10 X s 1374 129 m 9 X s 1383 129 m 9 X s 1392 129 m 10 X s 1402 129 m 9 X s 1411 129 m 9 X s 1420 129 m 10 X s 1430 129 m 9 X s 1439 129 m 9 X s 1448 129 m 10 X s 1458 129 m
+ 9 X s 1467 129 m 10 X s 1477 129 m 9 X s 1486 129 m 9 X s 1495 129 m 10 X s 1505 129 m 9 X s 1514 129 m 9 X s 1523 129 m 10 X s 1533 129 m 9 X s 1542 129 m 9 X s 1551 129 m 10 X s 1561 129 m 9 X s 1570 129 m 9 X s 1579 129 m 10 X s 1589 129 m 9 X s
+ 1598 129 m 9 X s 1607 129 m 10 X s 1617 129 m 9 X s 1626 129 m 9 X s 1635 129 m 10 X s 1645 129 m 9 X s 1654 129 m 9 X s 1663 129 m 10 X s 1673 129 m 9 X s 1682 129 m 9 X s 1691 129 m 10 X s 1701 129 m 9 X s 1710 129 m 9 X s 1719 129 m 10 X s 1729
+ 129 m 9 X s 1738 129 m 9 X s 1747 129 m 10 X s 1757 129 m 9 X s 1766 129 m 9 X s 1775 129 m 10 X s 1785 129 m 9 X s 1794 129 m 9 X s 1803 129 m 10 X s 1813 129 m 9 X s 1822 129 m 9 X s 1831 129 m 10 X s 1841 129 m 9 X s 1850 129 m 9 X s 1859 129 m
+ 10 X s 1869 129 m 9 X s 1878 129 m 10 X s 1888 129 m 9 X s 1897 129 m 9 X s 1906 129 m 10 X s 1916 129 m 9 X s 1925 129 m 9 X s 1934 129 m 10 X s 1944 129 m 9 X s 1953 129 m 9 X s 1962 129 m 10 X s 1972 129 m 9 X s 1981 129 m 9 X s 1990 129 m 10 X
+ s 2000 129 m 9 X s 2009 129 m 9 X s 2018 129 m 10 X s 2028 129 m 9 X s 2037 129 m 9 X s 2046 129 m 10 X s 2056 129 m 9 X s 2065 129 m 9 X s 2074 129 m 10 X s 2084 129 m 9 X s 2093 129 m 9 X s 2102 129 m 10 X s 2112 129 m 9 X s 2121 129 m 9 X s 2130
+ 129 m 10 X s 2140 129 m 9 X s 2149 129 m 9 X s 2158 129 m 10 X s 2168 129 m 9 X s 2177 129 m 1 X s 271 129 m 1907 X s 308 154 m -25 Y s 345 142 m -13 Y s 382 142 m -13 Y s 419 142 m -13 Y s 456 142 m -13 Y s 494 154 m -25 Y s 531 142 m -13 Y s 568
+ 142 m -13 Y s 605 142 m -13 Y s 642 142 m -13 Y s 679 154 m -25 Y s 716 142 m -13 Y s 753 142 m -13 Y s 790 142 m -13 Y s 827 142 m -13 Y s 864 154 m -25 Y s 901 142 m -13 Y s 938 142 m -13 Y s 975 142 m -13 Y s 1012 142 m -13 Y s 1049 154 m -25 Y
+ s 1086 142 m -13 Y s 1123 142 m -13 Y s 1160 142 m -13 Y s 1197 142 m -13 Y s 1234 154 m -25 Y s 1271 142 m -13 Y s 1308 142 m -13 Y s 1345 142 m -13 Y s 1382 142 m -13 Y s 1419 154 m -25 Y s 1456 142 m -13 Y s 1493 142 m -13 Y s 1530 142 m -13 Y s
+ 1567 142 m -13 Y s 1604 154 m -25 Y s 1641 142 m -13 Y s 1678 142 m -13 Y s 1715 142 m -13 Y s 1752 142 m -13 Y s 1789 154 m -25 Y s 1826 142 m -13 Y s 1863 142 m -13 Y s 1900 142 m -13 Y s 1937 142 m -13 Y s 1974 154 m -25 Y s 2011 142 m -13 Y s
+ 2048 142 m -13 Y s 2085 142 m -13 Y s 2122 142 m -13 Y s 2159 154 m -25 Y s 308 154 m -25 Y s 2159 154 m -25 Y s
+ gsave  282 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (0) show  gr 
+ gsave  468 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (1) show  gr 
+ gsave  651 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (2) show  gr 
+ gsave  833 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (3) show  gr 
+ gsave  1016 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (4) show  gr 
+ gsave  1202 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (5) show  gr 
+ gsave  1385 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (6) show  gr 
+ gsave  1575 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (7) show  gr 
+ gsave  1762 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (8) show  gr 
+ gsave  1944 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (9) show  gr 
+ gsave  2100 42
+ t 0 r 0 0 m /Helvetica-Bold findfont 102.999 sf 0 0 m (10) show  gr  271 1174 m 1907 X s 308 1149 m 25 Y s 345 1161 m 13 Y s 382 1161 m 13 Y s 419 1161 m 13 Y s 456 1161 m 13 Y s 494 1149 m 25 Y s 531 1161 m 13 Y s 568 1161 m 13 Y s 605 1161 m 13 Y
+ s 642 1161 m 13 Y s 679 1149 m 25 Y s 716 1161 m 13 Y s 753 1161 m 13 Y s 790 1161 m 13 Y s 827 1161 m 13 Y s 864 1149 m 25 Y s 901 1161 m 13 Y s 938 1161 m 13 Y s 975 1161 m 13 Y s 1012 1161 m 13 Y s 1049 1149 m 25 Y s 1086 1161 m 13 Y s 1123 1161
+ m 13 Y s 1160 1161 m 13 Y s 1197 1161 m 13 Y s 1234 1149 m 25 Y s 1271 1161 m 13 Y s 1308 1161 m 13 Y s 1345 1161 m 13 Y s 1382 1161 m 13 Y s 1419 1149 m 25 Y s 1456 1161 m 13 Y s 1493 1161 m 13 Y s 1530 1161 m 13 Y s 1567 1161 m 13 Y s 1604 1149 m
+ 25 Y s 1641 1161 m 13 Y s 1678 1161 m 13 Y s 1715 1161 m 13 Y s 1752 1161 m 13 Y s 1789 1149 m 25 Y s 1826 1161 m 13 Y s 1863 1161 m 13 Y s 1900 1161 m 13 Y s 1937 1161 m 13 Y s 1974 1149 m 25 Y s 2011 1161 m 13 Y s 2048 1161 m 13 Y s 2085 1161 m
+ 13 Y s 2122 1161 m 13 Y s 2159 1149 m 25 Y s 308 1149 m 25 Y s 2159 1149 m 25 Y s 271 129 m 1045 Y s
+ gsave  65 559
+ t 90 r 0 0 m /Helvetica-Bold findfont 76.2955 sf 0 0 m (Ratio) show  gr  341 129 m -70 X s 306 164 m -35 X s 306 199 m -35 X s 306 234 m -35 X s 341 269 m -70 X s 306 303 m -35 X s 306 338 m -35 X s 306 373 m -35 X s 341 408 m -70 X s 306 443 m -35
+ X s 306 477 m -35 X s 306 512 m -35 X s 341 547 m -70 X s 306 582 m -35 X s 306 617 m -35 X s 306 652 m -35 X s 341 686 m -70 X s 306 721 m -35 X s 306 756 m -35 X s 306 791 m -35 X s 341 826 m -70 X s 306 860 m -35 X s 306 895 m -35 X s 306 930 m
+ -35 X s 341 965 m -70 X s 306 1000 m -35 X s 306 1035 m -35 X s 306 1069 m -35 X s 341 1104 m -70 X s 341 1104 m -70 X s 306 1139 m -35 X s
+ gsave  236 103
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (0) show  gr 
+ gsave  186 244
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (0.2) show  gr 
+ gsave  186 384
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (0.4) show  gr 
+ gsave  186 521
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (0.6) show  gr 
+ gsave  186 662
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (0.8) show  gr 
+ gsave  244 795
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (1) show  gr 
+ gsave  186 936
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (1.2) show  gr 
+ gsave  186 1077
+ t 0 r 0 0 m /Helvetica-Bold findfont 61.0364 sf 0 0 m (1.4) show  gr  2178 129 m 1045 Y s 2108 129 m 70 X s 2143 164 m 35 X s 2143 199 m 35 X s 2143 234 m 35 X s 2108 269 m 70 X s 2143 303 m 35 X s 2143 338 m 35 X s 2143 373 m 35 X s 2108 408 m 70
+ X s 2143 443 m 35 X s 2143 477 m 35 X s 2143 512 m 35 X s 2108 547 m 70 X s 2143 582 m 35 X s 2143 617 m 35 X s 2143 652 m 35 X s 2108 686 m 70 X s 2143 721 m 35 X s 2143 756 m 35 X s 2143 791 m 35 X s 2108 826 m 70 X s 2143 860 m 35 X s 2143 895 m
+ 35 X s 2143 930 m 35 X s 2108 965 m 70 X s 2143 1000 m 35 X s 2143 1035 m 35 X s 2143 1069 m 35 X s 2108 1104 m 70 X s 2108 1104 m 70 X s 2143 1139 m 35 X s 1 0 0 c 1 1 1 c black 1 0 0 c 408 403 m 4 X 1 Y 2 X 1 Y 4 X 3 Y 1 X -3 Y 2 X 2 Y 4 X 1 Y 2
+ X -1 Y 2 X 12 Y 2 X -1 Y 1 X 5 Y 2 X -2 Y 2 X -2 Y 2 X 4 Y 2 X -3 Y 2 X 5 Y 2 X -4 Y 1 X 5 Y 2 X -4 Y 2 X 4 Y 2 X -5 Y 2 X 4 Y 2 X 4 Y 1 X -6 Y 2 X 4 Y 2 X 3 Y 2 X -5 Y 2 X 3 Y 2 X 3 Y 2 X -6 Y 1 X 3 Y 2 X 3 Y 2 X 3 Y 2 X -7 Y 2 X 3 Y 2 X 3 Y 2 X 3
+ Y 1 X -7 Y 2 X 2 Y 2 X 3 Y 2 X 2 Y 2 X 3 Y 2 X -8 Y 2 X 2 Y 1 X 3 Y 2 X 2 Y 2 X 2 Y 2 X -8 Y 2 X 3 Y 2 X 2 Y 1 X 2 Y 2 X 2 Y 2 X 2 Y 2 X -9 Y 2 X 2 Y 2 X 2 Y 2 X 2 Y 1 X 2 Y 2 X 2 Y 2 X 1 Y 2 X -8 Y 2 X 2 Y 2 X 1 Y 2 X 2 Y 1 X 2 Y 2 X 1 Y 2 X 2 Y 2
+ X 1 Y 2 X 2 Y 2 X -9 Y 1 X 1 Y 2 X 2 Y 2 X 1 Y 2 X 2 Y 2 X 1 Y 2 X 2 Y 2 X 1 Y 1 X 1 Y 2 X 2 Y 2 X -9 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 2 Y 1 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 2 Y 2 X 1 Y 1 X 1 Y 2 X -9 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 1 X 1 Y
+ 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 1 X 1 Y 2 X -10 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 1 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 4 X 1 Y 1 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 4 X 1 Y 2 X -10 Y 1 X 1 Y 2 X 1 Y 2 X 1 Y 2 X 1 Y 4 X 1 Y 2 X 1 Y 3 X
+ 1 Y 2 X 1 Y 2 X 1 Y 4 X 1 Y 1 X 1 Y 2 X 12 Y 2 X 1 Y 4 X 1 Y 2 X 1 Y 3 X 1 Y 2 X 1 Y 2 X -11 Y 2 X 1 Y 2 X 1 Y 4 X 1 Y 1 X 1 Y 4 X 1 Y 4 X 1 Y 2 X 1 Y 3 X 1 Y 4 X 1 Y 4 X 1 Y 2 X 1 Y 3 X 1 Y 4 X 1 Y 4 X 1 Y 3 X 1 Y 4 X 1 Y 4 X 1 Y 4 X -10 Y 1 X 1 Y
+ 4 X 1 Y 6 X 1 Y 3 X 1 Y 4 X 1 Y 4 X 1 Y 3 X 1 Y 6 X 1 Y 4 X 1 Y 3 X 1 Y 6 X 1 Y 4 X 1 Y 5 X 1 Y 4 X 1 Y 5 X 1 Y 4 X 1 Y 6 X 1 Y 3 X -10 Y 4 X 1 Y 6 X 1 Y 5 X 1 Y 6 X 1 Y 5 X 1 Y 6 X 1 Y 5 X 1 Y 6 X 1 Y 7 X 1 Y 6 X 1 Y 5 X 1 Y 8 X 1 Y 5 X 1 Y 8 X 1
+ Y 7 X 1 Y 6 X 1 Y 7 X 1 Y 8 X 1 Y 1 X -10 Y 8 X 1 Y 9 X 1 Y 8 X 1 Y 7 X 1 Y 9 X 1 Y 8 X 1 Y 9 X 1 Y 9 X 1 Y 9 X 1 Y 10 X 1 Y 9 X 1 Y 11 X 1 Y 9 X 1 Y 11 X 1 Y 11 X 1 Y 12 X 1 Y 12 X 1 Y 12 X 1 Y 3 X -10 Y 6 X 1 Y 11 X 1 Y 13 X 1 Y 15 X 1 Y 13 X 1 Y
+ 14 X 1 Y 15 X 1 Y 15 X 1 Y 17 X 1 Y 16 X 1 Y 19 X 1 Y 18 X 1 Y 19 X 1 Y 20 X 1 Y 21 X 1 Y 22 X 1 Y 24 X 1 Y 24 X 1 Y 15 X -8 Y 26 X 1 Y 26 X 1 Y 27 X 1 Y 30 X 1 Y 31 X 1 Y 34 X 1 Y 35 X 1 Y 37 X 1 Y 41 X 1 Y 44 X 1 Y 46 X 1 Y 52 X 1 Y 58 X 1 Y 59 X
+ 1 Y 68 X 1 Y 78 X 1 Y 48 X -7 Y 17 X s 1 1 1 c black 1 0 0 c 408 951 m 2 X -8 Y 2 X -4 Y 2 X 1 Y 2 X -3 Y 2 X 9 Y 1 X -7 Y 2 X 7 Y 2 X -14 Y 2 X 6 Y 2 X -16 Y 2 X 4 Y 2 X -17 Y 1 X 23 Y 2 X -18 Y 2 X 2 Y 2 X 2 Y 2 X -20 Y 2 X 23 Y 2 X -20 Y 1 X 1 Y
+ 2 X 1 Y 2 X 1 Y 2 X -21 Y 2 X 23 Y 2 X 1 Y 1 X -22 Y 4 X 24 Y 2 X -23 Y 2 X 1 Y 4 X 1 Y 5 X 1 Y 2 X -23 Y 2 X 23 Y 2 X 1 Y 3 X -24 Y 4 X 1 Y 2 X 24 Y 4 X -24 Y 7 X 25 Y 2 X -24 Y 11 X -24 Y 2 X 24 Y 11 X -24 Y 7 X 24 Y 10 X -24 Y 13 X 24 Y 5 X -24
+ Y 20 X 23 Y 2 X -24 Y 26 X -23 Y 8 X 23 Y 7 X -1 Y 19 X -22 Y 5 X -1 Y 13 X 23 Y 4 X -1 Y 20 X -22 Y 33 X -1 Y 6 X 22 Y 19 X -22 Y 49 X -1 Y 23 X 21 Y 3 X -21 Y 54 X -1 Y 57 X -19 Y 26 X 19 Y 8 X -1 Y 103 X -1 Y 39 X -17 Y 108 X 16 Y 100 X -1 Y 109
+ X -15 Y 392 X 13 Y 22 X -1 Y 235 X -1 Y 23 X 1 Y 3 X -1 Y 37 X 1 Y 4 X -1 Y 24 X -11 Y 17 X s gr 
+showpage
+ gr 
+%%Trailer
+%%Pages:  1
+ gr  gr  gr 
+%%EOF

@@ -1,0 +1,242 @@
+Universe       = vanilla
+Notification   = never
+Requirements   = (CPU_Type != "crs") && (CPU_Experiment == "star")
++Experiment    = "star"
+Priority       = +10
++Job_Type      = "cas"
+GetEnv         = true
+Executable       = readByRun.sh
+Arguments        = ht 15107005 
+Output           = log/log_ht_purity/run_15107005.out
+Error            = log/log_ht_purity/run_15107005.err
+Log              = log/log_ht_purity/run_15107005.olog
+Queue
+     
+Arguments        = ht 15107006 
+Output           = log/log_ht_purity/run_15107006.out
+Error            = log/log_ht_purity/run_15107006.err
+Log              = log/log_ht_purity/run_15107006.olog
+Queue
+     
+Arguments        = ht 15107008 
+Output           = log/log_ht_purity/run_15107008.out
+Error            = log/log_ht_purity/run_15107008.err
+Log              = log/log_ht_purity/run_15107008.olog
+Queue
+     
+Arguments        = ht 15107009 
+Output           = log/log_ht_purity/run_15107009.out
+Error            = log/log_ht_purity/run_15107009.err
+Log              = log/log_ht_purity/run_15107009.olog
+Queue
+     
+Arguments        = ht 15107010 
+Output           = log/log_ht_purity/run_15107010.out
+Error            = log/log_ht_purity/run_15107010.err
+Log              = log/log_ht_purity/run_15107010.olog
+Queue
+     
+Arguments        = ht 15107011 
+Output           = log/log_ht_purity/run_15107011.out
+Error            = log/log_ht_purity/run_15107011.err
+Log              = log/log_ht_purity/run_15107011.olog
+Queue
+     
+Arguments        = ht 15107013 
+Output           = log/log_ht_purity/run_15107013.out
+Error            = log/log_ht_purity/run_15107013.err
+Log              = log/log_ht_purity/run_15107013.olog
+Queue
+     
+Arguments        = ht 15107014 
+Output           = log/log_ht_purity/run_15107014.out
+Error            = log/log_ht_purity/run_15107014.err
+Log              = log/log_ht_purity/run_15107014.olog
+Queue
+     
+Arguments        = ht 15107015 
+Output           = log/log_ht_purity/run_15107015.out
+Error            = log/log_ht_purity/run_15107015.err
+Log              = log/log_ht_purity/run_15107015.olog
+Queue
+     
+Arguments        = ht 15107082 
+Output           = log/log_ht_purity/run_15107082.out
+Error            = log/log_ht_purity/run_15107082.err
+Log              = log/log_ht_purity/run_15107082.olog
+Queue
+     
+Arguments        = ht 15107083 
+Output           = log/log_ht_purity/run_15107083.out
+Error            = log/log_ht_purity/run_15107083.err
+Log              = log/log_ht_purity/run_15107083.olog
+Queue
+     
+Arguments        = ht 15107084 
+Output           = log/log_ht_purity/run_15107084.out
+Error            = log/log_ht_purity/run_15107084.err
+Log              = log/log_ht_purity/run_15107084.olog
+Queue
+     
+Arguments        = ht 15107085 
+Output           = log/log_ht_purity/run_15107085.out
+Error            = log/log_ht_purity/run_15107085.err
+Log              = log/log_ht_purity/run_15107085.olog
+Queue
+     
+Arguments        = ht 15107086 
+Output           = log/log_ht_purity/run_15107086.out
+Error            = log/log_ht_purity/run_15107086.err
+Log              = log/log_ht_purity/run_15107086.olog
+Queue
+     
+Arguments        = ht 15107087 
+Output           = log/log_ht_purity/run_15107087.out
+Error            = log/log_ht_purity/run_15107087.err
+Log              = log/log_ht_purity/run_15107087.olog
+Queue
+     
+Arguments        = ht 15107088 
+Output           = log/log_ht_purity/run_15107088.out
+Error            = log/log_ht_purity/run_15107088.err
+Log              = log/log_ht_purity/run_15107088.olog
+Queue
+     
+Arguments        = ht 15107089 
+Output           = log/log_ht_purity/run_15107089.out
+Error            = log/log_ht_purity/run_15107089.err
+Log              = log/log_ht_purity/run_15107089.olog
+Queue
+     
+Arguments        = ht 15107090 
+Output           = log/log_ht_purity/run_15107090.out
+Error            = log/log_ht_purity/run_15107090.err
+Log              = log/log_ht_purity/run_15107090.olog
+Queue
+     
+Arguments        = ht 15108001 
+Output           = log/log_ht_purity/run_15108001.out
+Error            = log/log_ht_purity/run_15108001.err
+Log              = log/log_ht_purity/run_15108001.olog
+Queue
+     
+Arguments        = ht 15108011 
+Output           = log/log_ht_purity/run_15108011.out
+Error            = log/log_ht_purity/run_15108011.err
+Log              = log/log_ht_purity/run_15108011.olog
+Queue
+     
+Arguments        = ht 15108012 
+Output           = log/log_ht_purity/run_15108012.out
+Error            = log/log_ht_purity/run_15108012.err
+Log              = log/log_ht_purity/run_15108012.olog
+Queue
+     
+Arguments        = ht 15108013 
+Output           = log/log_ht_purity/run_15108013.out
+Error            = log/log_ht_purity/run_15108013.err
+Log              = log/log_ht_purity/run_15108013.olog
+Queue
+     
+Arguments        = ht 15108014 
+Output           = log/log_ht_purity/run_15108014.out
+Error            = log/log_ht_purity/run_15108014.err
+Log              = log/log_ht_purity/run_15108014.olog
+Queue
+     
+Arguments        = ht 15108015 
+Output           = log/log_ht_purity/run_15108015.out
+Error            = log/log_ht_purity/run_15108015.err
+Log              = log/log_ht_purity/run_15108015.olog
+Queue
+     
+Arguments        = ht 15108016 
+Output           = log/log_ht_purity/run_15108016.out
+Error            = log/log_ht_purity/run_15108016.err
+Log              = log/log_ht_purity/run_15108016.olog
+Queue
+     
+Arguments        = ht 15108017 
+Output           = log/log_ht_purity/run_15108017.out
+Error            = log/log_ht_purity/run_15108017.err
+Log              = log/log_ht_purity/run_15108017.olog
+Queue
+     
+Arguments        = ht 15108018 
+Output           = log/log_ht_purity/run_15108018.out
+Error            = log/log_ht_purity/run_15108018.err
+Log              = log/log_ht_purity/run_15108018.olog
+Queue
+     
+Arguments        = ht 15108019 
+Output           = log/log_ht_purity/run_15108019.out
+Error            = log/log_ht_purity/run_15108019.err
+Log              = log/log_ht_purity/run_15108019.olog
+Queue
+     
+Arguments        = ht 15108022 
+Output           = log/log_ht_purity/run_15108022.out
+Error            = log/log_ht_purity/run_15108022.err
+Log              = log/log_ht_purity/run_15108022.olog
+Queue
+     
+Arguments        = ht 15108023 
+Output           = log/log_ht_purity/run_15108023.out
+Error            = log/log_ht_purity/run_15108023.err
+Log              = log/log_ht_purity/run_15108023.olog
+Queue
+     
+Arguments        = ht 15108024 
+Output           = log/log_ht_purity/run_15108024.out
+Error            = log/log_ht_purity/run_15108024.err
+Log              = log/log_ht_purity/run_15108024.olog
+Queue
+     
+Arguments        = ht 15108025 
+Output           = log/log_ht_purity/run_15108025.out
+Error            = log/log_ht_purity/run_15108025.err
+Log              = log/log_ht_purity/run_15108025.olog
+Queue
+     
+Arguments        = ht 15108027 
+Output           = log/log_ht_purity/run_15108027.out
+Error            = log/log_ht_purity/run_15108027.err
+Log              = log/log_ht_purity/run_15108027.olog
+Queue
+     
+Arguments        = ht 15108028 
+Output           = log/log_ht_purity/run_15108028.out
+Error            = log/log_ht_purity/run_15108028.err
+Log              = log/log_ht_purity/run_15108028.olog
+Queue
+     
+Arguments        = ht 15108078 
+Output           = log/log_ht_purity/run_15108078.out
+Error            = log/log_ht_purity/run_15108078.err
+Log              = log/log_ht_purity/run_15108078.olog
+Queue
+     
+Arguments        = ht 15108079 
+Output           = log/log_ht_purity/run_15108079.out
+Error            = log/log_ht_purity/run_15108079.err
+Log              = log/log_ht_purity/run_15108079.olog
+Queue
+     
+Arguments        = ht 15108080 
+Output           = log/log_ht_purity/run_15108080.out
+Error            = log/log_ht_purity/run_15108080.err
+Log              = log/log_ht_purity/run_15108080.olog
+Queue
+     
+Arguments        = ht 15109001 
+Output           = log/log_ht_purity/run_15109001.out
+Error            = log/log_ht_purity/run_15109001.err
+Log              = log/log_ht_purity/run_15109001.olog
+Queue
+     
+Arguments        = ht 15109002 
+Output           = log/log_ht_purity/run_15109002.out
+Error            = log/log_ht_purity/run_15109002.err
+Log              = log/log_ht_purity/run_15109002.olog
+Queue
+     

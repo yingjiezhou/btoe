@@ -1,0 +1,258 @@
+void PhoEV2(int save=1){
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+    gStyle->SetPalette(56);
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples_TuneB12.root");
+    //sprintf(dFile,"../test.root");
+    TFile *f_D = new TFile(dFile);
+    char dFile1[500];
+    sprintf(dFile1,"./root/event_corr_new.root");
+    char dFile2[500];
+    sprintf(dFile2,"./root/event_res.root");
+    TFile *f_D1 = new TFile(dFile1);
+    TFile *f_D2 = new TFile(dFile2);
+  
+    run_centrality_corrx = (TH2F*) f_D1->Get("run_centrality_corrx");
+    run_centrality_corrx->SetName("run_centrality_corrx");
+    run_centrality_corry = (TH2F*) f_D1->Get("run_centrality_corry");
+    run_centrality_corry->SetName("run_centrality_corry");
+
+    run_centrality_corrx1 = (TH2F*) f_D1->Get("run_centrality_corrx1");
+    run_centrality_corrx1->SetName("run_centrality_corrx2");
+    run_centrality_corry1 = (TH2F*) f_D1->Get("run_centrality_corry1");
+    run_centrality_corry1->SetName("run_centrality_corry2");
+    run_centrality_corrx2 = (TH2F*) f_D1->Get("run_centrality_corrx2");
+    run_centrality_corrx2->SetName("run_centrality_corrx2");
+    run_centrality_corry2 = (TH2F*) f_D1->Get("run_centrality_corry2");
+    run_centrality_corry2->SetName("run_centrality_corry2");
+
+    centrality_resolution = (TH2F*) f_D2->Get("centrality_resolution");    
+
+    ch2 = (TChain*) f_D->Get("PhoE");
+    float qx;
+    float qy;
+    float qx1;
+    float qy1;
+    float qx2;
+    float qy2;
+    float run_id;
+    float centrality;
+    float nsige;
+    float nsigpi;
+    float dcaxy;
+    float dca;
+    float phi;
+    float triggercat;
+    float bkgcat;
+    float mva;
+    float pt;
+    float p;
+    float eta;
+    float charge;
+    float gweight=1;
+    float charge1;
+    int const phiBins = 40;
+    int const numPtBins=8;
+    double binning[numPtBins+1]={0.6,0.7,0.8,0.9,1,1.2,1.5,2.5,8.5};
+    //int const numPtBins=11;
+    //double binning[numPtBins+1]={0.6,1,1.2,1.5,1.75,2.0,2.25,2.5,3.5,4.5,5.5,8.5};
+
+    double pub_x[17]={0.234,0.368,0.560,0.766,0.959,1.119,1.326,1.519,1.726,1.919,2.219,2.620,3.022,3.423,3.974,5.103,7.433};
+    double pub_y[17]={0.024,0.040,0.066,0.092,0.113,0.129,0.149,0.165,0.18,0.192,0.207,0.219,0.225,0.226,0.222,0.208,0.232};
+    double pub_ye[17]={0,0,0,0,0,0,0,0,0.001,0.001,0.001,0.001,0.002,0.002,0.003,0.006,0.018};
+    double pub_xe[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    TGraphErrors *gr = new TGraphErrors(17,pub_x,pub_y,pub_xe,pub_ye);
+    gr->SetMarkerColor(kRed);
+    gr->SetLineColor(kRed);
+    if(save==1){
+	TH2F *he = new TH2F("he","he",phiBins,0,TMath::Pi()/2,400,0,20);he->Sumw2();
+	TH2F *hec = new TH2F("hec","hec",phiBins,0,TMath::Pi()/2,400,0,20);hec->Sumw2();
+	TH2F *hews = new TH2F("hews","hews",phiBins,0,TMath::Pi()/2,400,0,20);he->Sumw2();
+	TH2F *hecws = new TH2F("hecws","hecws",phiBins,0,TMath::Pi()/2,400,0,20);hec->Sumw2();
+	TH2F *ave = new TH2F("ave","ave",200,0,2,400,0,20);ave->Sumw2();
+	TH2F *avews = new TH2F("avews","avews",200,0,2,400,0,20);ave->Sumw2();
+	int loop = 0;//ch1->GetEntries();
+
+	ch2 -> SetBranchAddress( "probe_mva" , &mva );
+	ch2 -> SetBranchAddress( "probe_charge" , &charge );
+	ch2 -> SetBranchAddress( "tag_charge" , &charge1 );
+	ch2 -> SetBranchAddress( "probe_eta" , &eta );
+	ch2 -> SetBranchAddress( "probe_pt" , &pt );
+	ch2 -> SetBranchAddress( "probe_nsige" , &nsige );
+	ch2 -> SetBranchAddress( "probe_dca" , &dcaxy );
+	ch2 -> SetBranchAddress( "probe_phi" , &phi );
+	ch2 -> SetBranchAddress( "probe_triggercat" , &triggercat );
+
+	ch2 -> SetBranchAddress( "event_qx" , &qx );
+	ch2 -> SetBranchAddress( "event_qy" , &qy );
+	ch2 -> SetBranchAddress( "event_qx1" , &qx1 );
+	ch2 -> SetBranchAddress( "event_qy1" , &qy1 );
+	ch2 -> SetBranchAddress( "event_qx2" , &qx2 );
+	ch2 -> SetBranchAddress( "event_qy2" , &qy2 );   
+	ch2 -> SetBranchAddress( "event_gweight" , &gweight );   
+	ch2 -> SetBranchAddress( "run_id" , &run_id );  
+	ch2 -> SetBranchAddress( "event_centrality" , &centrality ); 
+	loop = ch2->GetEntries();//100000;//
+	for(int i =0;i<loop;i++){
+	    ch2->GetEntry(i);
+	    run_id = run_id-15E6;
+	 
+	    if(i%1000000==0)cout << "On event " << i << " out of " << loop << endl;
+	    //if(triggercat!=8&&triggercat!=5)continue;
+	    //if(mva<0.45)continue;
+	    //if(centrality==0)continue;	   
+	    
+	    //if(centrality==8)continue;
+	    int bin = run_centrality_corrx ->FindBin(run_id,centrality);
+	    double corrx = run_centrality_corrx->GetBinContent(bin);
+	    double corry = run_centrality_corry->GetBinContent(bin);
+
+	    double plane = (TMath::Pi()+TMath::ATan2(-(qy-corry),-(qx-corrx))) / 2.; 
+	    double plane1 = (TMath::ATan2((qy-corry),(qx-corrx))) / 2.;
+	    double res = sqrt(2)*centrality_resolution->GetBinContent(centrality);
+	    double v2 = (phi-plane1);
+	    if(v2<0)v2 += TMath::Pi()*2;
+	    if(v2>=TMath::Pi())v2 = TMath::Pi()*2-v2;
+	    if(v2>=TMath::Pi()/2.)v2 = TMath::Pi()-v2;	   
+	    if(res>0 && corrx!=0 && corry!=0){
+		if(charge*charge1<0){
+		    if(TMath::Log10(dcaxy+1e-9)>-1.5 && pt>0.6 && nsige>-1 && nsige<3)he->Fill(v2,pt,1/res*gweight);// && 
+                    if(pt>0.6 && nsige>-1 && nsige<3)ave->Fill(1/res,pt,gweight);
+		    if(pt>0.6 && nsige>-1 && nsige<3)hec->Fill(v2,pt,1/res*gweight);
+		}else{
+		    if(TMath::Log10(dcaxy+1e-9)>-1.5 && pt>0.6 && nsige>-1 && nsige<3)hews->Fill(v2,pt,1/res*gweight);//
+		    if(pt>0.6 && nsige>-1 && nsige<3)hecws->Fill(v2,pt,1/res*gweight);
+		    if(pt>0.6 && nsige>-1 && nsige<3)avews->Fill(1/res,pt,gweight);
+		}
+	    }	
+	}
+	TFile f("root/histograms_phoe.root","RECREATE");
+	he->Write("he");
+	hec->Write("hec");
+	he->Write("hews");
+	hec->Write("hecws");
+	ave->Write();
+	avews->Write();
+	f.Close();
+    }
+    if(save==0){
+	char dFile3[500];
+	sprintf(dFile3,"root/histograms_phoe.root");
+	TFile *f_D3 = new TFile(dFile3);
+	he=(TH2F*)f_D3->Get("he");
+	hec=(TH2F*)f_D3->Get("hec");
+	hews=(TH2F*)f_D3->Get("hews");
+	hecws=(TH2F*)f_D3->Get("hecws");
+	ave=(Th2F*)f_D3->Get("ave");
+	avews=(Th2F*)f_D3->Get("avews");
+    }
+   
+//==============ELectron Part 
+    ave->Add(avews,-1);
+    he->Add(hews,-1);
+    hec->Add(hecws,-1);
+    TF1 *f2 = new TF1("f2","[0]*(1+2*[1]*cos(2*x))",0,TMath::Pi()/2);
+    TF1 *f3 = new TF1("f3","[0]*(1+2*[1]*cos(2*x))",0,TMath::Pi()/2);   
+    he->RebinX(4*2);
+    hec->RebinX(4*2);
+    he->GetYaxis()->SetRangeUser(0.6,8.5);
+    he_x= (TH1F*)he->ProjectionX();
+    
+    TCanvas *c99 = new TCanvas("c99","c99",1800,800);
+    c99->Divide(5,2);
+    TH1F* he_v2 = new TH1F("he_v2","h2_v2",numPtBins,binning);
+    for(int i =1;i<numPtBins+1;i++){//
+	c99->cd(i);
+	he->GetYaxis()->SetRangeUser(binning[i-1],binning[i]);
+	char name[10];
+	sprintf(name,"temp_%i",i);
+	temp = (TH1F*)he->ProjectionX(name);
+	
+	TF1 *f1 = new TF1("f1","[0]*(1+2*[1]*cos(2*x))",0,TMath::Pi()/2);
+	temp->Fit(f1,"R","",0,TMath::Pi()/2);
+	he_v2->SetBinContent(i,f1->GetParameter(1));
+	he_v2->SetBinError(i,f1->GetParError(1));
+	f1->Delete();
+	//norm(temp);
+	temp->SetLineColor(i);
+	temp->DrawClone("same PE");
+	//temp->Delete();
+    } 
+    c99->Update();
+    TCanvas *c10 = new TCanvas("c10","c10",1800,800);
+    c10->Divide(5,2);
+    TH1F* hec_v2 = new TH1F("hec_v2","h2c_v2",numPtBins,binning);
+    for(int i =1;i<numPtBins+1;i++){//
+	c10->cd(i);
+	hec->GetYaxis()->SetRangeUser(binning[i-1],binning[i]);
+	ave->GetYaxis()->SetRangeUser(binning[i-1],binning[i]);
+	char name[10];
+	sprintf(name,"tempa_%i",i);
+	temp = (TH1F*)hec->ProjectionX(name);
+	temp->Rebin(8);
+	temp11 = (TH1F*)ave->ProjectionX();	
+	double cor = temp11->GetMean();
+	cout << "Corr " << cor << endl;
+	TF1 *f1 = new TF1("f1","[0]*(1+2*[1]*cos(2*x))",0,TMath::Pi()/2);
+	temp->Fit(f1,"R","",0,TMath::Pi()/2);
+	hec_v2->SetBinContent(i,f1->GetParameter(1)*cor);
+	hec_v2->SetBinError(i,f1->GetParError(1)*cor);
+	f1->Delete();
+	//norm(temp);
+	temp->SetLineColor(i);
+	temp->SetMarkerStyle(22);
+	temp->DrawClone("same PE");
+	//temp->Delete();
+    } 
+    c10->Update();
+
+    int yield=0;
+    double error=0;
+    for(int i =1;i<he->GetNbinsX()/2.+1;i++){
+	double temp1 = he_x->GetBinContent(i);
+	double temp3 = he_x->GetBinError(i);	
+	yield+= temp1;
+	error+= temp3*temp3;
+    }
+    TCanvas *c4 = new TCanvas("c4",""); 
+    he_x->Fit(f2);
+    he_x->GetXaxis()->SetRangeUser(0,TMath::Pi()/2);
+    he_x->Draw("PE");
+
+    TFile *fff = new TFile("../../NPE_MC/Ana/v2_hists/phoe_v2.root","READ");
+    PhoEV2 = (TH1F*)fff->Get("PhoEV2_2");
+    PhoEV2->SetLineColor(kRed);
+    PhoEV2->SetMarkerColor(kRed); 
+    PhoEV2->SetMarkerStyle(26);
+    TLegend *leg = new TLegend(0.5,0.65,0.9,0.9);
+    leg->AddEntry(hec_v2,"Reconstructed photonic electron","PLE");
+    leg->AddEntry(PhoEV2,"Calculated from photonic cocktail","PLE");   
+    TCanvas *c44 = new TCanvas("c44",""); 
+    hec_v2->GetYaxis()->SetRangeUser(0,0.2);
+    hec_v2->GetYaxis()->SetTitle("#it{v}_{2}^{e}");
+    hec_v2->GetXaxis()->SetTitle("#it{p}_{T}^{e}");
+    hec_v2->Draw("PE");
+    //PhoEV2->Scale(0.9);
+    PhoEV2->Draw("same");
+    leg->Draw("same");
+    //hec_v2->SetMarkerColor(kRed);
+    //hec_v2->SetLineColor(kRed);
+    //hec_v2->Draw("PE same");
+    cout << "=============================\n";
+    cout << "Yield of electrons in region " << yield << " +/- " << sqrt(error) << endl;
+    cout << "=============================\n";
+}
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+	double temp = h->GetBinContent(i);
+	double err = h->GetBinError(i);
+	h->SetBinContent(i,temp/norm1);
+	h->SetBinError(i,err/norm1);
+    }
+}
+

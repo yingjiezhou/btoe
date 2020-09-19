@@ -1,0 +1,13 @@
+test（）
+{
+TFile *input_run14_sts=new TFile("/Users/xiaozhibai/work/Analysis/run14/Result/Draw_B_Fraction/Test_temp/InPut/Fit_B_fraction_MB.root","READ");
+
+ TFile *input_run14_AuAu_new=new TFile("OutPut/Fit_B_fraction_MB.root","READ");
+
+  TH1F *B_fraction_MB=(TH1F *) input_run14_sts->Get("b_fraction_MB")->Clone("B_fraction_MB");
+    // TH1F *B_fraction_sys=(TH1F *) input_run14_sys->Get("b_Fraction_sys")->Clone("B_fraction_sys");
+    TH1F *B_fraction_sys=(TH1F *) input_run14_sys->Get("b_Fraction")->Clone("B_fraction_sys");
+
+    TH1F *B_fraction_new=(TH1F *) input_run14_AuAu_new->Get("b_Fraction_MB")->Clone("B_fraction_new");
+
+}

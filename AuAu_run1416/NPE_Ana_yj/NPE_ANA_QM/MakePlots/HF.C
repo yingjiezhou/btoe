@@ -1,0 +1,121 @@
+void HF(){
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    gStyle->SetPalette(56);
+    TGaxis::SetMaxDigits(3); 
+    char hist[150] = "h";
+    char axis[150] = "Decay Radius [cm]";
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples_TuneA4.root");
+    TFile *f_D = new TFile(dFile);
+    char dFile1[500];
+    sprintf(dFile1,"../production/NPE_Tuples_TuneA2.root");
+    TFile *f_D1 = new TFile(dFile1);
+    ch1 = (TChain*)f_D->Get("EH");
+    ch2 = (TChain*)f_D->Get("Signal");  
+    ch3 = (TChain*)f_D1->Get("PhoE");    
+    TH1F *h1 = new TH1F("h1","h1",420,0,2.1);
+    TH1F *h2 = new TH1F("h2","h2",420,0,2.1);
+    TH1F *h55 = new TH1F("h55","h55",420,0,2.1);
+    TH1F *h66 = new TH1F("h66","h66",420,0,2.1);
+
+
+    TH1F *h11 = new TH1F("h11","h11",100,-.1,.1);
+    TH1F *h111 = new TH1F("h111","h111",100,-.1,.1);
+    TH1F *h22 = new TH1F("h22","h22",100,-.1,.1);
+    TH1F *h3 = new TH1F("h3","h3",100,-.1,.1);
+    TH1F *h4 = new TH1F("h4","h4",100,-.1,.1);
+    TH1F *h5 = new TH1F("h5","h5",100,-.1,.1);
+    TH1F *h6 = new TH1F("h6","h6",100,-.1,.1);
+
+
+
+    ch1->Project("h1","eh_pair_decaypos","sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)>0&& abs(eh_h_dca)>0.05  && eh_mass>0 && (abs(eh_h_nsigk)<3 || abs(eh_h_nsigpi)<3)")  ;   // eh_e_charge*eh_h_charge>0 &&
+    ch1->Project("h2","eh_pair_decaypos","sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)>0 && eh_mass>0&& (abs(eh_h_nsigk)<3 || abs(eh_h_nsigpi)<3)")  ; 
+    ch1->Project("h11","eh_e_dcaxy","sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)>1.5&& sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)<8.5 && abs(eh_h_dca)>0.05 &&eh_mass>0 &&(abs(eh_h_nsigpi)<2)")  ;   
+    ch1->Project("h111","eh_e_dcaxy","sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)>1.5&& sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)<8.5  &&eh_mass>0 &&(abs(eh_h_nsigpi)<2)")  ;      
+    //ch1->Project("h22","eh_e_dcaxy","sqrt(eh_e_px*eh_e_px+eh_e_py*eh_e_py)>1.5 &&  eh_mass>1 && eh_e_charge*eh_h_charge>0 && abs(eh_h_nsigk)<2")  ; 
+    ch2->Project("h3","sig_dcaxy","sig_pt>1.5 &&sig_pt<8.5 &&  sig_nsige>-1 && sig_nsige<3")  ; 
+    ch3->Project("h5","probe_dcaxy","probe_pt>1.5 && probe_pt<8.5 && probe_charge*tag_charge<0 && probe_nsige>-1 && probe_nsige<3 && probe_mva>0");  
+    ch3->Project("h6","probe_dcaxy","probe_pt>1.5 && probe_pt<8.5 && probe_charge*tag_charge>0 && probe_nsige>-1 && probe_nsige<3 && probe_mva>0");
+    //ch3->Project("h55","pair_decayradius","probe_charge*tag_charge<0");  
+    //ch3->Project("h66","pair_decayradius","probe_charge*tag_charge>0");
+    h5->Add(h6,-1);
+    //h55->Add(h66,-1);
+    h2->SetLineColor(kRed);
+    h22->SetLineColor(kRed);
+    h3->SetLineColor(kRed);
+    h5->SetLineColor(kRed);   
+    h2->SetMarkerColor(kRed);
+    h22->SetMarkerColor(kRed);
+    h3->SetMarkerColor(kRed);
+    h5->SetMarkerColor(kRed); 
+    h55->SetLineColor(kBlue); 
+    for(int i =1;i<h3->GetNbinsX()+1;i++){
+	double temp1 = h3->GetBinContent(i);
+	double temp2 = h11->GetBinContent(i);	    
+	h4->SetBinContent(i,temp1-temp2);
+    }
+
+    TLegend *leg =new TLegend(0.65,0.6,0.85,0.85);
+    //leg->AddEntry(h22,"e^{#pm}-h^{#pm} comb.","l");
+    leg->AddEntry(h11,"e^{#pm} -h^{#pm} comb.","l");    
+    leg->AddEntry(h3,"Inclusive e","l");  
+
+
+  
+  
+  
+    TCanvas *c1 = new TCanvas("c1","");
+    h2->GetXaxis()->SetTitle("Pair Decay R_{xy}");
+    h2->Draw("hist");
+    h1->Draw("same hist"); 
+    h55->Scale(h1->Integral()/h55->Integral());
+    //h55->Draw("same hist");  
+    TCanvas *c11 = new TCanvas("c11","");
+    norm(h11);
+    norm(h3);
+    h11->GetXaxis()->SetTitle("DCA_{xy}");					        
+    h11->GetYaxis()->SetTitle("Normalized Units");
+    h11->Draw("PE");
+    //h22->Draw("hist same");  
+    h3->Draw("PE same");   
+    leg->Draw("same");
+
+    norm(h4);
+    
+    TCanvas *c2 = new TCanvas("c2","");
+    h4->Draw("PE same");  
+    ZERO(h5);
+    norm(h5);
+    h5->Draw("PE same");  
+    TCanvas *c22 = new TCanvas("c22","");
+    h4->Draw("PE same");  
+    h5->Draw("PE same");  
+    h11->SetLineColor(kCyan);
+    h111->SetLineColor(kBlue);   
+    h111->Add(h11,-1);
+    norm(h111);
+    //norm(h111);
+    //h11->Draw("same hist");
+    h111->Draw("same hist");    
+
+}
+
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+	double temp = h->GetBinContent(i);
+	double err = h->GetBinError(i);
+	h->SetBinContent(i,temp/norm1);
+	h->SetBinError(i,err/norm1);
+    }
+}
+void ZERO(TH1F* h){
+    for(int i = 0; i<h->GetNbinsX()+1;i++){
+        double temp = h->GetBinContent(i);
+        if(temp<0)h->SetBinContent(i,0);
+    }
+}

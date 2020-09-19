@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<job fileListSyntax="paths" minFilesPerProcess="5" maxFilesPerProcess="10" simulateSubmission="false">
+  <command>
+ starver SL15c
+root4star -l -b &lt;&lt;EOF
+.L StRoot/macros/run_Read_Ana.C
+run_Read_Ana("$FILELIST","npe_tree_$JOBID.root")
+.q
+EOF
+  </command>
+  <stdout URL="file:/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/log/pid_$JOBID.log"/>
+  <stderr URL="file:/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/err/pid_$JOBID.err"/>
+  
+  <Generator>
+    <Location>/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/report/</Location>
+    <ScriptLocation>/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/csh/</ScriptLocation>
+    <ListLocation>/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/list/</ListLocation>
+  </Generator>
+  
+  <input URL="filelist:/star/u/xiao00/Run14_Analysis/PhotonicElectronSim/Histogram_mc/Ana_full.list"/>
+    
+  <SandBox installer="ZIP">
+    <Package name="LocalLibraries_hists">
+      <File>file:/star/u/xiao00/Run14/Hijing_Simulation/Histogram_mc/StRoot/</File>
+      <File>file:/star/u/xiao00/Run14/Hijing_Simulation/Histogram_mc/.sl64_gcc482/</File>
+    </Package>
+  </SandBox>
+  <output fromScratch="*.root" toURL="file:/star/data01/pwg/xiao00/PhotonicElectronSim/Histogram_mc/production/"/>
+</job>

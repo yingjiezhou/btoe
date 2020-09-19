@@ -1,0 +1,46 @@
+000 (8929558.721.000) 04/28 20:31:00 Job submitted from host: <130.199.153.58:9618?addrs=130.199.153.58-9618&noUDP&sock=8557_482e_166>
+...
+001 (8929558.721.000) 04/28 20:33:37 Job executing on host: <130.199.150.170:9618?addrs=130.199.150.170-9618&noUDP&sock=21995_3d44_3>
+...
+006 (8929558.721.000) 04/28 20:33:37 Image size of job updated: 574916
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (8929558.721.000) 04/28 20:33:37 Job terminated.
+	(1) Normal termination (return value 1)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                 1         1 
+	   Disk (KB)            :        1        1  41489298 
+	   Memory (MB)          :        0     1500      2007 
+...
+000 (8929569.721.000) 04/28 20:55:26 Job submitted from host: <130.199.153.58:9618?addrs=130.199.153.58-9618&noUDP&sock=8557_482e_166>
+...
+001 (8929569.721.000) 04/28 21:02:11 Job executing on host: <130.199.202.5:9618?addrs=130.199.202.5-9618&noUDP&sock=29158_3d07_3>
+...
+006 (8929569.721.000) 04/28 21:02:17 Image size of job updated: 40540
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (8929569.721.000) 04/28 21:02:18 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:03  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:03  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	0  -  Run Bytes Sent By Job
+	0  -  Run Bytes Received By Job
+	0  -  Total Bytes Sent By Job
+	0  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                 1         1 
+	   Disk (KB)            :        1        1  47541051 
+	   Memory (MB)          :        0     1500      2008 
+...

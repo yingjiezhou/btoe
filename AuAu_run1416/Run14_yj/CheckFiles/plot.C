@@ -1,0 +1,93 @@
+void plot(int save = 1){
+    char prefile[150] = "EA3CFA588324C8D2960C534A65DBCB2D";
+    char filename[200];
+    sprintf(filename,"../production/%s_0.root",prefile);
+    TFile *f_D = new TFile(filename);
+    h = (TH1F*)f_D->Get("h1dEvent");
+    h->SetName("h");
+    h2D = (TH2F*)f_D->Get("hJpsip");
+    h2D->SetName("h2D");
+    h2D1 = (TH2F*)f_D->Get("hJpsip_1");
+    h2D1->SetName("h2D1");
+    h2D2 = (TH2F*)f_D->Get("hJpsip_2");
+    h2D2->SetName("h2D2");
+    h2Dws = (TH2F*)f_D->Get("hJpsip_ws");
+    h2Dws->SetName("h2Dws");
+    h2D1ws = (TH2F*)f_D->Get("hJpsip_1_ws");
+    h2D1ws->SetName("h2D1ws");
+    h2D2ws = (TH2F*)f_D->Get("hJpsip_2_ws");
+    h2D2ws->SetName("h2D2ws");      
+    int miss=0;
+    vector<int> miss_file;
+    for(int i=1;i<7011+1;i++){                                                                                                                                                                    
+        if(i%100==0)cout << "On " << i << endl;
+	char dFile[120];                                                                                                                                                                          
+        sprintf(dFile,"../production/%s_%i.root",prefile,i);
+	TFile f_D1(dFile);
+	if(f_D1.IsOpen()){
+	    if(f_D1.IsZombie()){
+		miss_file.push_back(i);
+		miss++;
+		remove(dFile);
+		cout << "Deleting bad file: " << dFile  << endl;
+		continue;
+	    }
+	    h1 =(TH1F*)f_D1.Get("h1dEvent");
+	    h->Add(h1);
+	    h1->Delete();
+	    h2D_1 = (TH2F*)f_D1.Get("hJpsip");
+	    h2D_1->SetName("h2D_1");
+	    h2D_2 = (TH2F*)f_D1.Get("hJpsip_1");
+	    h2D_2->SetName("h2D_2");
+	    h2D_3 = (TH2F*)f_D1.Get("hJpsip_2");
+	    h2D_3->SetName("h2D_3");
+	    h2D->Add(h2D_1);
+	    h2D1->Add(h2D_2);
+	    h2D2->Add(h2D_3);
+	    h2D_1->Delete();
+	    h2D_2->Delete();
+	    h2D_3->Delete();
+	    h2D_1 = (TH2F*)f_D1.Get("hJpsip_ws");
+            h2D_1->SetName("h2D_1");
+            h2D_2 = (TH2F*)f_D1.Get("hJpsip_1_ws");
+            h2D_2->SetName("h2D_2");
+            h2D_3 = (TH2F*)f_D1.Get("hJpsip_2_ws");
+            h2D_3->SetName("h2D_3");
+            h2Dws->Add(h2D_1);
+            h2D1ws->Add(h2D_2);
+            h2D2ws->Add(h2D_3);
+            h2D_1->Delete();
+            h2D_2->Delete();
+            h2D_3->Delete();
+
+	}
+	else{
+	    miss_file.push_back(i);
+	    miss++;
+	}
+	f_D1.Close();
+    }
+    TCanvas *c1 = new TCanvas("c1","c1");
+    h->GetXaxis()->SetRangeUser(-1,10);
+    h->Draw();
+    cout << "Number of missing files = " << miss << endl;   
+    if (save==1){
+	char datfile[100];
+	sprintf(datfile,"new_miss_%s.txt",prefile);
+        ofstream output1 (datfile,ios::app);
+        if(output1.is_open()){
+	    for(int i = 0;i<miss;i++){
+		output1 << miss_file[i] << endl;
+	    }
+	}
+    }
+    cout << "Number of missing files = " << miss << endl;
+    TFile file("hist.root","RECREATE");
+    h2D->Write();
+    h2D1->Write();
+    h2D2->Write();
+    h2Dws->Write();
+    h2D1ws->Write();
+    h2D2ws->Write();
+
+}

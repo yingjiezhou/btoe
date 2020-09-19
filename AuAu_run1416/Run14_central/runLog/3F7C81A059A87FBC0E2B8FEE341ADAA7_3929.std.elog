@@ -1,0 +1,84 @@
+[1]  + Done                          ( ( setenv SUMS_EXECUTION 1 && nohup $0 $* ) > $SCRATCH/.output.log ) >& $SCRATCH/.errror.log
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
+190925 09:09:56 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:09:56 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:09:56 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:12:11 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:12:11 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:12:11 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:13:56 5612 Xrd: DoHandShake: Failed to read 4 bytes. Retrying ...
+190925 09:13:56 5612 Xrd: GetAccessToSrv: HandShake failed with server [10.42.42.6:39114]
+190925 09:13:56 5612 Xrd: GoToAnotherServer: Error handshaking to [10.42.42.6:39114]
+190925 09:16:11 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:16:11 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:16:11 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:18:26 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:18:26 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:18:26 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:18:41 5612 Xrd: SendGenCommand: Too many redirections for request  kXR_open. Aborting command.
+190925 09:18:41 5612 Xrd: Open: Error opening the file /home/starlib/home/starreco/reco/AuAu_200_production_mid_2014/ReversedFullField/P16id.SL18f/2014/134/15134002/st_physics_15134002_raw_2500040.picoDst.root on host xrdstar03.rcf.bnl.gov:1095
+Error in <TXNetFile::CreateXClient>: open attempt failed on root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_mid_2014/ReversedFullField/P16id.SL18f/2014/134/15134002/st_physics_15134002_raw_2500040.picoDst.root
+190925 09:20:41 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:20:41 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:20:41 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:22:56 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:22:56 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:22:56 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:24:52 5612 Xrd: ReadPartialAnswer: Failed to read msg from connmgr (server [10.42.42.6:39114]). Retrying ...
+190925 09:24:53 19392 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+190925 09:26:52 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:26:52 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:26:52 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:29:07 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:29:07 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:29:07 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:29:22 5612 Xrd: SendGenCommand: Too many redirections for request  kXR_open. Aborting command.
+190925 09:29:22 5612 Xrd: Open: Error opening the file /home/starlib/home/starreco/reco/AuAu_200_production_mid_2014/ReversedFullField/P16id.SL18f/2014/134/15134002/st_physics_15134002_raw_2500040.picoDst.root on host xrdstar03.rcf.bnl.gov:1095
+Error in <TXNetFile::CreateXClient>: open attempt failed on root://xrdstar.rcf.bnl.gov:1095//home/starlib/home/starreco/reco/AuAu_200_production_mid_2014/ReversedFullField/P16id.SL18f/2014/134/15134002/st_physics_15134002_raw_2500040.picoDst.root
+190925 09:31:22 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:31:22 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:31:22 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:32:17 5612 Xrd: CheckErrorStatus: Server [rcas6520.rcf.bnl.gov:43578] declared: session not found(error code: 3011)
+190925 09:33:47 5612 Xrd: ReadPartialAnswer: Failed to read msg from connmgr (server [10.42.42.6:39114]). Retrying ...
+190925 09:33:47 28625 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+190925 09:35:47 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:35:47 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:35:47 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:38:02 5612 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 09:38:02 5612 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 09:38:02 5612 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 09:38:43 5612 Xrd: CheckErrorStatus: Server [rcas6520.rcf.bnl.gov:43578] declared: session not found(error code: 3011)
+
+ *** Break *** segmentation violation
+Function runPicoNpeAnaMaker() busy flag cleared
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
+190925 09:42:09 37601 Xrd: DoHandShake: Failed to read 4 bytes. Retrying ...
+190925 09:42:09 37601 Xrd: GetAccessToSrv: HandShake failed with server [10.42.42.6:39114]
+190925 09:42:09 37601 Xrd: GoToAnotherServer: Error handshaking to [10.42.42.6:39114]
+190925 09:44:06 37601 Xrd: ReadPartialAnswer: Failed to read msg from connmgr (server [10.42.42.6:39114]). Retrying ...
+190925 09:44:07 38833 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+190925 09:44:09 37601 Xrd: CheckErrorStatus: Server [rcas6520.rcf.bnl.gov:43578] declared: session not found(error code: 3011)
+190925 10:04:36 37669 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
+190925 10:15:30 59585 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 10:15:30 59585 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 10:15:30 59585 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 10:17:45 59585 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 10:17:45 59585 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 10:17:45 59585 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 10:20:00 59585 Xrd: Connect: can't open connection to [10.42.42.6:39114]
+190925 10:20:00 59585 Xrd: XrdNetFile: Error creating logical connection to 10.42.42.6:39114
+190925 10:20:00 59585 Xrd: GoToAnotherServer: Error connecting to [10.42.42.6:39114
+190925 10:22:16 59585 Xrd: ReadPartialAnswer: Failed to read msg from connmgr (server [10.42.42.6:39114]). Retrying ...
+190925 10:22:16 5596 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+190925 10:55:59 59682 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+190925 10:55:59 59684 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available
+190925 11:01:21 54216 Xrd: ReadPartialAnswer: Failed to read msg from connmgr (server [10.42.42.6:39114]). Retrying ...
+190925 11:01:21 54281 Xrd: XrdClientMessage::ReadRaw: Failed to read header (8 bytes).
+Warning in <TClass::TClass>: no dictionary for class StStrangeMuDst is available
+Warning in <TClass::TClass>: no dictionary for class StStrangeAssoc is available

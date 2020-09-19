@@ -1,0 +1,31 @@
+void NSig(){
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+gStyle->SetPalette(56);
+
+    TGaxis::SetMaxDigits(3); 
+    char dFile[500];
+    sprintf(dFile,"../production/test.root");
+    TFile *f_D = new TFile(dFile);
+        
+    h1_2D= (TH2F*) f_D->Get("hFit_0");
+    h2_2D= (TH2F*)f_D->Get("hFit_4");
+    h1 = (TH1F*)h1_2D->ProjectionY();
+    h2 = (TH1F*)h2_2D->ProjectionY();
+    h2->SetMarkerColor(kGreen-2);
+    h2->SetLineColor(kGreen-2);
+    TCanvas *c2 = new TCanvas ("c2","c2");
+    h1->Draw();
+    h2->Draw("same");
+}//End
+
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+	double temp = h->GetBinContent(i);
+	double err = h->GetBinError(i);
+	h->SetBinContent(i,temp/norm1);
+	h->SetBinError(i,err/norm1);
+    }
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job maxFilesPerProcess="1" filesPerHour="20">
+	<command>
+		starver SL06b
+                cd /star/institutions/ucla/sshingo/2008/09/18/offline/paper/psn0471/MC
+		root4star -b -q xGetMcTracks.C\(99999,\"$FILELIST\",\"$JOBINDEX\"\)
+		rm core*
+	</command>
+	<input URL="catalog:star.bnl.gov?collision=pp200,production=P05if,geometry=y2005,filetype=MC_reco_event,filename~\1_mix,available=1,sanity=1" nFiles="all" />
+	<!--stdout URL="file:/dev/null" /-->
+	<stdout URL="file:/dev/null" />
+	<stderr URL="file:/dev/null" /> 
+	<output fromScratch="*histogram.root" toURL="file:/star/u/sshingo/ucla/2008/09/18/offline/paper/psn0471/MC" /> 
+</job> 

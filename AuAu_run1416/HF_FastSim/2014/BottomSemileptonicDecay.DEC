@@ -1,0 +1,47 @@
+Decay B0
+   0.049300 D*- e+ nu_e   HQET2 1.207 0.908 1.406 0.853;
+   0.004500 D_0*- e+ nu_e   PHOTOS ISGW2;
+   0.011200 D_1-  e+ nu_e   PHOTOS ISGW2;
+   0.004650 D'_1- e+ nu_e   PHOTOS ISGW2;
+   0.002835 D_2*- e+ nu_e   PHOTOS ISGW2;
+   0.000178 D0  pi- e+ nu_e PHOTOS GOITY_ROBERTS;
+   0.000414 D*- pi0 e+ nu_e PHOTOS GOITY_ROBERTS;
+   0.021900 D- e+ nu_e   PHOTOS HQET2 1.185 1.074;
+   0.000178 D-  pi0 e+ nu_e PHOTOS GOITY_ROBERTS;
+Enddecay
+CDecay anti-B0
+#
+Decay B-
+   0.022700 D0 e- anti-nu_e    PHOTOS ISGW2;
+   0.056900 D*0 e- anti-nu_e    PHOTOS ISGW2;
+   0.003750 D_0*0 e- anti-nu_e    PHOTOS ISGW2;
+   0.011500 D_10 e- anti-nu_e    PHOTOS ISGW2;
+   0.004050 D'_10 e- anti-nu_e    PHOTOS ISGW2;
+   0.003810 D_2*0 e- anti-nu_e    PHOTOS ISGW2;
+   0.000119 D0  pi0 e- anti-nu_e    PHOTOS GOITY_ROBERTS;
+   0.000277 D*0 pi0 e- anti-nu_e    PHOTOS GOITY_ROBERTS;
+   0.000119 D+  pi- e- anti-nu_e    PHOTOS GOITY_ROBERTS;
+   0.000277 D*+ pi- e- anti-nu_e    PHOTOS GOITY_ROBERTS;
+Enddecay
+CDecay B+
+#
+Decay B_s0
+  0.0210   D_s- e+ nu_e       PHOTOS  HQET2 1.17 1.074;
+  0.0510   D_s*- e+ nu_e       PHOTOS  HQET2 1.16 0.921 1.37 0.845;
+  0.0070   D_s0*- e+ nu_e       PHOTOS  ISGW2;
+  0.0040   D_s1- e+ nu_e       PHOTOS  ISGW2;
+  0.0040   D'_s1- e+ nu_e       PHOTOS  ISGW2;
+Enddecay
+CDecay anti-B_s0
+#
+Decay Lambda_b0
+  0.0730     Lambda_c+ e- anti-nu_e     PHOTOS   BaryonPCR  1 1 1 1;#Lb2Baryonlnu  1 1 1 1;
+  0.00900    Lambda_c(2593)+ e- anti-nu_e     PHOTOS   BaryonPCR  1 1 1 1;#Lb2Baryonlnu  1 1 1 1;
+  0.01500    Lambda_c(2625)+ e- anti-nu_e     PHOTOS   BaryonPCR  1 1 1 1;#Lb2Baryonlnu  1 1 1 1;
+  0.00390    Sigma_c0 pi+ e- anti-nu_e     PHOTOS   PHSP;
+  0.00390    Sigma_c+ pi0 e- anti-nu_e     PHOTOS   PHSP;
+  0.00390    Sigma_c++ pi- e- anti-nu_e     PHOTOS   PHSP;
+Enddecay
+CDecay anti-Lambda_b0
+#
+End

@@ -1,0 +1,5 @@
+Error in <TGClient::TGClient>: can't open display "localhost:16.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Error in <TFile::TFile>: file /star/data01/pwg/yjzhou19/run14_MuDstread_Yj/script/out/out_ht_purity/st_physics_15108022.purity.root does not exist
+Error: illegal pointer to class object file 0x0 4  readPurity.C:38:
+*** Interpreter error recovered ***

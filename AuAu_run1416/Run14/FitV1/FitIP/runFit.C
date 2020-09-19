@@ -1,0 +1,128 @@
+#include "fitdata1D.C"
+//#include "fit_tfraction.C"
+void runFit(int rs=1,int save=1, int doAllFits=1, int HT=0)
+{
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+///// Electron PID cuts 
+    float cutLow = 0;
+    float cutHigh = 0;
+//////
+    int const numPhiBins=4;
+    double binning[numPhiBins+1]={0,TMath::Pi()/4*1,TMath::Pi()/4*2,TMath::Pi()/4*3,TMath::Pi()/4*4};  
+    int const numEtaBins=4;
+    double binningeta[numEtaBins+1]={-0.8,-0.4,0,0.4,0.8};    
+    if(doAllFits){
+        int qqStart=-1;
+        int qqEnd=1; 
+        int etaStart=1;
+        int etaEnd=4; 
+        int phiStart=1;
+        int phiEnd=4;//numPhiBins;
+    } else {
+	int qqStart=-1;//Here
+        int etaStart=2;//Here
+        int phiStart=2;//Here  
+	int qqEnd=qqStart; 
+        int etaEnd=etaStart; 
+        int phiEnd=phiStart;
+    }
+//////////////////////////////////////////////////////////////////
+    int pass=1;
+////////////////////////////////////////////////////////////////
+//Saving Information//////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+    for(int qq=qqStart;qq<qqEnd+1;qq++){
+	for(int eta=etaStart;eta<etaEnd+1;eta++){
+	    for(int phi=phiStart;phi<phiEnd+1;phi++){
+		char dir1[150];char dir2[150];char dir3[150];
+		char dir4[150];char dir5[150];char dir6[150]; 
+		char file[50];char dat[50];char datc[50];        
+		sprintf(dir1,"%1.0f/fits/DCAFit_q_%i_Eta_%1.0f_Phi_%1.0f",pass,qq,eta,phi);
+		sprintf(file,"%1.0f/log.txt",pass);
+		sprintf(dat,"%1.0f/yields.dat",pass);
+		sprintf(datc,"%1.0f/chi2.dat",pass);
+//////////////////////////////////////////////////////////////////
+//GETTING HISTOGRAMS TO FIT. Change as needed 
+//////////////////////////////////////////////////////////////////
+		TFile *f_D = new TFile("../../production/NPE_Tuples_TuneB12.root");
+		TFile *f_D1 = new TFile("../../../NPE_MC/Ana/root/DCA_plots_Hijing.root");   
+		TFile *f_D2 = new TFile("../../../NPE_MC/Ana/root/HF_plots.root");
+		ch1 = (TChain*)f_D->Get("Signal");
+		TFile *f_D3 = new TFile("../root/histograms.root");
+		if(qq>0){
+		    if(eta==1)h01_2D = (TH2F*)f_D3->Get("Eta1_p");
+		    if(eta==2)h01_2D = (TH2F*)f_D3->Get("Eta2_p");
+		    if(eta==3)h01_2D = (TH2F*)f_D3->Get("Eta3_p");
+		    if(eta==4)h01_2D = (TH2F*)f_D3->Get("Eta4_p");
+		}
+		if(qq<0){
+		    if(eta==1)h01_2D = (TH2F*)f_D3->Get("Eta1_m");
+		    if(eta==2)h01_2D = (TH2F*)f_D3->Get("Eta2_m");
+		    if(eta==3)h01_2D = (TH2F*)f_D3->Get("Eta3_m");
+		    if(eta==4)h01_2D = (TH2F*)f_D3->Get("Eta4_m");
+		}
+		if(qq==0){
+		    if(eta==1)h01_2D = (TH2F*)f_D3->Get("Eta1_m");
+		    if(eta==2)h01_2D = (TH2F*)f_D3->Get("Eta2_m");
+		    if(eta==3)h01_2D = (TH2F*)f_D3->Get("Eta3_m");
+		    if(eta==4)h01_2D = (TH2F*)f_D3->Get("Eta4_m");
+		    if(eta==1)h01_2D1 = (TH2F*)f_D3->Get("Eta1_p");
+		    if(eta==2)h01_2D1 = (TH2F*)f_D3->Get("Eta2_p");
+		    if(eta==3)h01_2D1 = (TH2F*)f_D3->Get("Eta3_p");
+		    if(eta==4)h01_2D1 = (TH2F*)f_D3->Get("Eta4_p");
+		    h01_2D->Add(h01_2D1);
+		}
+		h01_2D->GetXaxis()->SetRangeUser(binning[phi-1],binning[phi]);
+		h01_2D->GetYaxis()->SetRangeUser(-4,-1);
+////////////////////////////////////////////////////////////////// BKGs
+		double constraint[9]={0.362,0.304,0.283,0.240,0.207,0.173,0.141,0.128,0.123};
+		int pur_val=10;
+		double eff=1;
+		h01_2D_pi = (TH2F*)f_D->Get("hDcaLog3D_pi_1");//isPion 4
+	    
+		double e_const = 0.283;//constraint[pt-1];
+		h01_2D_emc = (TH2F*)f_D1->Get("dcapt_all");
+		h01_2D_emc->SetName("h01_2D_emc");	      
+		h01_2D_D = (TH2F*)f_D2->Get("dcapt_d_all");
+		h01_2D_B = (TH2F*)f_D2->Get("dcapt_b_all"); 
+	
+		h01_2D_D->GetXaxis()->SetRangeUser(-4,-1);
+		h01_2D_B->GetXaxis()->SetRangeUser(-4,-1); 
+  		h01_2D_pi->GetYaxis()->SetRangeUser(-4,-1);
+		h01_2D_emc->GetXaxis()->SetRangeUser(-4,-1); 	      
+		h01_2D_D->GetYaxis()->SetRangeUser(1.2,8.5);	
+		h01_2D_B->GetYaxis()->SetRangeUser(1.2,8.5); 
+		h01_2D_pi->GetXaxis()->SetRangeUser(1.2,8.5);	
+		h01_2D_emc->GetYaxis()->SetRangeUser(1.2,8.5); 
+//////////////////////////////////////////////////////////////////Project 
+		h01_D=(TH1F*)h01_2D_D->ProjectionX();
+		h01_B=(TH1F*)h01_2D_B->ProjectionX();     
+		h01=(TH1F*)h01_2D->ProjectionY();
+		h01_pi=(TH1F*)h01_2D_pi->ProjectionY();
+		h01_emc=(TH1F*)h01_2D_emc->ProjectionX();	
+		h01->Rebin(4);
+		h01_B->Rebin(4);
+		h01_emc->Rebin(4);
+		h01_D->Rebin(4);
+		h01_pi->Rebin(4);   
+		//CALLING FITTING SCRIPT TO DO FIT////////////////////////////////
+//////////////////////////////////////////////////////////////////    
+		fitdata1D(h01,h01_emc,h01_emc,h01_pi,h01_D,h01_B,0,0,save,file,dat,datc,dir1,dir2,dir3,dir4,dir5,dir6,5,eta,phi,binning[phi-1],binning[phi],binningeta[eta-1],binningeta[eta],qq,pur_val,HT,e_const);
+
+	    }//End PT
+	}
+    }
+}//End
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+        double temp = h->GetBinContent(i);
+        double width = h->GetBinWidth(i);
+        double err = h->GetBinError(i);
+        h->SetBinContent(i,temp/norm1);
+        h->SetBinError(i,err/norm1);
+    }
+}

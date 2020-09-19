@@ -1,0 +1,14 @@
+Universe       = vanilla
+Notification   = never
+Requirements   = (CPU_Type != "crs") && (CPU_Experiment == "star")
++Experiment    = "star"
+Priority       = +10
++Job_Type      = "cas"
+GetEnv         = true
+Executable       = haddTreeByRun.sh
+Arguments        = mb 15154018 
+Output           = log/log_mb_anaTree/run_15154018.out
+Error            = log/log_mb_anaTree/run_15154018.err
+Log              = log/log_mb_anaTree/run_15154018.olog
+Queue
+     

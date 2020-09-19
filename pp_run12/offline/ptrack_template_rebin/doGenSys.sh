@@ -1,0 +1,10 @@
+root -b -q -l  offline.C\(\"May5\",\"default\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"purity\",kTRUE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"rec\",kFALSE,kTRUE\)
+root -b -q -l  offline.C\(\"May5\",\"nsigmae\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"poe\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"gpt\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"gpt04\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"masscut\",kFALSE,kFALSE\)
+root -b -q -l  offline.C\(\"May5\",\"trig\",kFALSE,kFALSE\)
+

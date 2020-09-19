@@ -1,0 +1,1354 @@
+#include "fitData.C"
+#include "fitData_Pion.C"
+void runFit_sWeight(int save=1)
+{
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+//////////////////////////////////////////////////////////////////////////////////////////
+    int pt=2;
+    int const numPtBins=2;
+    double binning[numPtBins+1]={0.6,2.,8.5};
+    char cut_s[500];
+    char cut_b[500];
+    char cut_s_beta[500];
+    char cut_b_beta[500];
+    char cut_bkg[500];
+    char cut_bkg1[500];
+    if(pt>0)sprintf(cut_s,"probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge<0 && probe_pt>%1.1f && probe_pt<%1.1f ",binning[pt-1],binning[pt]);
+    if(pt>0)sprintf(cut_b,"probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge>0 && probe_pt>%1.1f && probe_pt<%1.1f ",binning[pt-1],binning[pt]);
+    if(pt>0)sprintf(cut_s_beta,"probe_beta>0 &&probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge<0 && probe_pt>%1.1f && probe_pt<%1.1f ",binning[pt-1],binning[pt]);
+    if(pt>0)sprintf(cut_b_beta,"probe_beta>0 &&probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge>0 && probe_pt>%1.1f && probe_pt<%1.1f ",binning[pt-1],binning[pt]);
+
+    if(pt>0)sprintf(cut_bkg,"probe_beta>0 && probe_nsige<0 && probe_emc0>0 && probe_bkgcat==1 && probe_pt>%1.1f && probe_pt<%1.1f ",binning[pt-1],binning[pt]);
+    if(pt>0)sprintf(cut_bkg1,"probe_beta>0 && probe_nsige<0 && probe_emc0>0 && probe_bkgcat==1 && probe_pt>%1.1f && probe_pt<%1.1f  && abs(probe_nsigpi)<2 ",binning[pt-1],binning[pt]);
+    if(pt==0)sprintf(cut_s,"probe_beta>0 && probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge<0 && probe_pt>%1.1f && probe_pt<%1.1f ",0.6,8.5);
+    if(pt==0)sprintf(cut_b,"probe_beta>0 && probe_nsige<13 && probe_emc0>0 && probe_charge*tag_charge>0 && probe_pt>%1.1f && probe_pt<%1.1f ",0.6,8.5);
+    if(pt==0)sprintf(cut_bkg,"probe_beta>0 && probe_nsige<0 && probe_emc0>0 && probe_bkgcat==1 && probe_pt>%1.1f && probe_pt<%1.1f ",0.6,8.5);
+    if(pt==0)sprintf(cut_bkg1,"probe_beta>0 && probe_nsige<0 && probe_emc0>0 && probe_bkgcat==1 && probe_pt>%1.1f && probe_pt<%1.1f && abs(probe_nsigpi)<2 ",0.6,8.5);    
+
+cout << "Using cuts " << cut_s << endl;
+    char file[100] = "root/weights_electron.root";
+    char file_pion[100] = "root/weights_pion.root";
+//////////////////////////////////////////////////////////////////
+//GETTING Data TO FIT. Change as needed 
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples2.root");
+    char dFile1[500];
+    sprintf(dFile1,"../SPlot/Kshort/out.root"); 
+    TFile *f_D = new TFile(dFile);
+    TFile *f_D1 = new TFile(dFile1);
+
+
+    TH1F* hSig_povere = new TH1F("hSig_povere","hSig_povere",200,0,10);
+    TH1F* hSig_nsige = new TH1F("hSig_nsige","hSig_nsige",70,-13,13);
+    TH1F* hSig_deltabeta = new TH1F("hSig_deltabeta","hSig_deltabeta",30,-0.05,0.05);
+    TH1F* hSig_zdist = new TH1F("hSig_zdist","hSig_zdist",100,-30,30);
+    TH1F* hSig_phidist = new TH1F("hSig_phidist","hSig_phidist",100,-0.1,0.1);
+    TH1F* hSig_povere_ws = new TH1F("hSig_povere_ws","hSig_povere_ws",200,0,10);
+    TH1F* hSig_nsige_ws = new TH1F("hSig_nsige_ws","hSig_nsige_ws",70,-13,13);
+    TH1F* hSig_deltabeta_ws = new TH1F("hSig_deltabeta_ws","hSig_deltabeta_ws",30,-0.05,0.05);
+    TH1F* hSig_zdist_ws = new TH1F("hSig_zdist_ws","hSig_zdist_ws",100,-30,30);
+    TH1F* hSig_phidist_ws = new TH1F("hSig_phidist_ws","hSig_phidist_ws",100,-0.1,0.1);
+    ch1 = (TChain*)f_D->Get("PhoE");
+    ch2 = (TChain*)f_D1->Get("Ks_tree_sw");
+    
+    ch1->Project("hSig_povere","probe_p/probe_emc0",cut_s); 
+    ch1->Project("hSig_nsige","probe_nsige",cut_s); 
+    ch1->Project("hSig_deltabeta","(1/probe_beta - 1/(probe_p / TMath::Sqrt(probe_p*probe_p+0.00051099907*0.00051099907)))/ (1/probe_beta)",cut_s_beta); 
+    ch1->Project("hSig_zdist","probe_zdist",cut_s); 
+    ch1->Project("hSig_phidist","probe_phidist",cut_s); 
+
+    ch1->Project("hSig_povere_ws","probe_p/probe_emc0",cut_b); 
+    ch1->Project("hSig_nsige_ws","probe_nsige",cut_b); 
+    ch1->Project("hSig_deltabeta_ws","(1/probe_beta - 1/(probe_p / TMath::Sqrt(probe_p*probe_p+0.00051099907*0.00051099907)))/ (1/probe_beta)",cut_b_beta); 
+    ch1->Project("hSig_zdist_ws","probe_zdist",cut_b); 
+    ch1->Project("hSig_phidist_ws","probe_phidist",cut_b); 
+
+    TH1F* hBkg_povere = new TH1F("hBkg_povere","hBkg_povere",200,0,10);
+    TH1F* hBkg_nsigpi = new TH1F("hBkg_nsigpi","hBkg_nsigpi",70,-13,13);
+    if(1)TH1F* hBkg_deltabeta = new TH1F("hBkg_deltabeta","hBkg_deltabeta",30,-0.05,0.05);
+    //if(pt==2)TH1F* hBkg_deltabeta = new TH1F("hBkg_deltabeta","hBkg_deltabeta",50,-0.0005,0.0005);
+    TH1F* hBkg_zdist = new TH1F("hBkg_zdist","hBkg_zdist",100,-30,30);
+    TH1F* hBkg_phidist = new TH1F("hBkg_phidist","hBkg_phidist",100,-0.1,0.1);
+
+    float nsige = 0;
+    float beta = 0;
+    float pT = 0;
+    float p = 0;
+    float emc0 = 0;
+    float nsigpi = 0;
+    float zdist = 0;
+    float phidist = 0;
+    float nphi = 0;
+    float neta = 0;
+    float sw = 0;
+    ch2->SetBranchAddress("probe_nsige",&nsige);
+    ch2->SetBranchAddress("probe_beta",&beta);
+    ch2->SetBranchAddress("probe_pt",&pT);
+    ch2->SetBranchAddress("probe_p",&p);
+    ch2->SetBranchAddress("probe_emc0",&emc0);
+    ch2->SetBranchAddress("probe_nsigpi",&nsigpi);
+    ch2->SetBranchAddress("probe_zdist",&zdist);
+    ch2->SetBranchAddress("probe_phidist",&phidist);
+    ch2->SetBranchAddress("probe_nphi",&nphi);
+    ch2->SetBranchAddress("probe_neta",&neta);
+    ch2->SetBranchAddress("sWeight",&sw);
+    for(int i =0;i<ch2->GetEntries();i++){
+	ch2->GetEntry(i);
+	if(i%10000==0)cout << "on loop " << i << " of " << ch2->GetEntries() << endl;	   
+	hBkg_nsigpi->Fill(nsige,sw); 
+	if(emc0>0){
+	    hBkg_povere->Fill(p/emc0,sw);
+	    hBkg_zdist->Fill(zdist,sw);
+	    hBkg_phidist->Fill(phidist,sw);
+	}
+	//if(nphi>0||neta>0){
+	//    hneta->Fill(neta,sw);
+	//    hnphi->Fill(nphi,sw);
+        //	}
+	if(beta!=0){
+	    hBkg_deltabeta->Fill((1/beta - 1/(p / TMath::Sqrt(p*p+0.00051099907*0.00051099907)))/ (1/beta),sw);
+	    //hBkg_deltabeta->Fill((1/beta - 1/(p / TMath::Sqrt(p*p+0.139*0.139)))/ (1/beta),sw);
+	}
+    }
+    /*if(pt==2)hBkg_phidist->Rebin();
+    if(pt==2)hBkg_povere->Rebin();  
+    int num = 200000;
+    if(pt==2)num =  10000000;
+    ch2->Project("hBkg_povere","probe_p/probe_emc0",cut_bkg,"",num); 
+    ch2->Project("hBkg_nsigpi","probe_nsigpi",cut_bkg,"",num); 
+//    ch2->Project("hBkg_deltabeta","(1/probe_beta - 1/(probe_p / TMath::Sqrt(probe_p*probe_p+0.00051099907*0.00051099907)))/ (1/probe_beta)",cut_bkg,"",num);
+    ch2->Project("hBkg_deltabeta","(1/probe_beta - 1/(probe_p / TMath::Sqrt(probe_p*probe_p+0.13957018*0.13957018)))/ (1/probe_beta)",cut_bkg,"",num);
+    ch2->Project("hBkg_zdist","probe_zdist",cut_bkg,"",num); 
+    ch2->Project("hBkg_phidist","probe_phidist",cut_bkg,"",num); 
+*/
+// OS-SS subtraction  
+    hSig_povere->Add(hSig_povere_ws,-1);
+    hSig_nsige->Add(hSig_nsige_ws,-1);
+    hSig_deltabeta->Add(hSig_deltabeta_ws,-1);
+    hSig_zdist->Add(hSig_zdist_ws,-1);
+    hSig_phidist->Add(hSig_phidist_ws,-1); 
+//////////////////////////////////////////////////////////////////
+    ZERO(hSig_povere);
+    ZERO(hSig_nsige);
+    ZERO(hSig_deltabeta);
+    ZERO(hSig_zdist);
+    ZERO(hSig_phidist);
+//CALLING FITTING SCRIPT TO DO FIT////////////////////////////////
+//////////////////////////////////////////////////////////////////     
+    if(pt>0)fitdata1D(hSig_povere,hSig_nsige,hSig_deltabeta,hSig_zdist,hSig_phidist,save,file,pt,binning[pt-1],binning[pt]);
+    //if(pt==0)fitdata1D(hSig_povere,hSig_nsige,hSig_deltabeta,hSig_zdist,hSig_phidist,save,file,pt,0.6,8.5);
+    //if(pt>0)fitdata1D_pion(hBkg_povere,hBkg_nsigpi,hBkg_deltabeta,hBkg_zdist,hBkg_phidist,save,file_pion,pt,binning[pt-1],binning[pt]);
+    //if(pt==0)fitdata1D_pion(hBkg_povere,hBkg_nsigpi,hBkg_deltabeta,hBkg_zdist,hBkg_phidist,save,file_pion,pt,0.6,8.5);
+    //End Fit
+}//End
+
+void ZERO(TH1F* h){
+    for(int i = 0; i<h->GetNbinsX()+1;i++){
+	double temp = h->GetBinContent(i);
+	if(temp<0)h->SetBinContent(i,0);
+    }
+}
+
+void doLikelihood(){
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    gStyle->SetPalette(56);
+    TGaxis::SetMaxDigits(4);
+ 
+    int const numPtBins=9;
+    double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+    //int const numPtBins=5;
+    //double binning[numPtBins+1]={0.6,1,1.5,2.5,3.5,8.5};
+    TFile *file_e = new TFile("./root/weights_electron.root");
+    TFile *file_p = new TFile("./root/weights_pion.root");
+    electron_weight_povere=(TH1F*)file_e->Get("electron_weight_povere");
+    electron_weight_nsige=(TH1F*)file_e->Get("electron_weight_nsige");
+    electron_weight_deltabeta=(TH1F*)file_e->Get("electron_weight_deltabeta");
+    electron_weight_zdist=(TH1F*)file_e->Get("electron_weight_zdist");
+    electron_weight_phidist=(TH1F*)file_e->Get("electron_weight_phidist");
+    pion_weight_povere=(TH1F*)file_p->Get("pion_weight_povere");
+    pion_weight_nsigpi=(TH1F*)file_p->Get("pion_weight_nsigpi");
+    pion_weight_deltabeta=(TH1F*)file_p->Get("pion_weight_deltabeta");
+    pion_weight_zdist=(TH1F*)file_p->Get("pion_weight_zdist");
+    pion_weight_phidist=(TH1F*)file_p->Get("pion_weight_phidist");
+
+    char dFile[500];
+    char dFile1[500];
+    sprintf(dFile,"../production/NPE_Tuples2.root");
+    //sprintf(dFile1,"../SPlot/BKG.root");
+    sprintf(dFile1,"../SPlot/Kshort/all.root");
+    TFile *f_D = new TFile(dFile);
+    TFile *f_D1 = new TFile(dFile1);
+    ch1 = (TChain*)f_D->Get("PhoE");
+    ch2 = (TChain*)f_D1->Get("Ks_tree_sw");
+    //ch2 = (TChain*)f_D1->Get("BKG_lowPT_pi");
+    TH2F * hFit_pi_5 = new TH2F("hFit_pi_5","hFit_pi_5",200,0,20,300,-13,13);
+    TH2F * hFit_pi_4 = new TH2F("hFit_pi_4","hFit_pi_4",200,0,20,300,-13,13);
+    TH2F * hFit_pi_3 = new TH2F("hFit_pi_3","hFit_pi_3",200,0,20,300,-13,13);
+    TH2F * hFit_e_3 = new TH2F("hFit_e_3","hFit_e_3",200,0,20,300,-13,13);
+    TH2F * hFit_e_WS_3 = new TH2F("hFit_e_WS_3","hFit_e_WS_3",200,0,20,300,-13,13);
+    TH2F * hFit_pi_0 = new TH2F("hFit_pi_0","hFit_pi_0",200,0,20,300,-13,13);
+    TH2F * hFit2D_pi_0  = new TH2F ("hFit2D_pi_0","hFit2D_pi_0", 200,0,20,400,-4,4);
+ 
+    //ch2 = (TChain*)f_D1->Get("BKG_highPT_pi");
+    /*TH1F* DLL_e = new TH1F("DLL_e","DLL_e",1000,-0.3,0.3);
+    TH1F* DLL_e_ws = new TH1F("DLL_e_ws","DLL_e_ws",1000,-0.3,0.3);
+    TH1F* DLL_p = new TH1F("DLL_p","DLL_e",1000,-0.3,0.3);
+    TH2F* DLL_e_2D = new TH2F("DLL_e_2D","DLL_e_2D",400,-1,5,100,-0.3,0.3);
+    TH2F* DLL_e_ws_2D = new TH2F("DLL_e_ws_2D","DLL_e_ws_2D",400,-1,5,100,-0.3,0.3);
+    TH2F* DLL_p_2D = new TH2F("DLL_p_2D","DLL_e_2D",400,-1,5,100,-0.3,0.3);*/
+    TH1F* DLL_e = new TH1F("DLL_e","DLL_e",75,-1,1.5);
+    TH1F* DLL_e_ws = new TH1F("DLL_e_ws","DLL_e_ws",75,-1,1.5);
+    TH2F* DLL_e_nsige = new TH2F("DLL_e_nsige","DLL_e_nsige",100,-13,13,80,-4,4);
+    TH2F* DLL_e_nsige_ws = new TH2F("DLL_e_nsige_ws","DLL_e_nsige_ws",100,-13,13,80,-4,4);
+    TH2F* DLL_p_nsige = new TH2F("DLL_p_nsige","DLL_p_nsige",100,-13,13,80,-4,4);
+    TH2F* DLL_e_pt = new TH2F("DLL_e_pt","DLL_e_pt",75,-1,1.5,200,-4,4);
+    TH2F* DLL_e_pt_ws = new TH2F("DLL_e_pt_ws","DLL_e_pt_ws",75,-1,1.5,200,-4,4);
+    TH2F* DLL_p_pt = new TH2F("DLL_p_pt","DLL_p_pt",75,-1,1.5,200,-4,4);
+
+    TH2F* DLL_e_nsig = new TH2F("DLL_e_nsig","DLL_e_nsig",15,-10,5,200,-4,4);
+    TH2F* DLL_e_nsig_ws = new TH2F("DLL_e_nsig_ws","DLL_e_nsig_ws",15,-10,5,200,-4,4);
+    TH2F* DLL_p_nsig = new TH2F("DLL_p_nsig","DLL_p_nsig",15,-10,5,200,-4,4);
+    TH1F* nsig_eff_e = new TH1F("nsig_eff_e","pt_eff_e",15,-10,5);
+    TH1F* nsig_eff_p = new TH1F("nsig_eff_p","pt_eff_p",15,-10,5);
+
+    TH1F* DLL_p = new TH1F("DLL_p","DLL_p",75,-1,1.5);
+    TH1F* DLL_p_ot = new TH1F("DLL_p_ot","DLL_p_ot",75,-1,1.5);
+    TH1F* DLL_e_nw = new TH1F("DLL_e_nw","DLL_e_nw",75,-1,1.5);
+    TH1F* DLL_e_ws_nw = new TH1F("DLL_e_ws_nw","DLL_e_ws_nw",75,-1,1.5);
+    TH1F* DLL_p_nw = new TH1F("DLL_p_nw","DLL_p_nw",75,-1,1.5);
+
+    TH1F* DLL_e_post = new TH1F("DLL_e_post","DLL_e_post",40,-1,1.5);
+    TH1F* DLL_e_ws_post = new TH1F("DLL_e_ws_post","DLL_e_ws_post",40,-1,1.5);
+    TH1F* DLL_p_post = new TH1F("DLL_p_post","DLL_p_post",40,-1,1.5);
+    TH1F* DLL_pr_post = new TH1F("DLL_pr_post","DLL_pr_post",75,-1,1.5);
+    TH1F* DLL_k_post = new TH1F("DLL_k_post","DLL_k_post",75,-1,1.5);
+    TH2F* DLL_e_2D = new TH2F("DLL_e_2D","DLL_e_2D",200,0,20,400,-4,4);
+    TH2F* DLL_e_ws_2D = new TH2F("DLL_e_ws_2D","DLL_e_ws_2D",200,0,20,400,-4,4);
+    TH2F* DLL_e_2D1 = new TH2F("DLL_e_2D1","DLL_e_2D1",200,0,20,400,-4,4);
+    TH2F* DLL_e_ws_2D1 = new TH2F("DLL_e_ws_2D1","DLL_e_ws_2D1",200,0,20,400,-4,4);
+    TH2F* DLL_e_2D2 = new TH2F("DLL_e_2D2","DLL_e_2D2",200,0,20,400,-4,4);
+    TH2F* DLL_e_ws_2D2 = new TH2F("DLL_e_ws_2D2","DLL_e_ws_2D2",200,0,20,400,-4,4);
+    TH2F* DLL_p_2D = new TH2F("DLL_p_2D","DLL_p_2D",200,0,20,400,-4,4);
+
+    TH1F* DLL_pr = new TH1F("DLL_pr","DLL_pr",1000,-4,4);
+    TH2F* DLL_pr_2D = new TH2F("DLL_pr_2D","DLL_pr_2D",75,-1,1.5,400,-4,4);
+    TH1F* DLL_2p = new TH1F("DLL_2p","DLL_2p",1000,-4,4);
+    TH2F* DLL_2p_2D = new TH2F("DLL_2p_2D","DLL_2p_2D",75,-1,1.5,400,-4,4);
+    TH1F* DLL_k = new TH1F("DLL_k","DLL_k",1000,-4,4);
+    TH2F* DLL_k_2D = new TH2F("DLL_k_2D","DLL_k_2D",75,-1,1.5,400,-4,4);
+  
+    TH1F* pt_eff_r = new TH1F("pt_eff_r","pt_eff_r",numPtBins,binning);
+    TH1F* pt_eff_e = new TH1F("pt_eff_e","pt_eff_e",numPtBins,binning);
+ 
+    TH1F* pt_eff_e1 = new TH1F("pt_eff_e1","pt_eff_e1",numPtBins,binning);
+    TH1F* pt_eff_e2 = new TH1F("pt_eff_e2","pt_eff_e2",numPtBins,binning);
+    TH1F* pt_eff_e3 = new TH1F("pt_eff_e3","pt_eff_e3",numPtBins,binning);
+    TH1F* pt_eff_e4 = new TH1F("pt_eff_e4","pt_eff_e4",numPtBins,binning);
+    TH1F* pt_eff_e5 = new TH1F("pt_eff_e5","pt_eff_e5",numPtBins,binning);
+    TH1F* pt_eff_p1 = new TH1F("pt_eff_p1","pt_eff_p1",numPtBins,binning);
+    TH1F* pt_eff_p2 = new TH1F("pt_eff_p2","pt_eff_p2",numPtBins,binning);
+    TH1F* pt_eff_p3 = new TH1F("pt_eff_p3","pt_eff_p3",numPtBins,binning);
+    TH1F* pt_eff_p4 = new TH1F("pt_eff_p4","pt_eff_p4",numPtBins,binning);
+    TH1F* pt_eff_p5 = new TH1F("pt_eff_p5","pt_eff_p5",numPtBins,binning);
+    TH1F* pt_eff_p = new TH1F("pt_eff_p","pt_eff_p",numPtBins,binning);
+
+    TH1D* LL_ep = new TH1D("LL_ep","LL_ep",1000,0,.000001);
+    TH1D* LL_ee = new TH1D("LL_ee","LL_ee",1000,0,.000001);
+    TH1D* LL_ep_ws = new TH1D("LL_ep_ws","LL_ep_ws",1000,0,0.000001);
+    TH1D* LL_ee_ws = new TH1D("LL_ee_ws","LL_ee_ws",1000,0,0.000001);
+    TH1D* LL_pp = new TH1D("LL_pp","LL_pp",1000,0,.000001);
+    TH1D* LL_pe = new TH1D("LL_pe","LL_pe",1000,0,.000001);
+    TH1F* eff_e = new TH1F("eff_e","eff_e",75,-1,1.5);
+  
+    TH1F* sign = new TH1F("sign ","sign ",75,-1,1.5);
+    TH1F* line = new TH1F("line","line",50,-13,40);
+    TH1F* eff_p = new TH1F("eff_p","eff_p",75,-1,1.5);
+
+    TH1F* ROC = new TH1F("ROC","ROC",1000,0,1);
+  
+    TH2F* e_corr_nsige_beta = new TH2F("e_corr_nsige_beta","",200,-13,13,400,-1,5);
+    TH2F* e_corr_nsige_povere = new TH2F("e_corr_nsige_povere","",200,-13,13,200,0,5);
+    TH2F* e_corr_povere_zdist = new TH2F("e_corr_povere_zdist","",200,-13,13,200,-30,30);
+    TH2F* e_corr_beta_povere = new TH2F("e_corr_beta_povere","",400,-1,5,200,0,5);
+    TH2F* e_corr_phidist_zdist = new TH2F("e_corr_phidist_zdist","",200,-0.1,0.1,200,-30,30);
+    TH2F* e_corr_nsige_beta_ws = new TH2F("e_corr_nsige_beta_ws","",200,-13,13,400,-1,5);
+    TH2F* e_corr_nsige_povere_ws = new TH2F("e_corr_nsige_povere_ws","",200,-13,13,200,0,5);
+    TH2F* e_corr_povere_zdist_ws = new TH2F("e_corr_povere_zdist_ws","",200,-13,13,200,-30,30);
+    TH2F* e_corr_beta_povere_ws = new TH2F("e_corr_beta_povere_ws","",400,-1,5,200,0,5);
+    TH2F* e_corr_phidist_zdist_ws = new TH2F("e_corr_phidist_zdist_ws","",200,-0.1,0.1,200,-30,30);
+   
+    TH2F* p_corr_nsige_beta = new TH2F("p_corr_nsige_beta","",200,-13,13,200,-0.003,0.003);
+    TH2F* p_corr_nsige_povere = new TH2F("p_corr_nsige_povere","",200,-13,13,200,0,5);
+    TH2F* p_corr_povere_zdist = new TH2F("p_corr_povere_zdist","",200,-13,13,200,-30,30);
+    TH2F* p_corr_beta_povere = new TH2F("p_corr_beta_povere","",200,-0.03,0.03,200,0,5);
+    TH2F* p_corr_phidist_zdist = new TH2F("p_corr_phidist_zdist","",200,-0.1,0.1,200,-30,30);
+
+
+
+
+    TH1F *electron_povere = new TH1F("electron_povere","",electron_weight_povere->GetNbinsX(),electron_weight_povere->GetXaxis()->GetXmin(),electron_weight_povere->GetXaxis()->GetXmax());
+    TH1F *electron_nsigpi = new TH1F("electron_nsigpi","",electron_weight_nsige->GetNbinsX(),electron_weight_nsige->GetXaxis()->GetXmin(),electron_weight_nsige->GetXaxis()->GetXmax());
+    TH1F *electron_nsige = new TH1F("electron_nsige","",electron_weight_nsige->GetNbinsX(),electron_weight_nsige->GetXaxis()->GetXmin(),electron_weight_nsige->GetXaxis()->GetXmax());
+
+    TH1F *electron_deltabeta_p = new TH1F("electron_deltabeta_p","",pion_weight_deltabeta->GetNbinsX()*5,pion_weight_deltabeta->GetXaxis()->GetXmin()*5,pion_weight_deltabeta->GetXaxis()->GetXmax()*5);
+    TH1F *electron_deltabeta_p_ws = new TH1F("electron_deltabeta_p_ws","",pion_weight_deltabeta->GetNbinsX()*5,pion_weight_deltabeta->GetXaxis()->GetXmin()*5,pion_weight_deltabeta->GetXaxis()->GetXmax()*5);
+    TH1F *electron_deltabeta_e = new TH1F("electron_deltabeta_e","",electron_weight_deltabeta->GetNbinsX(),electron_weight_deltabeta->GetXaxis()->GetXmin(),electron_weight_deltabeta->GetXaxis()->GetXmax());
+    TH1F *electron_zdist = new TH1F("electron_zdist","",electron_weight_zdist->GetNbinsX(),electron_weight_zdist->GetXaxis()->GetXmin(),electron_weight_zdist->GetXaxis()->GetXmax());
+    TH1F *electron_phidist = new TH1F("electron_phidist","",electron_weight_phidist->GetNbinsX(),electron_weight_phidist->GetXaxis()->GetXmin(),electron_weight_phidist->GetXaxis()->GetXmax());
+    TH1F *electron_povere_ws = new TH1F("electron_povere_ws","",electron_weight_povere->GetNbinsX(),electron_weight_povere->GetXaxis()->GetXmin(),electron_weight_povere->GetXaxis()->GetXmax());
+    TH1F *electron_nsigpi_ws = new TH1F("electron_nsigpi_ws","",electron_weight_nsige->GetNbinsX(),electron_weight_nsige->GetXaxis()->GetXmin(),electron_weight_nsige->GetXaxis()->GetXmax());
+    TH1F *electron_nsige_ws = new TH1F("electron_nsige_ws","",electron_weight_nsige->GetNbinsX(),electron_weight_nsige->GetXaxis()->GetXmin(),electron_weight_nsige->GetXaxis()->GetXmax());
+   
+    TH1F *electron_deltabeta_e_ws = new TH1F("electron_deltabeta_e_ws","",electron_weight_deltabeta->GetNbinsX(),electron_weight_deltabeta->GetXaxis()->GetXmin(),electron_weight_deltabeta->GetXaxis()->GetXmax());
+    TH1F *electron_zdist_ws = new TH1F("electron_zdist_ws","",electron_weight_zdist->GetNbinsX(),electron_weight_zdist->GetXaxis()->GetXmin(),electron_weight_zdist->GetXaxis()->GetXmax());
+    TH1F *electron_phidist_ws = new TH1F("electron_phidist_ws","",electron_weight_phidist->GetNbinsX(),electron_weight_phidist->GetXaxis()->GetXmin(),electron_weight_phidist->GetXaxis()->GetXmax());
+    TH1F *pion_povere = new TH1F("pion_povere","",pion_weight_povere->GetNbinsX(),pion_weight_povere->GetXaxis()->GetXmin(),pion_weight_povere->GetXaxis()->GetXmax());
+    TH1F *pion_nsigpi = new TH1F("pion_nsigpi","",pion_weight_nsigpi->GetNbinsX(),pion_weight_nsigpi->GetXaxis()->GetXmin(),pion_weight_nsigpi->GetXaxis()->GetXmax());
+    TH1F *pion_nsige = new TH1F("pion_nsige","",pion_weight_nsigpi->GetNbinsX(),pion_weight_nsigpi->GetXaxis()->GetXmin(),pion_weight_nsigpi->GetXaxis()->GetXmax());
+    TH1F *pion_deltabeta_p = new TH1F("pion_deltabeta_p","",pion_weight_deltabeta->GetNbinsX(),pion_weight_deltabeta->GetXaxis()->GetXmin(),pion_weight_deltabeta->GetXaxis()->GetXmax());
+
+    TH1F *pion_deltabeta_e = new TH1F("pion_deltabeta_e","",electron_weight_deltabeta->GetNbinsX(),electron_weight_deltabeta->GetXaxis()->GetXmin(),electron_weight_deltabeta->GetXaxis()->GetXmax());
+    TH1F *pion_zdist = new TH1F("pion_zdist","",pion_weight_zdist->GetNbinsX(),pion_weight_zdist->GetXaxis()->GetXmin(),pion_weight_zdist->GetXaxis()->GetXmax());
+    TH1F *pion_phidist = new TH1F("pion_phidist","",pion_weight_phidist->GetNbinsX(),pion_weight_phidist->GetXaxis()->GetXmin(),pion_weight_phidist->GetXaxis()->GetXmax());
+
+    
+    double w1=1;//0.7;
+    double w2=1;//3.4;
+    double w3=1;//1.3;
+    double w4=1;//0.8;
+    double w5=1;//1.3;
+    //w1=0.8;
+    //w2=2.1;
+    //w3=5.3;
+    //w4=0.3;
+    //w5=0.5;  
+    w1=0.7; //TuneA
+    w2=3.4;
+    w3=5.5;
+    w4=0.8;
+    w5=1.3; //TuneA   
+    Float_t pt=0;
+    Float_t p=0;
+    Float_t nphi=0;
+    Float_t neta=0;
+    Float_t phidist=0;
+    Float_t zdist=0;
+    Float_t nsige=0;
+    Float_t nsigpi=0;
+    Float_t beta=0;
+    Float_t emc0=0;
+    Float_t probe_charge=0;
+    Float_t tag_charge=0;
+
+    ch1 -> SetBranchAddress( "probe_p" , &p );
+    ch1 -> SetBranchAddress( "probe_pt" , &pt );
+    ch1 -> SetBranchAddress( "probe_nphi" , &nphi );
+    ch1 -> SetBranchAddress( "probe_neta" , &neta);
+    ch1 -> SetBranchAddress( "probe_phidist" , &phidist);
+    ch1 -> SetBranchAddress( "probe_zdist" , &zdist);
+    ch1 -> SetBranchAddress( "probe_nsige" , &nsige );
+    ch1 -> SetBranchAddress( "probe_nsigpi" , &nsigpi);
+    ch1 -> SetBranchAddress( "probe_beta" , &beta );
+    ch1 -> SetBranchAddress( "probe_emc0" , &emc0 );
+    ch1 -> SetBranchAddress( "probe_charge" , &probe_charge );
+    ch1 -> SetBranchAddress( "tag_charge" , &tag_charge );
+    for(int i=0; i<ch1->GetEntries();i++){
+	if((i%10000==0)){
+	    double inte = i;
+	    int outt =100*inte/ch1->GetEntries();
+	    cout << "On Track #: " << i << "  Percent Complete: " <<  outt << endl;
+	}
+
+	ch1->GetEntry(i);
+	//if(!(beta>0))continue;
+	if(!(emc0>0))continue;
+	if(!(nsige<13))continue;
+	//if(!(nsige>-1 && nsige<3))continue; 
+	//if(!(pt>2))continue; 
+	double dbeta = (1/beta - 1/(p / TMath::Sqrt(p*p+0.00051099907*0.00051099907)))/ (1/beta);
+	double dbeta_p = (1/beta - 1/(p / TMath::Sqrt(p*p+0.13957018*0.13957018)))/ (1/beta);
+	/////////////////////DLL
+	int bin1 = electron_weight_povere->FindBin(p/emc0);
+	int bin2 = electron_weight_nsige->FindBin(nsige);
+	int bin3 = electron_weight_deltabeta->FindBin(dbeta);
+	int bin4 = electron_weight_zdist->FindBin(zdist);
+	int bin5 = electron_weight_phidist->FindBin(phidist);
+	double weight1= electron_weight_povere->GetBinContent(bin1);
+	double weight2= electron_weight_nsige->GetBinContent(bin2);
+	double weight3= electron_weight_deltabeta->GetBinContent(bin3);
+	double weight4= electron_weight_zdist->GetBinContent(bin4);
+	double weight5= electron_weight_phidist->GetBinContent(bin5);	
+	bin1 = pion_weight_povere->FindBin(p/emc0);
+	bin2 = pion_weight_nsigpi->FindBin(nsige);
+	bin3 = pion_weight_deltabeta->FindBin(dbeta);
+	bin4 = pion_weight_zdist->FindBin(zdist);
+	bin5 = pion_weight_phidist->FindBin(phidist);
+	double weight11= pion_weight_povere->GetBinContent(bin1);//1E-6;
+	double weight22= pion_weight_nsigpi->GetBinContent(bin2);//1E-6;
+	double weight33= pion_weight_deltabeta->GetBinContent(bin3);//1E-6;
+	double weight44= pion_weight_zdist->GetBinContent(bin4);//1E-6;
+	double weight55= pion_weight_phidist->GetBinContent(bin5);//1E-6;
+	//double dll = log(weight1*weight2*weight3*weight4*weight5+1.) - log(weight11*weight22*weight33*weight44*weight55+1.); 
+	//double dll = TMath::Log(w1*weight1+w2*weight2+w3*weight3+w4*weight4+w5*weight5) - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	//double dll_nw = TMath::Log(weight1+weight2+weight3+weight4+weight5) - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	//double dll = TMath::Log(w1*weight1/weight11*w2*weight2/weight22*w3*weight3/weight33*w4*weight4/weight44*w5*weight5/weight55);// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	double dll_nw = TMath::Log(weight1/weight11*weight2/weight22*weight3/weight33*weight4/weight44*weight5/weight55);// - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	/*double sum1 = weight1*weight2*weight3*weight4*weight5;
+	double sum2 = weight11*weight22*weight33*weight44*weight55;
+	if(sum1<1e-21)sum1+=1e-21;
+	if(sum2<1e-21)sum2+=1e-21;
+	double rati = (sum1)/(sum1+sum2);
+	if(rati>=1) rati = 1. - 1.e-21;    
+	double dll = -1./15*TMath::Log(1.0/rati-1.);//TMath::Log((sum1+1E-6)/(sum1+sum2+1E-6));// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	*/
+	
+
+	if(weight1<1e-10)weight1+=1e-10;                                             
+	if(weight2<1e-10)weight2+=1e-10;    
+	if(weight3<1e-10)weight3+=1e-10;    
+	if(weight4<1e-10)weight4+=1e-10;    
+	if(weight5<1e-10)weight5+=1e-10;    
+	//if(weight6<1e-10)weight6+=1e-10;    
+	if(weight11<1e-10)weight11+=1e-10;                                                                                                                 
+        if(weight22<1e-10)weight22+=1e-10;
+	if(weight33<1e-10)weight33+=1e-10;
+	if(weight44<1e-10)weight44+=1e-10;
+	if(weight55<1e-10)weight55+=1e-10;
+	//if(weight66<1e-10)weight66+=1e-10;
+	double lr1 = weight1/(weight1+weight11);
+	double lr2 = weight2/(weight2+weight22);
+        double lr3 = weight3/(weight3+weight33);
+	double lr4 = weight4/(weight4+weight44);
+        double lr5 = weight5/(weight5+weight55);
+        //double lr6 = weight6/(weight6+weight66);
+	//if(beta>0)double rati =(lr1+lr2+lr3+lr4+lr5)/5.;
+	//if(beta<=0)double rati =(lr1+lr2+lr4+lr5)/4.;
+	if(beta>0)double rati =weight1*weight2*weight3*weight4*weight5 / (weight1*weight2*weight3*weight4*weight5+weight11*weight22*weight33*weight44*weight55);
+	if(beta<=0)double rati =weight1*weight2*weight4*weight5 / (weight1*weight2*weight4*weight5+weight11*weight22*weight44*weight55);
+
+	//if(rati>=1) rati = 1 - 1e-21;
+	//if(rati==0)rati=1e-21;
+	double dll = -TMath::Log(1./rati -1)/15;
+	//double dll = rati;
+
+	if(dll>300)dll=2;
+	if(dll<-300)dll=-2;
+	////////////////////DLL
+	 
+	if(1){//nsige>-1 && nsige<3){
+	if(probe_charge*tag_charge<0){
+	    if(p/emc0>0.3 && p/emc0<1.5){	   
+		if(dll>0.45)  hFit_e_3->Fill(pt,nsige);
+	    }
+	    e_corr_nsige_beta->Fill(nsige,dbeta);
+	    e_corr_nsige_povere->Fill(nsige,p/emc0);
+	    e_corr_povere_zdist->Fill(p/emc0,zdist);
+	    e_corr_phidist_zdist->Fill(phidist,zdist);
+	    e_corr_beta_povere->Fill(dbeta,p/emc0);
+	    DLL_e->Fill(dll);
+	    if(p/emc0>0.3 && p/emc0<1.5)DLL_e_post->Fill(dll);
+	    DLL_e_nsig->Fill(nsige,dll);
+	    DLL_e_pt->Fill(pt,dll);
+	    DLL_e_nw->Fill(dll_nw);
+	    if(p/emc0>0.3 && p/emc0<1.5)DLL_e_2D->Fill(pt,dll);
+	    if(p/emc0>0.3 && p/emc0<1.5 && nsige>-1 && nsige<3)DLL_e_2D1->Fill(pt,dll);
+	    LL_ee->Fill((weight1*weight2*weight3*weight4*weight5));
+	    LL_ep->Fill((weight11*weight22*weight33*weight44*weight55));
+	    electron_povere->Fill(p/emc0);
+	    electron_nsige->Fill(nsige);
+	    electron_nsigpi->Fill(nsigpi);
+	    electron_deltabeta_e->Fill(dbeta);
+	    electron_deltabeta_p->Fill(dbeta_p);
+	    electron_zdist->Fill(zdist);
+	    electron_phidist->Fill(phidist);
+	}
+	if(probe_charge*tag_charge>0){
+	    if(p/emc0>0.3 && p/emc0<1.5){	   
+		if(dll>0.45)  hFit_e_WS_3->Fill(pt,nsige);
+	    }
+	    e_corr_nsige_beta_ws->Fill(nsige,dbeta);
+	    e_corr_nsige_povere_ws->Fill(nsige,p/emc0);
+	    e_corr_povere_zdist_ws->Fill(p/emc0,zdist);
+	    e_corr_phidist_zdist_ws->Fill(phidist,zdist);
+	    e_corr_beta_povere_ws->Fill(dbeta,p/emc0);
+	    DLL_e_ws->Fill(dll);
+	  
+	    if(p/emc0>0.3 && p/emc0<1.5)DLL_e_ws_post->Fill(dll);
+	    DLL_e_nsig_ws->Fill(nsige,dll);
+	    DLL_e_pt_ws->Fill(pt,dll);
+	    DLL_e_ws_nw->Fill(dll_nw);
+	    if(p/emc0>0.3 && p/emc0<1.5)DLL_e_ws_2D->Fill(pt,dll);
+	    if(p/emc0>0.3 && p/emc0<1.5 && nsige>-1 && nsige<3)DLL_e_ws_2D1->Fill(pt,dll);
+	    LL_ee_ws->Fill((weight1*weight2*weight3*weight4*weight5));
+	    LL_ep_ws->Fill((weight11*weight22*weight33*weight44*weight55));
+	    electron_povere_ws->Fill(p/emc0);
+	    electron_nsige_ws->Fill(nsige);
+	    electron_nsigpi_ws->Fill(nsigpi);
+	    electron_deltabeta_e_ws->Fill(dbeta);
+	    electron_deltabeta_p_ws->Fill(dbeta_p);
+	    electron_zdist_ws->Fill(zdist);
+	    electron_phidist_ws->Fill(phidist);
+	}
+	}   
+    }
+    ch2 -> SetBranchAddress( "probe_p" , &p );
+    ch2 -> SetBranchAddress( "probe_pt" , &pt );
+    ch2 -> SetBranchAddress( "probe_nphi" , &nphi );
+    ch2 -> SetBranchAddress( "probe_neta" , &neta);
+    ch2 -> SetBranchAddress( "probe_phidist" , &phidist);
+    ch2 -> SetBranchAddress( "probe_zdist" , &zdist);
+    ch2 -> SetBranchAddress( "probe_nsige" , &nsige );
+    ch2 -> SetBranchAddress( "probe_nsigpi" , &nsigpi);
+    ch2 -> SetBranchAddress( "probe_beta" , &beta );
+    ch2 -> SetBranchAddress( "probe_emc0" , &emc0 );
+    float sw=1;
+    ch2->SetBranchAddress("sWeight",&sw);
+    Float_t bkgcat=0;
+    ch2 -> SetBranchAddress( "probe_bkgcat" , &bkgcat );
+    int iLoop = ch2->GetEntries();
+    for(int i=1; i<iLoop;i++){//
+	if((i%100000==0)){
+	    double inte = i;
+	    int outt =100*inte/iLoop;
+	    cout << "On Track #: " << i << "  Percent Complete: " <<  outt << endl;
+	}
+	//if(i<200000)continue;
+	ch2->GetEntry(i);
+	//if(!(beta>0))continue;
+	if(!(emc0>0))continue;
+//	if(!(pt>2))continue; 
+	//if(!(bkgcat==1))continue;
+	//if(!(nsige<3))continue;
+	double dbeta = (1/beta - 1/(p / TMath::Sqrt(p*p+0.13957018*0.13957018)))/ (1/beta);
+	double dbeta_e = (1/beta - 1/(p / TMath::Sqrt(p*p+0.00051099907*0.00051099907)))/ (1/beta);
+	/////////////////////DLL
+	int bin1 = electron_weight_povere->FindBin(p/emc0);
+	int bin2 = electron_weight_nsige->FindBin(nsige);
+	int bin3 = electron_weight_deltabeta->FindBin(dbeta_e);
+	int bin4 = electron_weight_zdist->FindBin(zdist);
+	int bin5 = electron_weight_phidist->FindBin(phidist);
+	double weight1= electron_weight_povere->GetBinContent(bin1);
+	double weight2= electron_weight_nsige->GetBinContent(bin2);
+	double weight3= electron_weight_deltabeta->GetBinContent(bin3);
+	double weight4= electron_weight_zdist->GetBinContent(bin4);
+	double weight5= electron_weight_phidist->GetBinContent(bin5);	
+	bin1 = pion_weight_povere->FindBin(p/emc0);
+	bin2 = pion_weight_nsigpi->FindBin(nsige);
+	bin3 = pion_weight_deltabeta->FindBin(dbeta_e);
+	bin4 = pion_weight_zdist->FindBin(zdist);
+	bin5 = pion_weight_phidist->FindBin(phidist);
+
+	double weight11= pion_weight_povere->GetBinContent(bin1);//+electron_weight_povere->GetBinContent(bin1);;//1E-6;
+	double weight22= pion_weight_nsigpi->GetBinContent(bin2);//+electron_weight_nsige->GetBinContent(bin2);;//1E-6;
+	double weight33= pion_weight_deltabeta->GetBinContent(bin3);//+electron_weight_deltabeta->GetBinContent(bin3);;//1E-6;
+	double weight44= pion_weight_zdist->GetBinContent(bin4);//+electron_weight_zdist->GetBinContent(bin4);;//1E-6;
+	double weight55= pion_weight_phidist->GetBinContent(bin5);//+electron_weight_phidist->GetBinContent(bin5);//1E-6;
+	//double dll = log(weight1*weight2*weight3*weight4*weight5+1) - log(weight11*weight22*weight33*weight44*weight55+1);
+	//double dll = TMath::Log(w1*weight1+w2*weight2+w3*weight3+w4*weight4+w5*weight5) - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	//double dll_nw = TMath::Log(weight1+weight2+weight3+weight4+weight5) - TMath::Log(weight11+weight22+weight33+weight44+weight55);	
+	//double dll = TMath::Log(w1*weight1/weight11*w2*weight2/weight22*w3*weight3/weight33*w4*weight4/weight44*w5*weight5/weight55);// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	//double dll_nw = TMath::Log(weight1/weight11*weight2/weight22*weight3/weight33*weight4/weight44*weight5/weight55);// - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	double dll_nw = TMath::Log(weight1/weight11*weight2/weight22*weight3/weight33*weight4/weight44*weight5/weight55);// - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	/*double sum1 = weight1*weight2*weight3*weight4*weight5;
+	double sum2 = weight11*weight22*weight33*weight44*weight55;
+	if(sum1<1e-20)sum1+=1e-21;
+	if(sum2<1e-20)sum2+=1e-21;
+	double rati = (sum1)/(sum1+sum2);
+	if(rati>=1) rati = 1. - 1.e-21;    
+	double dll = -1./15*TMath::Log(1.0/rati-1.);//TMath::Log((sum1+1E-6)/(sum1+sum2+1E-6));// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	*/
+	if(weight1<1e-10)weight1+=1e-10;
+	if(weight2<1e-10)weight2+=1e-10;
+        if(weight3<1e-10)weight3+=1e-10;
+	if(weight4<1e-10)weight4+=1e-10;
+	if(weight5<1e-10)weight5+=1e-10;
+	//if(weight6<1e-10)weight6+=1e-10;                                                                                                                                          
+	if(weight11<1e-10)weight11+=1e-10;
+        if(weight22<1e-10)weight22+=1e-10;
+        if(weight33<1e-10)weight33+=1e-10;
+        if(weight44<1e-10)weight44+=1e-10;
+        if(weight55<1e-10)weight55+=1e-10;
+        //if(weight66<1e-10)weight66+=1e-10;                                                                                                                                        
+        double lr1 = weight1/(weight1+weight11);
+        double lr2 = weight2/(weight2+weight22);
+	double lr3 = weight3/(weight3+weight33);
+	double lr4  = weight4/(weight4+weight44);
+	double lr5 = weight5/(weight5+weight55);
+	//double lr6 = weight6/(weight6+weight66);
+	//double rati = (lr1+lr2+lr3+lr4+lr5)/5.;
+	//if(beta>0)double rati =(lr1+lr2+lr3+lr4+lr5)/5.;//TMath::Log(lr1+lr2+lr3+lr4+lr5);
+	//if(beta<=0)double rati =(lr1+lr2+lr4+lr5)/4.;//TMath::Log(lr1+lr2+lr3+lr4+lr5); 
+	if(beta>0)double rati =weight1*weight2*weight3*weight4*weight5 / (weight1*weight2*weight3*weight4*weight5+weight11*weight22*weight33*weight44*weight55);
+	if(beta<=0)double rati =weight1*weight2*weight4*weight5 / (weight1*weight2*weight4*weight5+weight11*weight22*weight44*weight55);
+
+//if(rati>=1) rati = 1 - 1e-21;
+	//if(rati==0)rati=1e-21;
+	double dll = -TMath::Log(1./rati -1)/15;
+	//double dll = rati;
+	if(dll>0.45)  hFit_pi_5->Fill(pt,nsige,sw);
+	////////////////////DLL	 
+	if(p/emc0>0.3 && p/emc0<1.5){
+	   
+	    hFit_pi_0->Fill(pt,nsige,sw);	 
+	    if(dll>0.45)  hFit_pi_3->Fill(pt,nsige,sw);
+	    if(dll>0.)  hFit_pi_4->Fill(pt,nsige,sw);
+	    if(nsige>-1 && nsige<3)hFit2D_pi_0->Fill(pt,dll,sw);
+	}
+    
+ 	if(!(pt>2))continue; 
+	if(1){
+	 
+	    p_corr_nsige_beta->Fill(nsige,dbeta,sw);
+	    p_corr_nsige_povere->Fill(nsige,p/emc0,sw);
+	    p_corr_povere_zdist->Fill(p/emc0,zdist,sw);
+	    p_corr_phidist_zdist->Fill(phidist,zdist,sw);
+	    p_corr_beta_povere->Fill(dbeta,p/emc0,sw);
+	    pion_povere->Fill(p/emc0,sw);
+	    pion_nsige->Fill(nsige,sw);
+	    pion_nsigpi->Fill(nsigpi,sw);
+	    pion_deltabeta_p->Fill(dbeta,sw);
+	    pion_deltabeta_e->Fill(dbeta_e,sw);
+	    pion_zdist->Fill(zdist,sw);
+	    pion_phidist->Fill(phidist,sw);
+	    LL_pp->Fill((weight1*weight2*weight3*weight4*weight5),sw);
+	    LL_pe->Fill((weight11*weight22*weight33*weight44*weight55),sw);
+	}
+	if(dll>300)dll=2;
+	if(dll<-300)dll=-2;
+	if(1){
+	    DLL_p->Fill(dll);
+	    if(p/emc0>0.3 && p/emc0<1.5)DLL_p_post->Fill(dll,sw);
+	    DLL_p_nsig->Fill(nsige,dll,sw);
+	    DLL_p_pt->Fill(pt,dll,sw);
+	    DLL_p_nw->Fill(dll_nw,sw);
+	    if(p/emc0>0.3 && p/emc0<1.5 && nsige>-1 && nsige<3)DLL_p_2D->Fill(pt,dll,sw);
+	}
+	if(bkgcat==2&& nsige>6){
+	    DLL_2p->Fill(dll);
+	    DLL_2p_2D->Fill(pt,dll);
+	}
+	if(bkgcat==3&& nsige<0){
+	    DLL_k->Fill(dll);
+	    if(fabs(1/beta-1)<0.025 && p/emc0>0.3 && p/emc0<1.5)DLL_k_post->Fill(dll);
+	    DLL_k_2D->Fill(pt,dll);
+	}
+	if(bkgcat==4&& nsige<0){
+	    DLL_pr->Fill(dll);
+	    if(fabs(1/beta-1)<0.025 && p/emc0>0.3 && p/emc0<1.5)DLL_pr_post->Fill(dll);
+	    DLL_pr_2D->Fill(pt,dll);
+	}
+    }
+    TFile file("root/Ks_pion.root","RECREATE");
+    hFit_e_3->Add(hFit_e_WS_3,-1);
+    hFit_e_3->Write();
+    hFit_pi_3->Write();
+    hFit_pi_4->Write();
+    hFit_pi_5->Write();
+    hFit_pi_0->Write();
+    hFit2D_pi_0->Write();
+    file.Close();
+
+
+    int numBins=1;
+    double binLow  = 0.;
+    double binHigh = 2.;
+    double binStep = (binHigh - binLow)/numBins;
+    TH1F* hOverlap = new TH1F("hOverlap","hOverlap",numBins,binLow+binStep/2.,binHigh+binStep/2.);
+    hOverlap->GetYaxis()->SetTitle("e-#pi overlap");
+    //hOverlap->GetXaxis()->SetTitle("w_{#it{p}/E}");
+    //hOverlap->GetXaxis()->SetTitle("w_{n#sigma_{e}}");
+    //hOverlap->GetXaxis()->SetTitle("w_{#Delta(1/#beta)/(1/#beta)}");
+    //hOverlap->GetXaxis()->SetTitle("w_{#Delta#it{z}}");
+    hOverlap->GetXaxis()->SetTitle("w_{#Delta#phi}");
+    w1=0.8;
+    w2=2.1;
+    w3=5.3;
+    w4=0.3;
+    w5=0.5;
+
+    cout << "Scanning from " << binLow+binStep << " to " << binHigh << " in steps of " << binStep << endl;
+    for(int loop=2;loop<numBins+1;loop++){
+	w5 = binLow+binStep*(loop);
+	cout << "On loop number " << loop << " :Scanning weight " << binLow+binStep*(loop) << endl;
+	Float_t pt=0;
+	Float_t p=0;
+	Float_t nphi=0;
+	Float_t neta=0;
+	Float_t phidist=0;
+	Float_t zdist=0;
+	Float_t nsige=0;
+	Float_t nsigpi=0;
+	Float_t beta=0;
+	Float_t emc0=0;
+	Float_t probe_charge=0;
+	Float_t tag_charge=0;
+	ch1 -> SetBranchAddress( "probe_p" , &p );
+	ch1 -> SetBranchAddress( "probe_pt" , &pt );
+	ch1 -> SetBranchAddress( "probe_nphi" , &nphi );
+	ch1 -> SetBranchAddress( "probe_neta" , &neta);
+	ch1 -> SetBranchAddress( "probe_phidist" , &phidist);
+	ch1 -> SetBranchAddress( "probe_zdist" , &zdist);
+	ch1 -> SetBranchAddress( "probe_nsige" , &nsige );
+	ch1 -> SetBranchAddress( "probe_nsigpi" , &nsigpi);
+	ch1 -> SetBranchAddress( "probe_beta" , &beta );
+	ch1 -> SetBranchAddress( "probe_emc0" , &emc0 );
+	ch1 -> SetBranchAddress( "probe_charge" , &probe_charge );
+	ch1 -> SetBranchAddress( "tag_charge" , &tag_charge );
+	TH1F* tDLL_p = new TH1F("tDLL_p","tDLL_p",80,-4,4);
+	TH1F* tDLL_e = new TH1F("tDLL_e","tDLL_e",80,-4,4);
+	TH1F* tDLL_e_ws = new TH1F("tDLL_e_ws","tDLL_e_ws",80,-4,4);
+
+	for(int i=0; i<ch1->GetEntries();i++){
+	    ch1->GetEntry(i);
+	    if(!(beta>0))continue;
+	    if(!(emc0>0))continue;
+	    if(!(nsige<13))continue; 
+	    double dbeta = (1/beta - 1/(p / TMath::Sqrt(p*p+0.00051099907*0.00051099907)))/ (1/beta);
+	    double dbeta_p = (1/beta - 1/(p / TMath::Sqrt(p*p+0.13957018*0.13957018)))/ (1/beta);
+	    /////////////////////DLL
+	    int bin1 = electron_weight_povere->FindBin(p/emc0)+1E-6;
+	    int bin2 = electron_weight_nsige->FindBin(nsige)+1E-6;
+	    int bin3 = electron_weight_deltabeta->FindBin(dbeta)+1E-6;
+	    int bin4 = electron_weight_zdist->FindBin(zdist)+1E-6;
+	    int bin5 = electron_weight_phidist->FindBin(phidist)+1E-6;
+	    double weight1= 1;//electron_weight_povere->GetBinContent(bin1)+1E-6;
+	    double weight2= electron_weight_nsige->GetBinContent(bin2)+1E-6;
+	    double weight3= electron_weight_deltabeta->GetBinContent(bin3)+1E-6;
+	    double weight4= electron_weight_zdist->GetBinContent(bin4)+1E-6;
+	    double weight5= electron_weight_phidist->GetBinContent(bin5)+1E-6;	
+	    bin1 = pion_weight_povere->FindBin(p/emc0);
+	    bin2 = pion_weight_nsigpi->FindBin(nsigpi);
+	    bin3 = pion_weight_deltabeta->FindBin(dbeta_p);
+	    bin4 = pion_weight_zdist->FindBin(zdist);
+	    bin5 = pion_weight_phidist->FindBin(phidist);
+	    double weight11= 1;//pion_weight_povere->GetBinContent(bin1)+1E-6;
+	    double weight22= pion_weight_nsigpi->GetBinContent(bin2)+1E-6;
+	    double weight33= pion_weight_deltabeta->GetBinContent(bin3)+1E-6;
+	    double weight44= pion_weight_zdist->GetBinContent(bin4)+1E-6;
+	    double weight55= pion_weight_phidist->GetBinContent(bin5)+1E-6;
+	    //double dll = log(weight1*weight2*weight3*weight4*weight5+1.) - log(weight11*weight22*weight33*weight44*weight55+1.); 
+	    // double dll = TMath::Log(w1*weight1+w2*weight2+w3*weight3+w4*weight4+w5*weight5) - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);	   
+	double dll = TMath::Log(w1*weight1/weight11+w2*weight2/weight22+w3*weight3/weight33+w4*weight4/weight44+w5*weight5/weight55);// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	double dll_nw = TMath::Log(weight1/weight11+weight2/weight22+weight3/weight33+weight4/weight44+weight5/weight55);// - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	    if(dll>300)dll=2;
+	    if(dll<-300)dll=-2;
+	    ////////////////////DLL
+	    if(probe_charge*tag_charge>0)tDLL_e_ws->Fill(dll);
+	    if(probe_charge*tag_charge<0)tDLL_e->Fill(dll);
+	}
+	ch2 -> SetBranchAddress( "probe_p" , &p );
+	ch2 -> SetBranchAddress( "probe_pt" , &pt );
+	ch2 -> SetBranchAddress( "probe_nphi" , &nphi );
+	ch2 -> SetBranchAddress( "probe_neta" , &neta);
+	ch2 -> SetBranchAddress( "probe_phidist" , &phidist);
+	ch2 -> SetBranchAddress( "probe_zdist" , &zdist);
+	ch2 -> SetBranchAddress( "probe_nsige" , &nsige );
+	ch2 -> SetBranchAddress( "probe_nsigpi" , &nsigpi);
+	ch2 -> SetBranchAddress( "probe_beta" , &beta );
+	ch2 -> SetBranchAddress( "probe_emc0" , &emc0 );
+	Float_t bkgcat=0;
+	ch2 -> SetBranchAddress( "probe_bkgcat" , &bkgcat );
+	int iLoop = ch2->GetEntries();//200000+40000;
+	for(int i=0; i<iLoop;i++){
+	    //if(i<200000)continue;
+	    ch2->GetEntry(i);
+	    if(!(beta>0))continue;
+	    if(!(emc0>0))continue;
+	    if(!(nsige<0))continue;
+	    double dbeta = (1/beta - 1/(p / TMath::Sqrt(p*p+0.13957018*0.13957018)))/ (1/beta);
+	    double dbeta_e = (1/beta - 1/(p / TMath::Sqrt(p*p+0.00051099907*0.00051099907)))/ (1/beta);
+	    /////////////////////DLL
+	    int bin1 = electron_weight_povere->FindBin(p/emc0);
+	    int bin2 = electron_weight_nsige->FindBin(nsige);
+	    int bin3 = electron_weight_deltabeta->FindBin(dbeta_e);
+	    int bin4 = electron_weight_zdist->FindBin(zdist);
+	    int bin5 = electron_weight_phidist->FindBin(phidist);
+	    double weight1= 1;//electron_weight_povere->GetBinContent(bin1)+1E-6;
+	    double weight2= electron_weight_nsige->GetBinContent(bin2)+1E-6;
+	    double weight3= electron_weight_deltabeta->GetBinContent(bin3)+1E-6;
+	    double weight4= electron_weight_zdist->GetBinContent(bin4)+1E-6;
+	    double weight5= electron_weight_phidist->GetBinContent(bin5)+1E-6;	
+	    bin1 = pion_weight_povere->FindBin(p/emc0);
+	    bin2 = pion_weight_nsigpi->FindBin(nsigpi);
+	    bin3 = pion_weight_deltabeta->FindBin(dbeta);
+	    bin4 = pion_weight_zdist->FindBin(zdist);
+	    bin5 = pion_weight_phidist->FindBin(phidist);
+	    double weight11= 1;//pion_weight_povere->GetBinContent(bin1)+1E-6;
+	    double weight22= pion_weight_nsigpi->GetBinContent(bin2)+1E-6;
+	    double weight33= pion_weight_deltabeta->GetBinContent(bin3)+1E-6;
+	    double weight44= pion_weight_zdist->GetBinContent(bin4)+1E-6;
+	    double weight55= pion_weight_phidist->GetBinContent(bin5)+1E-6;
+	    double dll = TMath::Log(w1*weight1/weight11+w2*weight2/weight22+w3*weight3/weight33+w4*weight4/weight44+w5*weight5/weight55);// - TMath::Log(w1*weight11+w2*weight22+w3*weight33+w4*weight44+w5*weight55);
+	    double dll_nw = TMath::Log(weight1/weight11+weight2/weight22+weight3/weight33+weight4/weight44+weight5/weight55);// - TMath::Log(weight11+weight22+weight33+weight44+weight55);
+	    ////////////////////DLL
+	    if(bkgcat==1 && nsige<0)tDLL_p->Fill(dll);
+	}
+	tDLL_e->Add(tDLL_e_ws,-1);
+	ZERO(tDLL_e);
+	double overlap=0;
+	double norm1 = tDLL_e->Integral();
+	double norm2 = tDLL_p->Integral();
+	norm(tDLL_e);
+	norm(tDLL_p);
+	for(int i=1;i<tDLL_e->GetNbinsX()+1;i++){
+	    double temp11 = tDLL_e->GetBinContent(i);
+	    double temp22 = tDLL_p->GetBinContent(i);
+	    if(temp11>0 && temp22>0){
+		if(temp11>temp22)overlap+=temp22;
+		if(temp22>temp11)overlap+=temp11;
+	    }
+	}
+	hOverlap->SetBinContent(loop,overlap);
+	hOverlap->SetBinError(loop,overlap*sqrt(1/norm1+1/norm2));	
+	tDLL_e->Delete();
+	tDLL_p->Delete();
+	tDLL_e_ws->Delete();
+    }
+
+
+    DLL_e_nsig->Add(DLL_e_nsig_ws,-1);
+    DLL_e_pt->Add(DLL_e_pt_ws,-1);
+  
+    e_corr_nsige_beta->Add(e_corr_nsige_beta_ws,-1);
+    e_corr_nsige_povere->Add(e_corr_nsige_povere_ws,-1);
+    e_corr_povere_zdist->Add(e_corr_povere_zdist_ws,-1);
+    e_corr_phidist_zdist->Add(e_corr_phidist_zdist_ws,-1);
+    e_corr_beta_povere->Add(e_corr_beta_povere_ws,-1);
+    DLL_e->Add(DLL_e_ws,-1);
+    DLL_e_post->Add(DLL_e_ws_post,-1);
+    DLL_e_nw->Add(DLL_e_ws_nw,-1);
+    ZERO(DLL_e);
+    ZERO(DLL_e_post);
+    ZERO(DLL_e_nw);    
+    LL_ee->Add(LL_ee_ws,-1);
+    LL_ep->Add(LL_ep_ws,-1);
+    DLL_e_2D->Add(DLL_e_ws_2D,-1);
+    DLL_e_2D1->Add(DLL_e_ws_2D1,-1);
+    electron_povere->Add(electron_povere_ws,-1);
+    electron_nsige->Add(electron_nsige_ws,-1);
+    electron_nsigpi->Add(electron_nsigpi_ws,-1);
+    electron_deltabeta_e->Add(electron_deltabeta_e_ws,-1);
+    electron_deltabeta_p->Add(electron_deltabeta_p_ws,-1);
+    electron_zdist->Add(electron_zdist_ws,-1);
+    electron_phidist->Add(electron_phidist_ws,-1);
+    pion_povere->SetLineColor(kRed);
+    pion_nsigpi->SetLineColor(kRed);
+    pion_nsige->SetLineColor(kRed);
+    pion_deltabeta_e->SetLineColor(kRed);
+    pion_deltabeta_p->SetLineColor(kRed);
+    pion_zdist->SetLineColor(kRed);
+    pion_phidist->SetLineColor(kRed);
+    pion_povere->SetMarkerColor(kRed);
+    pion_nsige->SetMarkerColor(kRed);
+    pion_nsigpi->SetMarkerColor(kRed);
+    pion_deltabeta_e->SetMarkerColor(kRed);
+    pion_deltabeta_p->SetMarkerColor(kRed);
+    pion_zdist->SetMarkerColor(kRed);
+    pion_phidist->SetMarkerColor(kRed);
+    norm1(pion_povere);
+    norm1(pion_nsige);
+    norm1(pion_nsigpi);
+    norm1(pion_deltabeta_e);
+    norm1(pion_deltabeta_p);
+    norm1(pion_zdist);
+    norm1(pion_phidist);
+    norm1(electron_povere);
+    norm1(electron_nsige);
+    norm1(electron_nsigpi);
+    norm1(electron_deltabeta_e);
+    norm1(electron_deltabeta_p);
+    norm1(electron_zdist);
+    norm1(electron_phidist);
+    TLegend *leg = new TLegend(0.7,0.7,0.9,0.9);
+    leg->AddEntry(DLL_e,"Electrons","L");
+    leg->AddEntry(DLL_p,"Pions","L");
+  
+    TCanvas *canv2 = new TCanvas ("canv2","weights",1500,800);
+    canv2->Divide(3,2);
+    pion_weight_povere->SetLineColor(kRed);
+    pion_weight_nsigpi->SetLineColor(kRed);
+    pion_weight_deltabeta->SetLineColor(kRed);
+    pion_weight_zdist->SetLineColor(kRed);
+    pion_weight_phidist->SetLineColor(kRed);
+
+    electron_weight_povere->GetYaxis()->SetTitle("Probability");
+    electron_weight_nsige->GetYaxis()->SetTitle("Probability");
+    pion_weight_nsigpi->GetYaxis()->SetTitle("Probability");
+    electron_weight_deltabeta->GetYaxis()->SetTitle("Probability");
+    electron_weight_zdist->GetYaxis()->SetTitle("Probability");
+    electron_weight_phidist->GetYaxis()->SetTitle("Probability");
+
+    /*electron_weight_povere->GetYaxis()->SetTitleOffset(1.3);
+    electron_weight_nsige->GetYaxis()->SetTitleOffset(1.3);
+    pion_weight_nsigpi->GetYaxis()->SetTitleOffset(1.3);
+    electron_weight_deltabeta->GetYaxis()->SetTitleOffset(1.3);
+    electron_weight_zdist->GetYaxis()->SetTitleOffset(1.3);
+    electron_weight_phidist->GetYaxis()->SetTitleOffset(1.3);*/
+
+    electron_weight_povere->GetXaxis()->SetTitle("#it{p}/E");
+    electron_weight_nsige->GetXaxis()->SetTitle("n#sigma_{e}");
+    pion_weight_nsigpi->GetXaxis()->SetTitle("n#sigma_{#pi}");
+    electron_weight_zdist->GetXaxis()->SetTitle("#Delta#it{z}");
+    electron_weight_phidist->GetXaxis()->SetTitle("#Delta#phi");
+
+    canv2->cd(1);
+    electron_weight_povere->Draw("hist");
+    pion_weight_povere->Draw("same hist");
+    //electron_povere->Draw("same PE");
+    //pion_povere->Draw("same PE");
+    leg->Draw("same");
+    canv2->cd(2);
+    electron_weight_zdist->Draw("hist");
+    pion_weight_zdist->Draw("same hist"); 
+    //electron_zdist->Draw("same PE");
+    //pion_zdist->Draw("same PE");
+    leg->Draw("same");
+    canv2->cd(3);
+    electron_weight_phidist->Draw("hist");
+    pion_weight_phidist->Draw("same hist");
+    //electron_phidist->Draw("same PE");
+    //pion_phidist->Draw("same PE");
+    leg->Draw("same");
+    canv2->cd(4);
+    electron_weight_nsige->Draw("hist");
+    pion_weight_nsigpi->Draw("hist same"); 
+    //electron_nsige->Draw("same PE");
+    //pion_nsige->Draw("same PE");
+    leg->Draw("same");
+    //canv2->cd(5);
+    //pion_weight_nsigpi->GetXaxis()->SetRangeUser(-5,13);
+    //pion_weight_nsigpi->Draw("hist"); 
+    // electron_nsigpi->Draw("same PE");
+    //pion_nsigpi->Draw("same PE");
+    //leg->Draw("same");
+    canv2->cd(5);
+    pion_deltabeta_e->GetXaxis()->SetTitle("(1/#beta - 1/#beta_{exp,e})/(1/#beta)");
+    pion_deltabeta_e->GetYaxis()->SetTitle("Probability");
+    //pion_deltabeta_e->Draw("PE");
+    electron_weight_deltabeta->Draw("same hist");
+    pion_weight_deltabeta->Draw("same hist");
+    //electron_deltabeta_e->Draw("same PE");
+    leg->Draw("same");
+    //canv2->cd(7);
+    //electron_deltabeta_p->GetYaxis()->SetRangeUser(0,1);
+    //electron_deltabeta_p->GetXaxis()->SetRangeUser(-0.030,0.020);
+    // electron_deltabeta_p->GetYaxis()->SetTitle("Probability");
+    //electron_deltabeta_p->GetXaxis()->SetTitle("(1/#beta - 1/#beta_{exp,#pi})/(1/#beta)");
+    //electron_deltabeta_p->Draw("PE");
+    //pion_weight_deltabeta->Draw("same hist"); 
+    //pion_deltabeta_p->Draw("same PE");
+    //leg->Draw("same");
+    TCanvas *canv3 = new TCanvas ("canv3","DLL");  
+    LL_pe->SetLineColor(kRed);
+    LL_pp->SetLineColor(kRed);
+    LL_pp->SetMarkerColor(kRed);
+    LL_ep->Draw("PE");
+    LL_ee->Draw(" hist same");
+    LL_pe->Draw("hist  same");
+    LL_pp->Draw(" PE same");   
+
+    TCanvas *canv4 = new TCanvas ("canv4","DLL");  
+    for(int i=1;i<DLL_e->GetNbinsX();i++){
+	int max = DLL_e->GetNbinsX();
+	double temp1 = DLL_e->Integral(i,max);///DLL_e->Integral();
+	double temp2 = DLL_p->Integral(i,max);///DLL_p->Integral();
+	eff_e->SetBinContent(i,temp1/DLL_e->Integral(1,max));
+	if(temp1>0)eff_e->SetBinError(i,temp1/DLL_e->Integral(1,max)*1/sqrt(temp1));
+	if(temp1==0)eff_e->SetBinError(i,0);	
+	eff_p->SetBinContent(i,temp2/DLL_p->Integral(1,max));
+
+	int bin = ROC->FindBin(temp1/DLL_e->Integral(1,max));
+	double ttemp =  ROC->GetBinContent(bin);	
+	if(ttemp==0)ROC->SetBinContent(bin,1-temp2/DLL_p->Integral(1,max));
+	if((1-temp2/DLL_p->Integral(1,max))<ttemp)ROC->SetBinContent(bin,1-temp2/DLL_p->Integral(1,max));
+	if(temp2>0)eff_p->SetBinError(i,temp2/DLL_p->Integral(1,max)*1/sqrt(temp2));
+	if(temp2==0)eff_p->SetBinError(i,0);
+	line->SetBinContent(i,1);
+    }
+    for(int i=1;i<DLL_e->GetNbinsX();i++){
+	int max = DLL_e->GetNbinsX();
+	double temp1 = DLL_e->Integral(i,max);///DLL_e->Integral();
+	double temp2 = DLL_p->Integral(i,max);///DLL_p->Integral();
+	if(temp1>0 && temp2>0){
+	    double temp = temp1/DLL_e->Integral(1,max)*1/(temp1/DLL_e->Integral(1,max)+100*temp2/DLL_p->Integral(1,max));
+	    sign->SetBinContent(i,temp);
+	}
+    }
+    eff_p->SetLineColor(kRed);
+    eff_p->SetMarkerColor(kRed);
+    eff_e->GetYaxis()->SetTitle("Efficiency");
+    eff_e->GetXaxis()->SetTitle("Likelihood Cut");
+    eff_e->GetXaxis()->SetRangeUser(-2,2);
+    eff_e->Draw("PE");
+    eff_p->Draw("same");
+    line->SetLineStyle(7);
+    line->Draw("same hist");
+ leg->Draw("same");
+    TCanvas *canvsig = new TCanvas ("canvsig","sig");
+    sign->GetXaxis()->SetTitle("Likelihood Cut");
+    sign->GetYaxis()->SetTitle("Significance");    
+    sign->Draw("P");
+   
+
+    TCanvas *canv1 = new TCanvas ("canv1","DLL");
+    DLL_e->GetXaxis()->SetTitle("Likelihood Response");
+    DLL_e->GetYaxis()->SetTitle("A. U.");
+    DLL_p->SetLineColor(kRed);
+    DLL_p_nw->SetLineColor(kRed);
+    DLL_p->SetMarkerColor(kRed);   
+    DLL_p_nw->SetLineStyle(2);
+    DLL_e_nw->SetLineStyle(2);
+    DLL_k->SetLineColor(kGray);
+    DLL_k->SetMarkerColor(kGray);   
+    DLL_pr->SetLineColor(kBlue-2);
+    DLL_pr->SetMarkerColor(kBlue-2);
+    DLL_2p->SetLineColor(kOrange-2);
+    DLL_2p->SetMarkerColor(kOrange-2);   
+
+    DLL_e_post->GetXaxis()->SetTitle("Likelihood Response");
+    DLL_e_post->GetYaxis()->SetTitle("A. U.");
+    DLL_p_post->SetLineColor(kRed);
+    DLL_p_post->SetMarkerColor(kRed);   
+    DLL_k_post->SetLineColor(kGray);
+    DLL_k_post->SetMarkerColor(kGray);   
+    DLL_pr_post->SetLineColor(kBlue-2);
+    DLL_pr_post->SetMarkerColor(kBlue-2);
+   
+    norm(DLL_e);
+    norm(DLL_e_post);
+    norm(DLL_e_nw);
+    norm(DLL_p);
+    norm(DLL_p_nw);
+    norm(DLL_2p);
+    norm(DLL_k);
+    norm(DLL_pr);
+    norm(DLL_p_post);
+    norm(DLL_pr_post);
+    norm(DLL_k_post);
+    cout << " Nominal e-pi overlap" << endl;
+    double overlap=0;
+    for(int i=1;i<DLL_e->GetNbinsX()+1;i++){
+	double temp11 = DLL_e->GetBinContent(i);
+	double temp22 = DLL_p->GetBinContent(i);
+	if(temp11>0 && temp22>0){
+	    if(temp11>temp22)overlap+=temp22;
+	    if(temp22>temp11)overlap+=temp11;
+	}
+    }
+    cout << overlap << endl;
+
+    TLegend *leg2 = new TLegend(0.7,0.7,0.9,0.9);
+    leg2->AddEntry(DLL_e,"Electrons","PEL");
+    leg2->AddEntry(DLL_p,"Pions","PEL");
+    //leg2->AddEntry(DLL_2p,"Merged Pions","PEL");
+    //leg2->AddEntry(DLL_k,"Kaons","PEL");
+    //leg2->AddEntry(DLL_pr,"Protons","PEL");
+    DLL_e->Draw();
+    //DLL_k->Draw("same");  
+    //DLL_pr->Draw("same");  
+    //DLL_2p->Draw("same"); 
+    DLL_p->Draw("same");  
+    //DLL_p_nw->Draw("same hist");    
+    //DLL_e_nw->Draw("same hist");     
+    leg2->Draw("same");
+
+    TCanvas *cp = new TCanvas("cp","post");
+    DLL_e_post->Draw();
+//    DLL_k_post->Draw("same");  
+//    DLL_pr_post->Draw("same");  
+       DLL_p_post->Draw("same");  
+    leg2->Draw("same");
+
+    TCanvas *cpp = new TCanvas("cpp","ROC");
+    ROC->GetXaxis()->SetTitle("Signal Efficiency");
+    ROC->GetYaxis()->SetTitle("Background Rejection");
+    ROC->Draw("P");
+    
+    for(int i = 1;i<DLL_e_nsig->GetNbinsX();i++){
+	double low = -10 + (i-1)*15/DLL_e_nsig->GetNbinsX();
+	double high = -10 + (i)*15/DLL_e_nsig->GetNbinsX();
+	DLL_e_nsig->GetXaxis()->SetRangeUser(low,high);
+	DLL_p_nsig->GetXaxis()->SetRangeUser(low,high);
+	htemp1 = (TH1F*) DLL_e_nsig->ProjectionY();
+	htemp2 = (TH1F*) DLL_p_nsig->ProjectionY();
+	ZERO(htemp1);
+	int bin1 = htemp1->FindBin(0.45);
+	
+	if(htemp1->Integral()>0 && i>5){
+	    nsig_eff_e->SetBinContent(i,htemp1->Integral(bin1,-1)/htemp1->Integral());
+	    nsig_eff_e->SetBinError(i,htemp1->Integral(bin1,-1)/htemp1->Integral()*sqrt(1/htemp1->Integral()));
+	}else{
+	    nsig_eff_e->SetBinContent(i,0);
+	    nsig_eff_e->SetBinError(i,0);
+	}
+	if(htemp2->Integral(bin1,-1)>0){
+	    nsig_eff_p->SetBinContent(i,htemp2->Integral(bin1,-1)/htemp2->Integral());
+	    nsig_eff_p->SetBinError(i,htemp2->Integral(bin1,-1)/htemp2->Integral()*sqrt(1/htemp2->Integral()));
+	}else{
+	    nsig_eff_p->SetBinContent(i,0.00001);
+	    nsig_eff_p->SetBinError(i,0.00001);
+	}
+	cout << "Bin " << i << " low " << low << " high " << high << " " << htemp2->Integral(bin1,-1) << " " << htemp2->Integral() << endl;
+    }
+    cout << "Electron eff for pt bins here " << endl;
+    for(int i = 1;i<numPtBins+1;i++){
+	DLL_e_2D->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	DLL_e_2D1->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	DLL_p_2D->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
+	htemp1 = (TH1F*) DLL_e_2D->ProjectionY();
+	htemp11 = (TH1F*) DLL_e_2D1->ProjectionY();
+	htemp2 = (TH1F*) DLL_p_2D->ProjectionY();
+	ZERO(htemp1);
+	int bin1 = htemp1->FindBin(0.45);
+	int bin2 = htemp1->FindBin(0.4);
+	int max = htemp1->GetNbinsX();
+	double temp1  = htemp1->Integral(bin1,max);
+	double temp2 =  htemp1->Integral(-1,bin1);
+	pt_eff_e->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral());
+	double temp3 = (temp2*sqrt(temp1)/(temp1+temp2)/(temp1+temp2));
+	double temp4 = (temp1*sqrt(temp2)/(temp1+temp2)/(temp1+temp2));
+	double error = sqrt(temp3*temp3+temp4*temp4);
+
+	double temp11  = htemp2->Integral(bin1,max);
+	double temp22 =  htemp2->Integral(-1,bin1);
+	double temp33 = (temp22*sqrt(temp11)/(temp11+temp22)/(temp11+temp22));
+	double temp44 = (temp11*sqrt(temp22)/(temp11+temp22)/(temp11+temp22));
+	double error1 = sqrt(temp33*temp33+temp44*temp44);
+
+	if(htemp1->Integral()>0)cout << i << " " <<temp1 << " " << temp2 << " " << htemp1->Integral(bin1,max)/htemp1->Integral() << " " << error<< endl;//htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()) << endl;
+	pt_eff_p->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+
+	pt_eff_e->SetBinError(i,error);//htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()));
+	pt_eff_p->SetBinError(i,error);//htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+	if(htemp2->Integral(bin1,max)==0)pt_eff_p->SetBinError(i,0.0000000001);
+	//cout << "Main cut ptbin " << i << " " << htemp1->Integral(bin1,max) << " " << error << endl;
+	//bin1 = htemp1->FindBin(0.2);
+
+	temp1  = htemp11->Integral();
+	temp2 =  htemp1->Integral()-htemp11->Integral();
+	temp11  = htemp11->Integral(bin1,max);
+	temp22 =  htemp1->Integral()-htemp11->Integral(bin1,max);
+	temp3 = (temp2*sqrt(temp1)/(temp1+temp2)/(temp1+temp2));
+	temp4 = (temp1*sqrt(temp2)/(temp1+temp2)/(temp1+temp2));
+	temp33 = (temp22*sqrt(temp11)/(temp11+temp22)/(temp11+temp22));
+	temp44 = (temp11*sqrt(temp22)/(temp11+temp22)/(temp11+temp22));
+	double error2 = sqrt(temp3*temp3+temp4*temp4);
+	double error22 = sqrt(temp33*temp33+temp44*temp44);
+	pt_eff_e1->SetBinContent(i,htemp11->Integral()/htemp1->Integral());
+	pt_eff_e1->SetBinError(i,error2);
+	pt_eff_e2->SetBinContent(i,htemp11->Integral(bin1,max)/htemp1->Integral());
+	pt_eff_e2->SetBinError(i,error22);
+
+	pt_eff_p1->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+	pt_eff_p1->SetBinError(i,htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+	bin1 = htemp1->FindBin(0.3);
+	//pt_eff_e2->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral());
+	//pt_eff_e2->SetBinError(i,htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()));
+	pt_eff_p2->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+	pt_eff_p2->SetBinError(i,htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+	bin1 = htemp1->FindBin(0.4);
+	pt_eff_e3->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral());
+	pt_eff_e3->SetBinError(i,htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()));
+	pt_eff_p3->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+	pt_eff_p3->SetBinError(i,htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+	pt_eff_r->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral(bin2,max));
+	pt_eff_r->SetBinError(i,0.01);
+	bin1 = htemp1->FindBin(0.5);
+	pt_eff_e4->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral());
+	pt_eff_e4->SetBinError(i,htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()));
+	pt_eff_p4->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+	pt_eff_p4->SetBinError(i,htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+	bin1 = htemp1->FindBin(0.6);
+	pt_eff_e5->SetBinContent(i,htemp1->Integral(bin1,max)/htemp1->Integral());
+	pt_eff_e5->SetBinError(i,htemp1->Integral(bin1,max)/htemp1->Integral()*1/sqrt(htemp1->Integral()));
+	pt_eff_p5->SetBinContent(i,htemp2->Integral(bin1,max)/htemp2->Integral());
+	pt_eff_p5->SetBinError(i,htemp2->Integral(bin1,max)/htemp2->Integral()*1/sqrt(htemp2->Integral()));
+
+    }
+
+    TLatex lat;
+
+    TCanvas *canv5 = new TCanvas ("canv5","DLL");
+
+    pt_eff_p->SetMarkerStyle(21);
+    pt_eff_p->SetLineColor(kRed);
+    pt_eff_p->SetMarkerColor(kRed);    
+    pt_eff_e->GetYaxis()->SetTitle("Likelihood Efficiency");
+    pt_eff_e->GetYaxis()->SetRangeUser(0,1.1);
+    pt_eff_e->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    TLegend *leg11 = new TLegend(0.6,0.4,0.8,0.7);
+    leg11->AddEntry(pt_eff_e,"Electrons","PEL");
+    leg11->AddEntry(pt_eff_p,"Pions ","PEL");
+
+    //pt_eff_e->Fit("pol3");
+
+    pt_eff_e->Draw("PE");
+    //pt_eff_p->Draw("same PE");
+    line->Draw("same hist");
+    //leg11->Draw("same");
+    lat.DrawLatex(2,0.5,"Likelihood Response>0.45");
+    TCanvas *canv51 = new TCanvas ("canv51","DLL Rat");
+    pt_eff_r->Draw("PE");
+    TCanvas *canv55 = new TCanvas ("canv55","DLL");
+    pt_eff_e->GetYaxis()->SetTitle("Likelihood Efficiency");
+    pt_eff_e->GetYaxis()->SetRangeUser(0,1.1);
+    pt_eff_e->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    pt_eff_e->Draw("PE");
+    //pt_eff_p->Draw("same PE");
+    line->Draw("same hist");
+
+    pt_eff_e1->SetLineColor(kRed);
+    pt_eff_e2->SetLineColor(kBlue);
+    pt_eff_e3->SetLineColor(kMagenta);
+    pt_eff_e4->SetLineColor(kGreen-2);
+    pt_eff_e5->SetLineColor(kCyan);
+    pt_eff_p1->SetLineColor(kGray);
+    pt_eff_p2->SetLineColor(kOrange);
+    pt_eff_p3->SetLineColor(kMagenta);
+    pt_eff_p4->SetLineColor(kGreen-2);
+    pt_eff_p5->SetLineColor(kCyan);
+    pt_eff_e1->SetMarkerColor(kRed);
+    pt_eff_e1->SetMarkerStyle(25);
+    pt_eff_e1->SetMarkerStyle(26);
+    pt_eff_e2->SetMarkerColor(kBlue);
+    pt_eff_e3->SetMarkerColor(kMagenta);
+    pt_eff_e4->SetMarkerColor(kGreen-2);
+    pt_eff_e5->SetMarkerColor(kCyan);
+    pt_eff_p1->SetMarkerColor(kGray);
+    pt_eff_p2->SetMarkerColor(kOrange);
+    pt_eff_p3->SetMarkerColor(kMagenta);
+    pt_eff_p4->SetMarkerColor(kGreen-2);
+    pt_eff_p5->SetMarkerColor(kCyan);
+
+
+    pt_eff_p1->SetMarkerStyle(4);
+    pt_eff_p2->SetMarkerStyle(4);
+    //pt_eff_e3->SetMarkerStyle(25);
+    pt_eff_p4->SetMarkerStyle(4);
+    //pt_eff_e5->SetMarkerStyle(25);
+
+    TLegend *leg1 = new TLegend(0.7,0.7,0.9,0.9);
+    leg1->AddEntry(pt_eff_e1,"#Delta#it{LL}(e-#pi)>0.0","PEL");
+    //leg1->AddEntry(pt_eff_p,"Pions #Delta#it{LL}(e-#pi)>0.00","PEL");
+    //leg1->AddEntry(pt_eff_p1,"#Delta#it{LL}(e-#pi)>-0.05","L");
+    //leg1->AddEntry(pt_eff_e2,"#Delta#it{LL}(e-#pi)>0.2","LPE");
+    //leg1->AddEntry(pt_eff_e3,"#Delta#it{LL}(e-#pi)>0.4","LPE");
+    //leg1->AddEntry(pt_eff_e4,"#Delta#it{LL}(e-#pi)>0.6","LPE");
+    //leg1->AddEntry(pt_eff_e5,"#Delta#it{LL}(e-#pi)>0.8","LPE");
+
+    pt_eff_e1->Draw("same PE");
+    pt_eff_e2->Draw("same PE");
+    //pt_eff_e3->Draw("same PE");
+    //pt_eff_e4->Draw("same PE");
+    // pt_eff_e5->Draw("same PE");
+    //pt_eff_p1->Draw("same PE");
+    //pt_eff_p2->Draw("same PE");
+    //pt_eff_p3->Draw("same PE");
+    //pt_eff_p4->Draw("same PE");
+    //pt_eff_p5->Draw("same PE");
+    //leg1->Draw("same");
+
+
+    e_corr_nsige_beta->GetYaxis()->SetTitle("#Delta(1/#beta)/(1/#beta)");
+    e_corr_nsige_beta->GetXaxis()->SetTitle("n#sigma_{e}");
+    e_corr_nsige_povere->GetYaxis()->SetTitle("#it{p}/E");
+    e_corr_nsige_povere->GetXaxis()->SetTitle("n#sigma_{e}"); 
+    e_corr_povere_zdist->GetYaxis()->SetTitle("#Deltaz");
+    e_corr_povere_zdist->GetXaxis()->SetTitle("#it{p}/E"); 
+    e_corr_phidist_zdist->GetYaxis()->SetTitle("#Deltaz");
+    e_corr_phidist_zdist->GetXaxis()->SetTitle("#Delta#phi"); 
+    e_corr_beta_povere->GetYaxis()->SetTitle("#it{p}/E");
+    e_corr_beta_povere->GetXaxis()->SetTitle("#Delta(1/#beta)/(1/#beta)"); 
+
+    /*TCanvas *canv6 = new TCanvas ("canv6","corr",1200,800);
+    canv6->Divide(3,2);
+    canv6->cd(1);
+    e_corr_nsige_beta->Draw("COL");
+    canv6->cd(2);
+    e_corr_nsige_povere->Draw("COL");
+    canv6->cd(3);
+    e_corr_povere_zdist->Draw("COL");
+    canv6->cd(4);
+    e_corr_phidist_zdist->Draw("COL");
+    canv6->cd(5);
+    e_corr_beta_povere->Draw("COL");*/
+
+    p_corr_nsige_beta->GetYaxis()->SetTitle("#Delta(1/#beta)/(1/#beta)");
+    p_corr_nsige_beta->GetXaxis()->SetTitle("n#sigma_{#pi}");
+    p_corr_nsige_povere->GetYaxis()->SetTitle("#it{p}/E");
+    p_corr_nsige_povere->GetXaxis()->SetTitle("n#sigma_{#pi}"); 
+    p_corr_povere_zdist->GetYaxis()->SetTitle("#Deltaz");
+    p_corr_povere_zdist->GetXaxis()->SetTitle("#it{p}/E"); 
+    p_corr_phidist_zdist->GetYaxis()->SetTitle("#Deltaz");
+    p_corr_phidist_zdist->GetXaxis()->SetTitle("#Delta#phi"); 
+    p_corr_beta_povere->GetYaxis()->SetTitle("#it{p}/E");
+    p_corr_beta_povere->GetXaxis()->SetTitle("#Delta(1/#beta)/(1/#beta)"); 
+
+    TCanvas *canv9 = new TCanvas ("canv9","overlap");  
+    hOverlap->Draw();
+   
+    TCanvas *canv25 = new TCanvas ("canv52","DLL nsige");
+
+    nsig_eff_p->SetMarkerStyle(21);
+    nsig_eff_p->SetLineColor(kRed);
+    nsig_eff_p->SetMarkerColor(kRed);    
+    nsig_eff_e->GetYaxis()->SetTitle("Efficiency");
+    nsig_eff_e->GetYaxis()->SetRangeUser(0,1.1);
+    nsig_eff_e->GetXaxis()->SetTitle("n#sigma_{e}");
+    nsig_eff_e->Draw("PE");
+    nsig_eff_p->Draw("same PE");
+    line->Draw("same hist");
+    lat.DrawLatex(2,0.5,"Likelihood>0.45");
+    leg11->Draw("same");
+    TCanvas *canv7 = new TCanvas ("canv7","nsige",800,400);
+    canv7->Divide(2,1);
+    canv7->cd(1);
+    DLL_e_nsige->Draw("COLZ");
+    canv7->cd(2);
+    DLL_p_nsige->Draw("COLZ");
+    TCanvas *canv77 = new TCanvas ("canv77","pt",800,400);
+    canv77->Divide(2,1);
+    canv77->cd(1);
+    DLL_e_pt->Draw("COLZ");
+    canv77->cd(2);
+    DLL_p_pt->Draw("COLZ");
+    //rmsp->SetMarkerColor(kRed);
+    //rmsp->SetLineColor(kRed);
+    //rmsp->Draw("same");
+
+    /*  TCanvas *canv66 = new TCanvas ("canv66","corr",1200,800);
+	canv66->Divide(3,2);
+	canv66->cd(1);
+	p_corr_nsige_beta->Draw("COL");
+	canv66->cd(2);
+	p_corr_nsige_povere->Draw("COL");
+	canv66->cd(3);
+	p_corr_povere_zdist->Draw("COL");
+	canv66->cd(4);
+	p_corr_phidist_zdist->Draw("COL");
+	canv66->cd(5);
+	p_corr_beta_povere->Draw("COL");*/
+}
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+        double temp = h->GetBinContent(i);
+        double err = h->GetBinError(i);
+        h->SetBinContent(i,temp/norm1);
+        h->SetBinError(i,err/norm1);
+    }
+}
+void norm1(TH1F *h){
+    double norm1 = h->GetMaximum();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+        double temp = h->GetBinContent(i);
+        double err = h->GetBinError(i);
+        h->SetBinContent(i,temp/norm1);
+        h->SetBinError(i,err/norm1);
+    }
+}

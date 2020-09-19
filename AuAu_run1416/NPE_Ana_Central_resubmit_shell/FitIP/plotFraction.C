@@ -1,0 +1,333 @@
+void plotFraction(int pass=1){
+
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    char file[50];
+    sprintf(file,"./%i/yields.dat",3);
+    ifstream data(file);
+    char file1[50];
+    sprintf(file1,"./%i/yields.dat",4);
+    ifstream data1(file1);
+
+    TFile * f= new TFile("../../NPE_MC/Ana/root/HF_plots.root");
+    dcapt_d_all=(TH2F*)f->Get("dcapt_d_all");
+    dcapt_b_all=(TH2F*)f->Get("dcapt_b_all");
+    pt_d_all =(TH1F*)dcapt_d_all->ProjectionY();
+    pt_b_all =(TH1F*)dcapt_b_all->ProjectionY();
+    norm(pt_b_all);
+    norm(pt_d_all);
+    pt_b_all->Scale(pt_d_all->Integral()/pt_b_all->Integral()/102.35);
+    for(int i = 1 ;i<pt_b_all->GetNbinsX()+1;i++){
+	double temp1 = pt_b_all->GetBinContent(i);
+	double temp2 = pt_d_all->GetBinContent(i);
+	if(temp1>0)pt_b_all->SetBinContent(i,temp1/(temp1+temp2));
+	else pt_b_all->SetBinContent(i,0);
+    }
+
+   
+    TFile *fk = new TFile("/project/projectdirs/starprod/rnc/mkelsey/forYifei/electronFraction/finalBtoEFraction.root");
+    kunsu = (TH1F*) fk->Get("run14_bF_sts");
+    kunsu->SetMarkerColor(kRed);
+    kunsu->SetMarkerStyle(25);
+    kunsu->SetLineColor(kRed);
+    ifstream data_b("b_pp200.txt");
+    ifstream data_c("c_pp200.txt");
+    vector<double> x;
+    vector<double> xu;
+    vector<double> yb; 
+    vector<double> yc; 
+    vector<double> eub; 
+    vector<double> euc;  
+    vector<double> edb; 
+    vector<double> edc;    
+    TH1F *hb_t = new TH1F("hb_t","",100,0,10);
+    TH1F *hc_t = new TH1F("hc_t","",100,0,10);
+    TH1F *hr_t = new TH1F("hr_t","",100,0,10);
+    TH1F *hb_et = new TH1F("hb_et","",100,0,10);
+    TH1F *hc_et = new TH1F("hc_et","",100,0,10);
+    double lumi = 1;//500e-6;
+    if(data_b.is_open()){
+	while(!data_b.eof()){
+	    double x1;
+	    double y1;
+	    double eu;
+	    double ed;
+	    double p1;
+	    double p2;
+	    double p3;
+	    double p4;
+	    double eff;
+	    data_b >> x1 >> y1 >> eu >> ed >> p1 >> p2 >> p3 >> p4;
+	    x.push_back(x1);
+	    xu.push_back(x1-10/100);
+	    yb.push_back(y1);
+	    eub.push_back(eu-y1);	    
+	    edb.push_back(y1-ed);
+	    int bin = hb_t->FindBin(x1);
+	    hb_t->SetBinContent(bin,y1*lumi);
+	    hb_t->SetBinError(bin,(y1-ed)*lumi);
+	}
+    }
+    if(data_c.is_open()){
+	while(!data_c.eof()){
+	    double x1;
+	    double y1;
+	    double eu;
+	    double ed;
+	    double p1;
+	    double p2;
+	    double p3;
+	    double p4;
+	    data_c >> x1 >> y1 >> eu >> ed >> p1 >> p2 >> p3 >> p4;
+	   
+	    yc.push_back(y1);
+	    euc.push_back(eu-y1);	    
+	    edc.push_back(y1-ed);
+	    int bin = hc_t->FindBin(x1);
+	    hc_t->SetBinContent(bin,y1*lumi);
+	    hc_t->SetBinError(bin,(y1-ed)*lumi);
+	}
+    }
+    double x_b[100];
+    double xe_b[100];
+    double y_bc[100];
+    double e_bc[100];
+    for(int i = 0;i<100;i++){
+	x_b[i] = x[i];
+	xe_b[i] = 0;
+	y_bc[i] = yb[i]/(yb[i]+yc[i]);
+	e_bc[i] = 0;
+
+
+    }
+    TGraphErrors *gb = new TGraphErrors(100,x_b,y_bc,xe_b,e_bc);
+    
+    int const numPtBins=9;
+    double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+    double binning1[numPtBins+1]={0.6+0.1,1+0.1,1.2+0.1,1.5+0.1,2.0+0.1,2.5+0.1,3.5+0.1,4.5+0.1,5.5+0.1,8.5};
+  
+    TH1F *hfracb1 = new TH1F("hfracb1","",numPtBins,binning);
+    TH1F *hfracc1 = new TH1F("hfracc1","",numPtBins,binning);
+    TH1F *hfrace1 = new TH1F("hfrace1","",numPtBins,binning);
+    TH1F *hfrach1 = new TH1F("hfrach1","",numPtBins,binning);
+
+    TH1F *hfracb2 = new TH1F("hfracb2","",numPtBins,binning);
+    TH1F *hfracc2 = new TH1F("hfracc2","",numPtBins,binning);
+    TH1F *hfrace2 = new TH1F("hfrace2","",numPtBins,binning);
+    TH1F *hfrach2 = new TH1F("hfrach2","",numPtBins,binning);
+
+
+    TH1F *hfracb1_ht = new TH1F("hfracb1_ht","",numPtBins,binning);
+    TH1F *hfracc1_ht = new TH1F("hfracc1_ht","",numPtBins,binning);
+    TH1F *hfrace1_ht = new TH1F("hfrace1_ht","",numPtBins,binning);
+    TH1F *hfrach1_ht = new TH1F("hfrach1_ht","",numPtBins,binning);
+
+    TH1F *hfracb2_ht = new TH1F("hfracb2_ht","",numPtBins,binning);
+    TH1F *hfracc2_ht = new TH1F("hfracc2_ht","",numPtBins,binning);
+    TH1F *hfrace2_ht = new TH1F("hfrace2_ht","",numPtBins,binning);
+    TH1F *hfrach2_ht = new TH1F("hfrach2_ht","",numPtBins,binning);
+
+    TH1F *hline = new TH1F("hline","",numPtBins,binning);
+    TH1F *h1 = new TH1F("h1","",numPtBins,binning);
+    TH1F *h2 = new TH1F("h2","",numPtBins,binning);
+    TH1F *h3 = new TH1F("h3","",numPtBins,binning);
+    TH1F *h4 = new TH1F("h4","",numPtBins,binning);
+    TH1F *hb = new TH1F("hb","",numPtBins,binning);
+    TH1F *hc = new TH1F("hc","",numPtBins,binning);
+    TH1F *he = new TH1F("he","",numPtBins,binning);
+    TH1F *hh = new TH1F("hh","",numPtBins,binning);  
+
+    TH1F *h1_ht = new TH1F("h1_ht","",numPtBins,binning1);
+    TH1F *h2_ht = new TH1F("h2_ht","",numPtBins,binning);
+    TH1F *h3_ht = new TH1F("h3_ht","",numPtBins,binning);
+    TH1F *h4_ht = new TH1F("h4_ht","",numPtBins,binning);
+    TH1F *hb_ht = new TH1F("hb_ht","",numPtBins,binning);
+    TH1F *hc_ht = new TH1F("hc_ht","",numPtBins,binning);
+    TH1F *he_ht = new TH1F("he_ht","",numPtBins,binning);
+    TH1F *hh_ht = new TH1F("hh_ht","",numPtBins,binning);  
+
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    int pT;
+	    double y1;
+	    double e1;
+	    double y2;
+	    double e2;
+	    double y3;
+	    double e3;
+	    double y4;
+	    double e4;
+	    double pur;
+	    double eff;
+
+
+	    double fb1;
+	    double fb2;
+	    double fc1;
+	    double fc2;
+	    double fe1;
+	    double fe2;
+	    double fh1;
+	    double fh2;
+
+	    data >> pT >> y1 >> e1 >> fb1 >> fb2 >> y2 >> e2 >> fc1 >> fc2 >> y3 >> e3 >> fe1 >> fe2 >> y4 >> e4 >> fh1 >> fh2 >> eff >> pur;
+	    if(pT!=0){
+		h1->SetBinContent(pT,y1/eff/(y1/eff+y2));
+		h1->SetBinError(pT,1/(y1/eff+y2)/(y1/eff+y2)*sqrt(y1/eff*y1/eff*e2*e2+y2*y2*e1*e1));
+		h2->SetBinContent(pT,(y1+y2)/y3);
+		h2->SetBinError(pT,(y1+y2)/y3 * sqrt((e1+e2)*(e1+e2)/(y1+y2)/(y1+y2)+e3*e3/y3/y3));	
+		hb->SetBinContent(pT,y1/(y1+y2+y3+y4));
+		//hb->SetBinError(pT,y1/(y1+y2+y3+y4)*e1/y1);
+		hc->SetBinContent(pT,y2/(y1+y2+y3+y4));
+		//hc->SetBinError(pT,y2/(y1+y2+y3+y4)*e2/y2);
+		he->SetBinContent(pT,y3/(y1+y2+y3+y4));
+		//he->SetBinError(pT,y3/(y1+y2+y3+y4)*e3/y3);
+		hh->SetBinContent(pT,y4/(y1+y2+y3+y4));
+		//hh->SetBinError(pT,y4/(y1+y2+y3+y4)*e4/y4);
+		h4->SetBinContent(pT,1-pur+0.1);
+		hline->SetBinContent(pT,1);
+	    }
+	}
+
+    }
+     else {
+	cout <<"Nope \n";
+    }
+    hline->SetBinContent(1,1);
+    hline->SetBinContent(3,1);
+    hline->SetBinContent(3,1);
+    hline->SetBinContent(4,1);
+    hline->SetBinContent(5,1);
+    hline->SetBinContent(6,1);
+    hline->SetBinContent(7,1);
+    hline->SetBinContent(8,1);
+    hline->SetBinContent(9,1);
+   
+    
+
+
+    if(data1.is_open()){
+	while(!data1.eof()){
+	    char out[50];
+	    int pT;
+	    double y1;
+	    double e1;
+	    double y2;
+	    double e2;
+	    double y3;
+	    double e3;
+	    double y4;
+	    double e4;
+	    double pur;
+	    double eff;
+	    data1 >> pT >> y1 >> e1 >>fb1>>fb2>>y2 >> e2 >>fc1>>fc2>> y3 >> e3 >>fe1>>fe2>> y4 >> e4 >>fh1>>fh2>> eff >> pur;
+	   
+	    if(pT!=0){
+		h1_ht->SetBinContent(pT,y1/eff/(y1/eff+y2));
+		h1_ht->SetBinError(pT,1/(y1/eff+y2)/(y1/eff+y2)*sqrt(y1/eff*y1/eff*e2*e2+y2*y2*e1*e1));
+		h2_ht->SetBinContent(pT,(y1+y2)/y3);
+		h2_ht->SetBinError(pT,(y1+y2)/y3 * sqrt((e1+e2)*(e1+e2)/(y1+y2)/(y1+y2)+e3*e3/y3/y3));	
+		hb_ht->SetBinContent(pT,y1/(y1+y2+y3+y4));
+		hb_ht->SetBinError(pT,y1/(y1+y2+y3+y4)*e1/y1);
+		hc_ht->SetBinContent(pT,y2/(y1+y2+y3+y4));
+		hc_ht->SetBinError(pT,y2/(y1+y2+y3+y4)*e2/y2);
+		he_ht->SetBinContent(pT,y3/(y1+y2+y3+y4));
+		he_ht->SetBinError(pT,y3/(y1+y2+y3+y4)*e3/y3);
+		hh_ht->SetBinContent(pT,y4/(y1+y2+y3+y4));
+		hh_ht->SetBinError(pT,y4/(y1+y2+y3+y4)*e4/y4);
+		h4_ht->SetBinContent(pT,pur);
+	    }
+	    if(pT>6){
+		h1->SetBinContent(pT,y1/eff/(y1/eff+y2));
+		h1->SetBinError(pT,1/(y1/eff+y2)/(y1/eff+y2)*sqrt(y1/eff*y1/eff*e2*e2+y2*y2*e1*e1));
+		h2->SetBinContent(pT,(y1+y2)/y3);
+		h2->SetBinError(pT,(y1+y2)/y3 * sqrt((e1+e2)*(e1+e2)/(y1+y2)/(y1+y2)+e3*e3/y3/y3));	
+		hb->SetBinContent(pT,y1/(y1+y2+y3+y4));
+		//hb->SetBinError(pT,y1/(y1+y2+y3+y4)*e1/y1);
+		hc->SetBinContent(pT,y2/(y1+y2+y3+y4));
+		//hc->SetBinError(pT,y2/(y1+y2+y3+y4)*e2/y2);
+		he->SetBinContent(pT,y3/(y1+y2+y3+y4));
+		//	he->SetBinError(pT,y3/(y1+y2+y3+y4)*e3/y3);
+		hh->SetBinContent(pT,y4/(y1+y2+y3+y4));
+		//hh->SetBinError(pT,y4/(y1+y2+y3+y4)*e4/y4);
+		h4->SetBinContent(pT,1-pur);
+	    }
+	}
+
+    }
+     else {
+	cout <<"Nope \n";
+    }
+
+
+    TCanvas *c1 = new TCanvas("c1","c1");
+    h1->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    h1->GetXaxis()->SetRangeUser(1,8.5);
+    h1->GetYaxis()->SetRangeUser(0,1);
+    h1_ht->SetMarkerStyle(8);
+    h1_ht->SetMarkerColor(kBlue);
+    h1_ht->SetLineColor(kBlue);
+    h1->SetMarkerStyle(8);
+    h1->GetYaxis()->SetTitle("N(#it{b}#rightarrow #it{e})/N(#it{b}+#it{c}#rightarrow #it{e})");
+    h1->Draw("same");
+    h1_ht->SetMarkerStyle(26);
+    //h1_ht->Draw("same");
+    kunsu->Draw("same");
+    gb->SetLineColor(kRed-2);
+    gb->Draw("same");
+    pt_b_all->SetLineColor(kMagenta);
+    pt_b_all->Draw("same hist");
+   TCanvas *c2 = new TCanvas("c2","c2");
+    h2->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    h2->GetYaxis()->SetTitle("NPE/PE");
+    h2->Draw("same");
+  
+    TCanvas *c3 = new TCanvas("c3","c3");
+    hb->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hb->GetYaxis()->SetTitle("Relative Fraction");
+    hb->GetYaxis()->SetRangeUser(0,1);
+    hb->SetLineColor(kGreen-2);
+    hb->SetMarkerColor(kGreen-2); 
+    hc->SetLineColor(kMagenta);
+    hc->SetMarkerColor(kMagenta);  
+    he->SetLineColor(kOrange-1);
+    he->SetMarkerColor(kOrange-1);
+    hh->SetLineColor(kRed);
+    hh->SetMarkerColor(kRed);
+    h4->SetLineColor(kRed);
+    h4->SetMarkerColor(kRed);
+    TLegend *leg = new TLegend(0.2,0.6,0.5,0.9);
+    leg->AddEntry(hb,"#it{b}#rightarrow #it{e}","PE");
+    leg->AddEntry(hc,"#it{c}#rightarrow #it{e}","PE");
+    leg->AddEntry(he,"Photonic #it{e}","PE");
+    leg->AddEntry(hh,"Hadrons","PE");
+    //leg->AddEntry(h4,"1-Purity","l");
+    hb->Draw("hist same");  
+    hc->Draw("hist same");  
+    he->Draw("hist same");  
+    hh->Draw("hist same");
+    h4->SetLineStyle(5);
+    hline->SetLineStyle(5);
+    hline->Draw("hist same");
+    leg->Draw("same");
+    TCanvas *c4 = new TCanvas("c4","c4");
+    hb_t->SetLineColor(kGreen-2);
+    hc_t->SetLineColor(kMagenta);
+    hb_t->Draw("hist");
+    hc_t->Draw("same hist");
+    cout << "Norm for c is " << hc_t->Integral() << endl;
+    cout << "Norm for b is " << hb_t->Integral() << endl;
+    cout << "Norm for c/b is " << hc_t->Integral()/hb_t->Integral() << endl;
+}
+void norm(TH1F *h){
+    //h->Rebin(4);                                                                                                                                                          
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+        double temp = h->GetBinContent(i);
+        double width = h->GetBinWidth(i);
+        double err = h->GetBinError(i);
+        h->SetBinContent(i,temp/norm1);
+        h->SetBinError(i,err/norm1);
+    }
+}

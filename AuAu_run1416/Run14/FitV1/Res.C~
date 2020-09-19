@@ -1,0 +1,32 @@
+void Res(){
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    TGaxis::SetMaxDigits(3);
+
+    TFile *f_D = new TFile("../production/test.root");
+    ZDCEPRes_sh_c1 = (TH1F*)f_D->Get("ZDCEPRes_sh_c1");
+    ZDCEPRes_sh_c2 = (TH1F*)f_D->Get("ZDCEPRes_sh_c2");
+    ZDCEPRes_sh_c3 = (TH1F*)f_D->Get("ZDCEPRes_sh_c3");
+    ZDCEPRes_sh_c4 = (TH1F*)f_D->Get("ZDCEPRes_sh_c4");
+    ZDCEPRes_sh_c5 = (TH1F*)f_D->Get("ZDCEPRes_sh_c5");
+    ZDCEPRes_sh_c6 = (TH1F*)f_D->Get("ZDCEPRes_sh_c6");
+    ZDCEPRes_sh_c7 = (TH1F*)f_D->Get("ZDCEPRes_sh_c7");
+    ZDCEPRes_sh_c8 = (TH1F*)f_D->Get("ZDCEPRes_sh_c8");
+    ZDCEPRes_sh_c0 = (TH1F*)f_D->Get("ZDCEPRes_sh_c0");
+    double bin[10]={0,5,10,20,30,40,50,60,70,80};
+    TH1F *Res = new TH1F("Res","Res",9,bin);
+    Res->SetBinContent(9,sqrt(2*ZDCEPRes_sh_c0->GetMean()));
+    Res->SetBinContent(8,sqrt(2*ZDCEPRes_sh_c1->GetMean()));
+    Res->SetBinContent(7,sqrt(2*ZDCEPRes_sh_c2->GetMean()));
+    Res->SetBinContent(6,sqrt(2*ZDCEPRes_sh_c3->GetMean()));
+    Res->SetBinContent(5,sqrt(2*ZDCEPRes_sh_c4->GetMean()));
+    Res->SetBinContent(4,sqrt(2*ZDCEPRes_sh_c5->GetMean()));
+    Res->SetBinContent(3,sqrt(2*ZDCEPRes_sh_c6->GetMean()));
+    Res->SetBinContent(2,sqrt(2*ZDCEPRes_sh_c7->GetMean()));
+    Res->SetBinContent(1,sqrt(2*ZDCEPRes_sh_c8->GetMean()));
+
+
+    TCanvas *c1 = new TCanvas("c1","vc");
+    Res->GetYaxis()->SetTitle("Resolution");
+    Res->GetXaxis()->SetTitle("Centrality [%]");
+    Res->Draw();
+}

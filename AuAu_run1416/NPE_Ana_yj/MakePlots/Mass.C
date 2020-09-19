@@ -1,0 +1,25 @@
+void Mass(){
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    gStyle->SetPalette(56);
+    TGaxis::SetMaxDigits(3); 
+    char hist[150] = "h";
+    char axis[150] = "Decay Radius [cm]";
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples2.root");
+    TFile *f_D = new TFile(dFile);
+    h1 = (TH1D*)f_D->Get("M2");
+    ch1 = (TChain*)f_D->Get("PhoE");
+    TH1F *h2 = new TH1F("h2","h2",h1->GetNbinsX(),-0.5,1);
+    TH1F *h2ws = new TH1F("h2ws","h2ws",h1->GetNbinsX(),-0.5,1);
+    ch1->Project("h2","probe_p*probe_p*(1/probe_beta/probe_beta-1);","probe_charge*tag_charge<0")  ;
+    ch1->Project("h2ws","probe_p*probe_p*(1/probe_beta/probe_beta-1);","probe_charge*tag_charge>0");
+    h2->Add(h2ws,-1);
+    TCanvas *c1 = new TCanvas("c1","");
+    h1->GetXaxis()->SetTitle("m^{2} [GeV^{2}]");
+    h1->GetYaxis()->SetTitle("A. U.");    
+    h1->DrawNormalized();
+    h2->SetLineColor(kRed);
+    //h2->DrawNormalized("same");
+}

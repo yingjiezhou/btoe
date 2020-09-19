@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--<job maxFilesPerProcess="70" filesPerHour="40" simulateSubmission="false">-->
+<job maxFilesPerProcess="1" filesPerHour="1" simulateSubmission="false">
+
+<!--<SandBox installer="ZIP">
+	<Package name="nsigmae">
+	<File>file:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/StRoot</File>
+        <File>file:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/.sl73_gcc485</File>
+   </Package>
+</SandBox>-->
+    ln -s &path;/.sl73_gcc485 ./
+    ln -s &path;/StRoot ./
+
+<command>
+starver SL18f
+<!--echo $INPUTFILE0
+set filename=`basename $INPUTFILE0`
+echo $SCRATCH-->
+<!--root4star -q -b -l StRoot/macros/makeTree.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+<!--root4star -q -b -l StRoot/macros/readAll.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+<!--root4star -q -b -l StRoot/macros/readAll.C\(\"$FILELIST\",\"${JOBID}_anaTree.root\"\) &gt;&amp; ${JOBID}.log-->
+<!--root4star -q -b -l StRoot/macros/makeAnaTree.C\(\"$INPUTFILE0\"\) &gt;&amp; ${JOBID}_$filename.log-->
+root4star -q -b -l StRoot/macros/run_StNpeRead.C\(\"$INPUTFILE0\",\"${JOBID}_ana.root\"\) &gt;&amp; ${JOBID}.log
+
+
+</command>
+    <stderr URL="file:/star/data05/scratch/yjzhou19/log/NPEhPhiAnalysis2015/log_&ver;/&run;/$JOBID.err" />
+    <stdout URL="file:/star/data05/scratch/yjzhou19/log/NPEhPhiAnalysis2015/log_&ver;/&run;/$JOBID.out" />
+    <Generator>
+        <ReportLocation>./submitReport</ReportLocation>
+        <ScriptLocation>./submitScript</ScriptLocation>
+        <ListLocation>./submitList</ListLocation>
+    </Generator> 
+    <input URL="filelist:/star/data01/pwg/yjzhou19/Local/zamiller/NPEhPhiAnalysis2015/&listOfFiles;"/>
+    <output fromScratch="*.log" toURL="&path;/log/log_&ver;/&run;/"/>
+    <output fromScratch="*ana.root" toURL="&path;/out/out_&ver;/&run;/" />
+</job>
+

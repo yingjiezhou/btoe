@@ -1,0 +1,4 @@
+Error in <TGClient::TGClient>: can't open display "localhost:19.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Error: Symbol tr is not defined in current scope  readPurity_hadron.C:37:
+*** Interpreter error recovered ***

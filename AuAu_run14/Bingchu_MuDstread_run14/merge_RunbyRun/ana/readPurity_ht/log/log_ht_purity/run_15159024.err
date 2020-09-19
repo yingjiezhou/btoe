@@ -1,0 +1,4 @@
+Error in <TGClient::TGClient>: can't open display "localhost:16.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+Error: illegal pointer to class object mh2 0x0 994  readPurity.C:39:
+*** Interpreter error recovered ***

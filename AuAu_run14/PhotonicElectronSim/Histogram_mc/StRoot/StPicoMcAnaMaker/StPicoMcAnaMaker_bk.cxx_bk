@@ -1,0 +1,403 @@
+#include "StPicoMcAnaMaker.h"
+#include "StPicoMcAnaHists.h"
+#include <assert.h>
+
+#include <map>
+#include <iostream>
+
+#include <utility>
+#include "Riostream.h"
+#include "Rtypes.h"
+#include "TROOT.h"
+#include "TSystem.h"
+#include "TF1.h"
+#include "TProfile.h"
+#include "TProfile3D.h"
+#include "TTree.h"
+#include "TChain.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TClassTable.h"
+#include "StLorentzVectorD.hh"
+#include "TVector3.h"
+#include "TFile.h"
+#include "TChain.h"
+#include "TString.h"
+#include "TStyle.h"
+#include "SystemOfUnits.h"
+#include "StarRoot/TPolynomial.h"
+#include "StDcaGeometry.h"
+#include "TRSymMatrix.h"
+#include "THelixTrack.h"
+#include "StBichsel/Bichsel.h"
+
+#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoDstMaker/StPicoDstMaker.h"
+#include "StPicoDstMaker/StPicoTrack.h"
+#include "StPicoDstMaker/StPicoEvent.h"
+#include "StPicoDstMaker/StPicoMcEvent.h"
+
+#include "StPicoDstMaker/StPicoMcTrack.h"
+#include "StAssociationMaker/StTrackPairInfo.hh"   
+#include "StAssociationMaker/StAssociationMaker.h" 
+
+double massElec=0.00051099906;
+
+ClassImp(StPicoMcAnaMaker)
+
+//-----------------------------------------------------------------------------
+StPicoMcAnaMaker::StPicoMcAnaMaker( TString  name,   TString outname, StPicoDstMaker *picoMaker)
+: StMaker(name), mHists(NULL)
+{
+  // mHists = new StPicoMcAnaHists(outname);
+  mPicoDstMaker = picoMaker;
+  mPicoDst = 0;
+  outfile=outname;
+  // strcpy(outfile,outname);
+  // cout<<outfile<<endl;
+  // outfile(outname);
+    cout<<outfile<<"  "<<outname<<endl;
+}
+//-----------------------------------------------------------------------------
+Int_t StPicoMcAnaMaker::Init(){
+
+
+  //  TString str(outfile);
+  outfile+=TString(".root");
+  //  std::cout<<outfile<<"  "<<endl;
+  mFile = new TFile(outfile, "recreate");  
+  
+  const char * varlist="mMcId:GePid:mMcParentid:mMcAssoID:Px:Py:Pz:Eta:misHFT:mPvx:mPvy:mPvz:Stx:Sty:Stz:nhitfit:nhitDedx:nhitMax:isHFT:rPvx:rPvy:rPvz:rgPx:rgPy:rgPz:rpPx:rpPy:rpPz:rdca:rdcaZ:rDcaXY";
+   mTupleMC= new TNtuple("tracksMC", "tracks", varlist);
+
+
+   const char* var_pair = 
+     "p1geantId:p1p:p1pt:p1rpt:p1reta:p1rphi:p1ndedx:p1nfit:p1ncom:p1nmax:p1dca:"
+     "p2geantId:p2p:p2pt:p2rp:p2rpt:p2reta:p2rphi:p2nfit:p2ncom:p2nmax:p2dca:massDCA:mcMassPair:pairDCA:pairPT:theta:dist:";
+
+   nt_pair= new TNtuple("nt_pair", "pairs", var_pair);
+
+  return StMaker::Init();
+  // return kStOk;
+
+
+}
+//-----------------------------------------------------------------------------
+Int_t StPicoMcAnaMaker::Make(){
+  if(!mPicoDstMaker) {
+    LOG_WARN << " No PicoDstMaker! Skip! " << endm;
+    return kStWarn;
+  }
+  mPicoDst = mPicoDstMaker->picoDst();
+  if(!mPicoDst) {
+    LOG_WARN << " No PicoDst! Skip! " << endm;
+    return kStWarn;
+  }
+  //MC
+
+  // StPicoMcEvent *Mcevent = (StPicoMcEvent *)mPicoDst->mcevent();
+  // StThreeVectorF McpVtx(-999.,-999.,-999.);
+  // StThreeVectorF McpVtxErr(0.,0.,0.);
+  // if(Mcevent) {
+  //   McpVtx = Mcevent->pVertex();
+  //   //   McpVtxErr = Mcevent->primaryVertexError();
+  // }
+
+
+
+  // Evet
+  StPicoEvent *event = (StPicoEvent *)mPicoDst->event();
+  StThreeVectorF pVtx(-999.,-999.,-999.);
+  StThreeVectorF pVtxErr(0.,0.,0.);
+  if(event) {
+    pVtx = event->primaryVertex();
+    pVtxErr = event->primaryVertexError();
+  }
+
+  if(!isGoodEvent(event)) return kStOk; 
+  //mHists->addEvent(event);
+
+
+  int nMcTracks =  mPicoDst->numberOfMcTracks();
+
+  for(int i_Mc=0; i_Mc<nMcTracks; i_Mc++){
+    StPicoMcTrack *mcTrk = (StPicoMcTrack*)mPicoDst->mctrack(i_Mc);
+
+    Int_t id=-999;
+    isRcTrack(mcTrk,mPicoDst,id);
+    if(id==-999) continue;
+    // if( mcTrk->assoId() == Pico::USHORTMAX )
+    //   continue;
+
+    // int temp = Pico::USHORTMAX ;
+    // for(int i_Rc =0; i_Rc<mPicoDst->numberOfTracks(); ++i_Rc){
+    //   StPicoTrack *Trk = (StPicoTrack*)mPicoDst->track(i_Rc);
+    //   if(mcTrk->assoId() == Trk->id() ) {
+    // 	temp = i_Rc;
+    // 	break;
+    //   }
+    // }
+
+
+    StPicoTrack *Trk = (StPicoTrack*)mPicoDst->track(id);
+
+    if(!Trk->isHFTTrack()&&mcTrk->GePid()!=2&&mcTrk->GePid()!=3) continue;
+
+    float B=(float) event->bField();
+    float MCID=(float )mcTrk->mcId();
+    float GetPID=(float )mcTrk->GePid();
+    float parentID= Pico::USHORTMAX;
+    if(mcTrk->parentId() != Pico::USHORTMAX) parentID=((StPicoMcTrack*)(mPicoDst->mctrack(mcTrk->parentId())))->GePid();
+    cout<< " nTracks  "<< nMcTracks << "  "<< parentID<<endl;
+
+    float assoID=(float )mcTrk->assoId();
+    float mPX=(float) mcTrk->Mom().x();
+    float mPY=(float) mcTrk->Mom().y();
+    float mPZ=(float) mcTrk->Mom().z();
+    float mEta=(float ) mcTrk->pseudorapidity();
+    float misHFT=(float)isHftTrack(mcTrk); 
+    float mpvx=(float)  pVtx.x();
+    float mpvy=(float) pVtx.y();
+    float mpvz=(float) pVtx.z();
+
+    float mStx=(float) mcTrk->Origin().x();
+    float mSty=(float) mcTrk->Origin().y();
+    float mStz=(float) mcTrk->Origin().z();
+
+    float rnhit=(float) Trk->nHitsFit();
+    float rnhitdedx=(float) Trk->nHitsDedx();
+    float rnhitMax=(float) Trk->nHitsMax();
+    // float nhitCom=(float) Trk->nHitsMax();
+
+    float risHFT=(float) Trk->isHFTTrack();
+
+    float rpvx=(float) pVtx.x();
+    float rpvy=(float) pVtx.y();
+    float rpvz=(float) pVtx.z();
+
+
+    float rpPX=(float) Trk->pMom().x();
+    float rpPY=(float) Trk->pMom().y();
+    float rpPZ=(float) Trk->pMom().z();
+
+    float rgPX=(float) Trk->gMom(pVtx,B).x();
+    float rgPY=(float) Trk->gMom(pVtx,B).y();
+    float rgPZ=(float) Trk->gMom(pVtx,B).z();
+
+
+    // dca
+    StPhysicalHelixD helix = Trk->helix();
+    float dca = float(helix.geometricSignedDistance(pVtx));
+    StThreeVectorF dcaPoint = helix.at(helix.pathLength(pVtx.x(), pVtx.y()));
+    float dcaZ = dcaPoint.z() - pVtx.z();
+
+    float DcaXY=(float) helix.geometricSignedDistance(pVtx.x(), pVtx.y()); 
+
+    float  tuple[]={MCID,GetPID,parentID,assoID,mPX,mPY,mPZ,mEta,misHFT,mpvx,mpvy,mpvz,mStx,mSty,mStz,
+		    rnhit,rnhitdedx,rnhitMax,risHFT,
+		    rpvx,rpvy,rpvz,rgPX,rgPY,rgPZ,rpPX,rpPY,rpPZ,
+		    dca,dcaZ,DcaXY};
+    
+       mTupleMC->Fill(tuple); 
+    
+       // now start the pair 
+
+       float p_nt_nt[100];
+       float  pairDCA=-999.0; 
+       float thetaDCA=-999.0;
+       float massPair=-999.0;
+       float pairPT=-999.0;
+       float MCID2=-999.0;
+       float GetPID2=-999.0;
+       float parentID2=-999.0;
+       float assoID2=-999.0;
+       float mPX2=-999.0;
+       float mPY2=-999.0;
+       float mPZ2=-999.0;
+       float mEta2=-999.0;
+       float misHFT2=-999.0;
+       float mpvx2=-999.0;
+       float mpvy2=-999.0;
+       float mpvz2=-999.0;
+
+       float mStx2=-999.0;
+       float mSty2=-999.0;
+       float mStz2=-999.0;
+
+       float rnhit2=-999.0;
+       float rnhitdedx2=-999.0;
+       float rnhitMax2=-999.0;
+       // float nhitCom=(float) Trk->nHitsMax();
+
+       float risHFT2=-999.0;
+
+       float rpv2x=-999.0;
+       float rpvy2=-999.0;
+       float rpvz2=-999.0;
+
+
+       float rpPX2=-999.0;
+       float rpPY2=-999.0;
+       float rpPZ2=-999.0;
+
+       float rgPX2=-999.0;
+       float rgPY2=-999.0;
+       float rgPZ2=-999.0;
+       float dca2=-999.0;
+       float dcaXY2=-999.0;
+       float dcaZ2=-999.0;
+
+
+
+       //     for(int iTrk2=i_Mc;iTrk2< nMcTracks;iTrk2++)
+       if(parentID!=1) continue;
+       for(int iTrk2=i_Mc+1;iTrk2<nMcTracks;iTrk2++)
+	 {
+	   StPicoMcTrack *mcTrk2 = (StPicoMcTrack*)mPicoDst->mctrack(iTrk2);
+	   if( mcTrk2->assoId() == Pico::USHORTMAX )
+	     continue;
+	   int temp = Pico::USHORTMAX ;
+	   for(int i_Rc =0; i_Rc<mPicoDst->numberOfTracks(); ++i_Rc){
+	     StPicoTrack *Trk2 = (StPicoTrack*)mPicoDst->track(i_Rc);
+	     if(mcTrk2->assoId() == Trk2->id() ) {
+	       temp = i_Rc;
+	       break;
+	     }
+	   }
+	   if (temp == Pico::USHORTMAX) continue;
+	   StPicoTrack *Trk2 = (StPicoTrack*)mPicoDst->track(temp);
+	   if(!Trk2->isHFTTrack()&&mcTrk2->GePid()!=2&&mcTrk2->GePid()!=3) continue;
+
+	   float parentID2= Pico::USHORTMAX;
+	   if(mcTrk2->parentId() != Pico::USHORTMAX) parentID2=((StPicoMcTrack*)(mPicoDst->mctrack(mcTrk2->parentId())))->GePid();
+
+	   float GetPID2=(float )mcTrk2->GePid();
+
+	   if(parentID==1&&parentID2==1)
+	     {
+	       cout<< "  "<< parentID<< " "<< GetPID<< endl;
+	       StThreeVectorF posDCA(-9999, -9999, -9999);  
+	       StPhysicalHelixD helix2 = Trk2->helix();
+	       pair<double,double> pathLength = helix.pathLengths(helix2);
+	       pairDCA = (helix.at(pathLength.first) - helix2.at(pathLength.second)).mag(); 
+
+	       StThreeVectorD p1DCA = helix.momentumAt(pathLength.first, (B/10.)*tesla);  
+	       StThreeVectorD p2DCA = helix.momentumAt(pathLength.second, (B/10.)*tesla);    
+
+	       thetaDCA = acos(p1DCA.dot(p2DCA)/p1DCA.mag()/p2DCA.mag()); 
+
+	       StThreeVectorF v1(helix.at(pathLength.first).x(),
+				 helix.at(pathLength.first).y(),
+				 helix.at(pathLength.first).z()); 
+
+	       StThreeVectorF v2(helix2.at(pathLength.second).x(), 
+				 helix2.at(pathLength.second).y(),
+				 helix2.at(pathLength.second).z()); 
+	       posDCA = (v1 + ((v2-v1)*0.5)); 
+
+	       StLorentzVectorD pathOne;
+	       StLorentzVectorD pathTwo;
+	       pathOne.setPx(p1DCA.x());
+	       pathOne.setPy(p1DCA.y());
+	       pathOne.setPz(p1DCA.z());
+	       pathOne.setE(p1DCA.massHypothesis(massElec));
+
+	       pathTwo.setPx(p2DCA.x());
+	       pathTwo.setPy(p2DCA.y());
+	       pathTwo.setPz(p2DCA.z());
+	       pathTwo.setE(p2DCA.massHypothesis(massElec));
+
+	       massPair = (pathOne + pathTwo).m();
+	       pairPT = (pathOne + pathTwo).perp();
+	       // delete mcTrk2;
+	       // delete Trk2;
+
+      }
+
+      } 
+   
+
+
+    int ii = 0;
+    p_nt_nt[ii++] = parentID;
+    
+    
+    
+    p_nt_nt[ii++]=  pairDCA; 
+    p_nt_nt[ii++]= thetaDCA;
+    p_nt_nt[ii++]= massPair;
+    p_nt_nt[ii++]= pairPT;
+    
+    p_nt_nt[ii++]= MCID2;
+    p_nt_nt[ii++]= GetPID2;
+    p_nt_nt[ii++]= parentID2;
+    p_nt_nt[ii++]= assoID2;
+    p_nt_nt[ii++]= mPX2;
+    p_nt_nt[ii++]= mPY2;
+    p_nt_nt[ii++]= mPZ2;
+    p_nt_nt[ii++]= mEta2;
+    p_nt_nt[ii++]= misHFT2;
+    p_nt_nt[ii++]= mpvx2;
+    p_nt_nt[ii++]= mpvy2;
+    p_nt_nt[ii++]= mpvz2;
+
+    p_nt_nt[ii++]= mStx2;
+    p_nt_nt[ii++]= mSty2;
+    p_nt_nt[ii++]= mStz2;
+
+    p_nt_nt[ii++]= rnhit2;
+    p_nt_nt[ii++]= rnhitdedx2;
+    p_nt_nt[ii++]= rnhitMax2;
+    // p_nt_nt[ii++]= nhitCom=(p_nt_nt[ii++]=) Trk->nHitsMax();
+
+    p_nt_nt[ii++]= risHFT2;
+
+    p_nt_nt[ii++]= rpv2x;
+    p_nt_nt[ii++]= rpvy2;
+    p_nt_nt[ii++]= rpvz2;
+
+
+    p_nt_nt[ii++]= rpPX2;
+    p_nt_nt[ii++]= rpPY2;
+    p_nt_nt[ii++]= rpPZ2;
+
+    p_nt_nt[ii++]= rgPX2;
+    p_nt_nt[ii++]= rgPY2;
+    p_nt_nt[ii++]= rgPZ2;
+    p_nt_nt[ii++]= dca2;
+    p_nt_nt[ii++]= dcaXY2;
+    p_nt_nt[ii++]= dcaZ2;
+
+
+      nt_pair ->Fill(p_nt_nt); 
+
+  }
+  return kStOk;
+}
+Int_t StPicoMcAnaMaker::Finish()
+{
+  //  mHists->closeFile();
+
+  mFile->cd();
+  mTupleMC->Write();
+  nt_pair->Write();
+  mFile->Close();
+  return kStOk;
+}
+bool StPicoMcAnaMaker::isRcTrack(StPicoMcTrack const * const PicoMcTrack,StPicoDst const * const  PicoDst,int &id)
+{
+  int nMcTracks =  PicoDst->numberOfMcTracks();  
+    if(PicoMcTrack->assoId() == Pico::USHORTMAX )
+      return false; 
+     int temp = Pico::USHORTMAX ;
+     for(int i_Rc =0; i_Rc<PicoDst->numberOfTracks(); ++i_Rc){
+    StPicoTrack *Trk = (StPicoTrack*)PicoDst->track(i_Rc);
+       if(PicoMcTrack->assoId() == Trk->id() ) {
+	  temp = i_Rc;
+	    break;
+       }
+     }
+     if (temp == Pico::USHORTMAX) return false;;
+     id=temp;
+  return true;
+}

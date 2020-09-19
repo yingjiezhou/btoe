@@ -1,0 +1,1 @@
+../../../../../StRoot/StTriggerUtilities/StDSMUtilities/sumTriggerPatchChannels.hh

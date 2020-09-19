@@ -1,0 +1,34 @@
+/////////////////////////////////////////////////////////////////////////
+// SPlot for NPE analysis
+// author: Matthew Kelsey
+// date Aug. 7 
+/////////////////////////////////////////////////////////////////////////
+#ifndef __CINT__
+#include "RooGlobalFunc.h"
+#endif
+#include "RooRealVar.h"
+#include "RooStats/SPlot.h"
+#include "RooDataSet.h"
+#include "RooRealVar.h"
+void parsePhoE()
+{
+
+    char dFile[500];
+    sprintf(dFile,"../production/NPE.root");
+    TFile *f_D = new TFile(dFile);
+    TTree *t = f_D->Get("PhoE");    
+ 
+    TFile out("PhoE.root","RECREATE");
+    TTree* PhoE_WS = t->CopyTree("tag_charge*probe_charge>0 && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01");//new TTree("PhoE_WS","PhoE_WS");//tree->CloneTree(0);
+    TTree* PhoE = t->CopyTree("tag_charge*probe_charge<0 && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01");//new TTree("PhoE_WS","PhoE_WS");//tree->CloneTree(0);
+    PhoE_WS->SetName("PhoE_WS");
+    PhoE->SetName("PhoE");
+    PhoE->Write();
+    PhoE_WS->Write();
+
+    out.Close();
+    out.Delete(); 
+}
+
+
+

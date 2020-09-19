@@ -1,0 +1,75 @@
+void prettycanvasAll(TCanvas *c1,RooPlot *Frame, int log, double max)
+{
+    TPaveText *Name = new TPaveText(0.5,0.8,0.9,0.9,"BRNDC");
+
+    Name->AddText("STAR Au+Au 200 GeV");
+    Name->SetFillColorAlpha(0, 0);
+    Name->SetTextAlign(12);
+    Name->SetBorderSize(0); 
+   
+    Frame->GetYaxis()->SetTitleSize(0.06); 
+    Frame->GetYaxis()->SetTitleOffset(1.05);
+    Frame->SetTitle(""); 
+    Frame->GetXaxis()->SetTitle("#Delta#phi");
+    Frame->GetYaxis()->SetTitle("dN/d#Delta#phi");
+    Frame->GetYaxis()->SetRangeUser(0.,max*2);
+
+    //Frame->GetXaxis()->SetTitleSize(0.3);
+    //Frame->GetXaxis()->SetLabelSize(0.1);    
+    //Frame->GetYaxis()->SetNdivisions(4,0); 
+    Frame->Draw();
+    Name->Draw("SAME");
+}
+void prettycanvasAll3(TCanvas *c1,RooPlot *Frame, RooPlot *Frame1, RooPlot *Frame2,int log, double max, double max1, double max2)
+{
+    TPaveText *Name = new TPaveText(gStyle->GetPadLeftMargin() + 0.2,
+                            0.8 - gStyle->GetPadTopMargin(),
+                            gStyle->GetPadLeftMargin() + 0.75,
+                            0.97 - gStyle->GetPadTopMargin(),
+                                        "BRNDC");
+
+    Name->AddText("STAR Au+Au 200 GeV");
+    Name->SetFillColorAlpha(0, 0);
+    Name->SetTextAlign(12);
+    Name->SetBorderSize(0); 
+    c1->cd(1);
+    Frame->GetYaxis()->SetTitleSize(0.06); 
+    Frame->GetYaxis()->SetTitleOffset(1.05);
+    Frame->SetTitle(""); 
+    Frame->GetXaxis()->SetTitle("#Delta#phi");
+    Frame->GetYaxis()->SetTitle("dN/d#Delta#phi");
+    Frame->GetYaxis()->SetRangeUser(max*0.3,max*1.4);
+
+    //Frame->GetXaxis()->SetTitleSize(0.3);
+    //Frame->GetXaxis()->SetLabelSize(0.1);    
+    //Frame->GetYaxis()->SetNdivisions(4,0); 
+    Frame->Draw();
+
+    Name->Draw("SAME");
+    c1->cd(2);
+    Frame1->GetYaxis()->SetTitleSize(0.06); 
+    Frame1->GetYaxis()->SetTitleOffset(1.05);
+    Frame1->SetTitle(""); 
+    Frame1->GetXaxis()->SetTitle("#Delta#phi");
+    Frame1->GetYaxis()->SetTitle("dN/d#Delta#phi");
+    Frame1->GetYaxis()->SetRangeUser(max1*0.3,max1*1.4);
+
+    //Frame1->GetXaxis()->SetTitleSize(0.3);
+    // Frame1->GetXaxis()->SetLabelSize(0.1);    
+    //Frame1->GetYaxis()->SetNdivisions(4,0); 
+    Frame1->Draw();
+    Name->Draw("SAME");
+    c1->cd(3);
+    Frame2->GetYaxis()->SetTitleSize(0.06); 
+    Frame2->GetYaxis()->SetTitleOffset(1.05);
+    Frame2->SetTitle(""); 
+    Frame2->GetXaxis()->SetTitle("#Delta#phi");
+    Frame2->GetYaxis()->SetTitle("dN/d#Delta#phi");
+    Frame2->GetYaxis()->SetRangeUser(max2*0.3,max2*1.4);
+
+    //Frame2->GetXaxis()->SetTitleSize(0.3);
+    // Frame2->GetXaxis()->SetLabelSize(0.1);    
+    //Frame2->GetYaxis()->SetNdivisions(4,0); 
+    Frame2->Draw();
+    Name->Draw("SAME");
+}

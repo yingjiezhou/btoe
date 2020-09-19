@@ -1,0 +1,10 @@
+mv  PIDe_Pt_0.pdf.pdf  PIDe_Pt_0.pdf
+mv  PIDe_Pt_9.pdf.pdf  PIDe_Pt_9.pdf
+mv  PIDe_Pt_8.pdf.pdf  PIDe_Pt_8.pdf
+mv  PIDe_Pt_1.pdf.pdf  PIDe_Pt_1.pdf
+mv  PIDe_Pt_3.pdf.pdf  PIDe_Pt_3.pdf
+mv  PIDe_Pt_2.pdf.pdf  PIDe_Pt_2.pdf
+mv  PIDe_Pt_7.pdf.pdf  PIDe_Pt_7.pdf
+mv  PIDe_Pt_6.pdf.pdf  PIDe_Pt_6.pdf
+mv  PIDe_Pt_4.pdf.pdf  PIDe_Pt_4.pdf
+mv  PIDe_Pt_5.pdf.pdf  PIDe_Pt_5.pdf

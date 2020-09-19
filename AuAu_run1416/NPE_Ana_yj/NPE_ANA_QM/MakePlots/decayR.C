@@ -1,0 +1,122 @@
+void decayR(){
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    gStyle->SetPalette(56);
+    TGaxis::SetMaxDigits(3); 
+    char hist[150] = "h";
+    char axis[150] = "Decay Radius [cm]";
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    sprintf(dFile,"../production/NPE_Tuples_TuneA6.root");
+    TFile *f_D = new TFile(dFile);
+    ch1 = (TChain*)f_D->Get("PhoE");
+    //TChain *ch1 = new TChain("PhoE");
+    // / /for(int i=0;i<1224;i++){
+//	sprintf(dFile,"../production/87730F08F5B2C47C35F6651B1028DAD2_%i.root",i);
+//	ch1->AddFile(dFile);
+	// }
+    //ch1->AddFile("../production/87730F08F5B2C47C35F6651B1028DAD2_*.root");
+    TH1F *h1 = new TH1F("h1","h1",500,0,7);
+   TH1F *h1_1 = new TH1F("h1_1","h1_1",500,0,7);
+   TH2F *h2d = new TH2F("h2d","h2d",200,0,20,75,0,0.015);
+    TH2F *h2dws = new TH2F("h2dws","h2dws",200,0,20,75,0,0.015);
+    TH1F *h2_1 = new TH1F("h2_1","h2_1",500,0,7);
+    TH1F *h2 = new TH1F("h2","h2",500,0,7);
+    TH1F *h3 = new TH1F("h3","h3",75,0,0.015);
+    TH1F *h4 = new TH1F("h4","h4",75,0,0.015);
+
+    TH1F *ha = new TH1F("ha","ha",100,0,0.1);
+    TH1F *hb = new TH1F("hb","hb",100,0,0.1);
+    TH1F *ha1 = new TH1F("ha1","ha1",50,0,10);
+    TH1F *hb1 = new TH1F("hb1","hb1",50,0,10);
+    TH1F *ha2 = new TH1F("ha2","ha2",100,-0.1,0.1);
+    TH1F *hb2 = new TH1F("hb2","hb2",100,-0.1,0.1);
+    TH1F *h5 = new TH1F("h5","h5",160,-13,13);
+    TH1F *h5ws = new TH1F("h5ws","h5ws",160,-13,13);
+
+    ch1->Project("h1","pair_decayradius","probe_charge*tag_charge<0")  ;   
+    ch1->Project("h2","pair_decayradius","probe_charge*tag_charge>0")  ; 
+    ch1->Project("h1_1","pair_decayradius","probe_charge*tag_charge<0 && probe_dca>0.01 ")  ;   
+    ch1->Project("h2_1","pair_decayradius","probe_charge*tag_charge>0 && probe_dca>0.01")  ; 
+
+    ch1->Project("h2d","PhoE_M:pair_decayradius","probe_charge*tag_charge<0")  ; 
+    ch1->Project("h2dws","PhoE_M:pair_decayradius","probe_charge*tag_charge>0")  ; 
+    ch1->Project("h3","PhoE_M","probe_charge*tag_charge<0  && pair_dca<0.001 &&pair_theta<0.001")  ; 
+    ch1->Project("h4","PhoE_M","probe_charge*tag_charge>0  && pair_dca<0.001 &&pair_theta<0.001")  ; 
+
+    ch1->Project("ha","pair_theta","probe_charge*tag_charge<0")  ; 
+    ch1->Project("hb","pair_theta","probe_charge*tag_charge>0")  ;
+
+    ch1->Project("ha1","probe_pt","probe_charge*tag_charge<0 && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01")  ; 
+    ch1->Project("hb1","probe_pt","probe_charge*tag_charge>0 && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01")  ;
+
+    ch1->Project("ha2","pair_phi","probe_charge*tag_charge<0")  ; 
+    ch1->Project("hb2","pair_phi","probe_charge*tag_charge>0")  ;
+
+    ch1->Project("h5",  "probe_nsige","probe_charge*tag_charge<0  && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01")  ; 
+    ch1->Project("h5ws","probe_nsige","probe_charge*tag_charge>0  && pair_dca<0.001 &&pair_theta<0.001 && PhoE_M<0.01 && pair_decayradius<5")  ; 
+    char label[100];
+    sprintf(label,"Normalized Entries");
+    cout<< "Number of entries in selected sample " << h5->Integral() << endl;
+    //h1->Rebin(5);
+    h1->GetYaxis()->SetTitle(label);
+    h1->GetXaxis()->SetTitle(axis);
+    h2->SetLineColor(kRed);
+    h4->SetLineColor(kRed);
+    hb->SetLineColor(kRed);
+    hb1->SetLineColor(kRed);
+    hb2->SetLineColor(kRed);
+    h2_1->SetLineColor(kBlue);
+    h1_1->SetLineColor(kGreen-2);
+    h5ws->SetLineColor(kRed);
+
+    //norm(ha);
+    //norm(hb);
+    //norm(ha1);
+    //norm(hb1);
+    //norm(ha2);
+    //norm(hb2);
+    TCanvas *c1 = new TCanvas("c1","");
+						
+ 
+    h1->Draw("hist");
+    h2->Draw("hist same");
+    h2_1->Draw("hist same");  
+    h1_1->Draw("hist same");  
+    TCanvas *c11 = new TCanvas("c11","nsigma");
+    //h5->Add(h5ws,-1);
+    h5->Draw("hist same");
+    h5ws->Draw("hist same");
+    TCanvas *c111 = new TCanvas("c111","");
+  
+    h3->Draw("hist");
+    h4->Draw("hist same");
+
+    TCanvas *c1111 = new TCanvas("c1111","RS");
+    h2d->Draw("COLZ");
+    TCanvas *c11111 = new TCanvas("c11111","WS");
+    h2dws->Draw("COLZ");
+    TCanvas *c2 = new TCanvas("c2","theta");
+  
+    ha->Draw("hist");
+    hb->Draw("hist same");
+    TCanvas *c21 = new TCanvas("c21","pt");
+  
+    ha1->Draw("hist");
+    //hb1->Draw("hist same");
+    TCanvas *c22 = new TCanvas("c22","phi");
+  
+    ha2->Draw("hist");
+    hb2->Draw("hist same");
+}//End
+
+void norm(TH1F *h){
+    double norm1 = h->Integral();
+    int bins = h->GetNbinsX();
+    for(int i=1; i<bins+1;i++){
+	double temp = h->GetBinContent(i);
+	double err = h->GetBinError(i);
+	h->SetBinContent(i,temp/norm1);
+	h->SetBinError(i,err/norm1);
+    }
+}

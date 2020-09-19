@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job filesPerHour="1" nProcesses="&nRuns;"  simulateSubmission="false">
+<command>
+
+starver SL16d
+./run_full.sh &startNRuns; ${JOBID} &submitter;
+
+</command>
+
+<stdout URL="file:&base;/log/hj_$JOBID.out" />
+<stderr URL="file:&base;/log/hj_$JOBID.err" />
+<output fromScratch="*.picoDst.root" toURL="file:&base;/files_full&submitter;/" />
+<Generator>
+  <Location>/star/u/xiao00/Run14_Analysis/PhotonicElectronSim/Pico_mc/report/</Location>
+  <ScriptLocation>/star/u/xiao00/Run14_Analysis/PhotonicElectronSim/Pico_mc/csh/</ScriptLocation>
+  <ListLocation>/star/u/xiao00/Run14_Analysis/PhotonicElectronSim/Pico_mc/list/</ListLocation>
+</Generator>
+
+<SandBox installer="ZIP">
+  <Package name="LocalLibraries_single_8_full_3">
+    <File>file:./starsim.hijing.Lc.C</File>
+    <File>file:./makePicoDst.C</File>
+    <File>file:./run_full.sh</File>
+    <File>file:./StRoot/</File>
+    <File>file:./pams/</File>
+    <File>file:./StarVMC/</File>
+    <File>file:./StarDb/</File>
+    <File>file:./.sl64_gcc482/</File>
+  </Package>
+</SandBox>
+
+</job>
+

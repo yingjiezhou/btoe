@@ -1,0 +1,3 @@
+root4star -l -b -q StRoot/macros/readPicoDst.C'("/star/u/kunsu/auau200GeVRun14/simulation_RealDetector_RealParticle_SL16d_Pixelisation/files_full/753BF48F0FBC1613C70FEAF958C9C033_3308.picoDst.root","ana_1.root")'
+root4star -l -b -q StRoot/macros/readPicoDst.C'("/star/u/kunsu/auau200GeVRun14/simulation_RealDetector_RealParticle_SL16d_Pixelisation/files_full/753BF48F0FBC1613C70FEAF958C9C033_9407.picoDst.root","ana_2.root")'
+root4star -l -b -q StRoot/macros/readPicoDst.C'("/star/u/kunsu/auau200GeVRun14/simulation_RealDetector_RealParticle_SL16d_Pixelisation/files_full/B49C7F5127F4B7725112D15B83558422_9884.picoDst.root","ana_3.root")'

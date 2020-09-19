@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job  maxFilesPerProcess="50"  filesPerHour="50" simulateSubmission="false" fileListSyntax="paths">
+
+        <stdout URL="file:./log/$JOBID.log" />
+        <stderr URL="file:./err/$JOBID.err" />
+
+	<Generator>
+		<Location>./report/</Location>
+		<ScriptLocation>./csh/</ScriptLocation>
+		<ListLocation>./list/</ListLocation>
+	</Generator>
+
+
+<command> 
+starver DEV
+
+python runHftTree.py ${FILELIST}
+
+</command>
+
+<ResourceUsage>
+    <StorageSpace>
+      <MinStorage>5500</MinStorage>
+    </StorageSpace>
+</ResourceUsage>
+
+<input URL="filelist:/gpfs01/star/pwg/dongx/hft/Run16/Cosmic_FieldOn_HftMatTree/&listOfFiles;"/>
+
+<SandBox installer="ZIP">
+	<Package name="LocalLibraries">
+		<File>file:./StRoot/</File>
+                <File>file:./.sl64_gcc482/</File>
+                <File>file:./runHftTree.C</File>     
+                <File>file:./runHftTree.py</File>
+	</Package>
+</SandBox>
+
+</job>

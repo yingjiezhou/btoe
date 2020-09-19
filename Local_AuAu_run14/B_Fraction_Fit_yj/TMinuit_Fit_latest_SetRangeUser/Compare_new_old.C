@@ -1,0 +1,32 @@
+void Compare_new_old()
+{
+
+  cout<< "draw previous and new "<<endl;
+  TFile * file_new= new TFile("OutPut/Fit_B_fraction_DCA_0.root","READ");
+  TFile * file_old= new TFile("OutPut/Fit_B_fraction_DCA_1.root","READ");
+
+  // TFile * file_old= new TFile("../Minuit_Fit_backup/OutPut/Fit_B_fraction_MB.root","READ");
+  //TFile * file_old= new TFile("OutPut/Fit_B_fraction_MB_DCAXY.root","READ");
+  
+  
+  // TFile * file_old= new TFile("../Minuit_Fit_backup/OutPut/Fit_B_fraction_MB.root","READ");
+
+  
+  
+  TH1F *old_b_frac=( TH1F *) file_old->Get("b_fraction_MB")->Clone("b_fraction_MB_old");
+  TH1F *new_b_frac=( TH1F *) file_new->Get("b_fraction_MB")->Clone("b_fraction_MB_new");
+
+
+  new_b_frac->SetMarkerColor(2);
+  new_b_frac->SetLineColor(2);
+  
+  old_b_frac->GetXaxis()->SetTitle("p_{T}");
+  old_b_frac->GetYaxis()->SetTitle("N_{Be}/(N_{Be}+N_{De})");
+
+  old_b_frac->GetYaxis()->SetRangeUser(0,1);
+  old_b_frac->Draw();
+  new_b_frac->Draw("same");
+  
+  
+    
+}

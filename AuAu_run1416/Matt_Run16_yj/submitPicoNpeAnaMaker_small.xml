@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Author: Kunsu OH (code maintainer, kunsuoh@gmail.com), Mustafa Mustafa (mmustafa@lbl.gov) -->
+
+<job fileListSyntax="xrootd" maxFilesPerProcess="75" simulateSubmission="false" filesPerHour="15">
+
+        <stdout discard="true" />
+        <stderr URL="file:./err/$JOBID.err" />
+                
+        <Generator>
+        <Location>./report/</Location>
+        <ScriptLocation>./csh/</ScriptLocation>
+        <ListLocation>./list/</ListLocation>
+        </Generator>
+                                                
+
+<command>
+starver SL19b
+cp $FILELIST in.list
+root4star -q -b -l runPicoNpeAnaMaker.C\(\"in.list\",\"$JOBID.root\"\) &gt;&amp; ${JOBID}.log
+</command>
+
+    <input URL = "catalog:star.bnl.gov?production=P16ij,filetype=daq_reco_picoDst,trgsetupname=AuAu_200_production_2016,library=SL18f,storage!=HPSS,runnumber>17062046" preferStorage="local" singleCopy="true" nFiles="10000" />
+    <output fromScratch="*.root" toURL="/gpfs01/star/pwg/mkelsey/Run16/production/" />
+    <output fromScratch="*.log" toURL="/gpfs01/star/pwg/mkelsey/Run16/log/" />
+<!-- Define locations of log/elog files -->
+<stdout URL="file:/gpfs01/star/pwg/mkelsey/Run16/log_tmp/$JOBID.std.log"/>
+<stderr URL="file:/gpfs01/star/pwg/mkelsey/Run16/log_tmp/$JOBID.std.elog"/>
+
+<SandBox installer="ZIP">
+	<Package name="LocalLibraries">
+		<File>file:./StRoot/</File>
+                <File>file:./bad_runs_refmult_year2016_P16id.txt</File>
+		<File>file:./goodruns2016_wpxl_grefhftrcut.txt</File>
+           	<File>file:/gpfs01/star/pwg/mkelsey/Run16/.sl73_gcc485/</File>
+		<File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/root/weights_electron.root</File>	
+		<File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/root/weights_pion.root</File> 
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/root/weights_electron_highpt.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/root/weights_pion_highpt.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/HighTower/root/weights_electron_HT.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/Likelihood/HighTower/root/weights_pion_HT.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_corr.root</File>
+		<File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_res.root</File>	
+                <File>file:/gpfs01/star/pwg/mkelsey/NPE_ANA/EventPlane/root/event_corr_new.root</File>
+		<File>file:/gpfs01/star/pwg/mkelsey/Run16/EventPlane/root/event_corr_fms.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/Run16/zdcsmdBeamCenter.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/Run16/fZdcEPResolution.root</File>
+                <File>file:/gpfs01/star/pwg/mkelsey/Run16/eprecenter.root</File>
+		<File>file:/gpfs01/star/pwg/mkelsey/Run16/runPicoNpeAnaMaker.C</File>
+	</Package>
+</SandBox>
+
+</job>

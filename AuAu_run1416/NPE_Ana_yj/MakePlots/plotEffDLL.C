@@ -1,0 +1,38 @@
+
+void plotEffDLL(int pt=8)
+{
+/////////////////////////////////////////////////////////////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+///// Electron PID cuts 
+    int const numPtBins=9;
+    double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+ 
+//////////////////////////////////////////////////////////////////
+    char dFile[500];
+    char dFile1[500];
+    sprintf(dFile,"../production/NPE_Tuples_TuneA5.root");
+    TFile *f_D = new TFile(dFile);
+    h02 = (TH2F*) f_D->Get("hFit_0");
+    h32 = (TH2F*) f_D->Get("hFit_3");
+
+    
+    if(pt>0){
+	h32->GetXaxis()->SetRangeUser(binning[pt-1],binning[pt]);
+	h02->GetXaxis()->SetRangeUser(binning[pt-1],binning[pt]);	 
+    }
+    else{  
+	h32->GetXaxis()->SetRangeUser(0,8.5);
+	h02->GetXaxis()->SetRangeUser(0,8.5);    
+    }
+    h3 = (TH1F*)h32->ProjectionY();
+    h0 = (TH1F*)h02->ProjectionY();    
+    
+    h3->Rebin(32);
+    h0->Rebin(32);    
+
+    h3->Divide(h0);
+    TCanvas *c1 = new TCanvas("c1","");
+    h3->Draw();
+}//End
+

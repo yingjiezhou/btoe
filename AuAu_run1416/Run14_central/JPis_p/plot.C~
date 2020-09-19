@@ -1,0 +1,18 @@
+void plot(){
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(4);  
+//////////////////////////////////////////////////////////////////
+
+    TFile *fi = new TFile("../production/test.root");
+    h1 = (TH2F*) fi->Get("hJpsip");
+    h2 = (TH2F*) fi->Get("hJpsip_1");
+    h3 = (TH2F*) fi->Get("hJpsip_2");
+    h1->Add(h2);
+    h1->Add(h3);
+    h1_x = (TH1F*)h1->ProjectionX();
+    TCanvas *c1 = new TCanvas("c1","c1");
+    cout << "Number of candidates "<< h1->Integral() << endl;
+    h1_x->Draw();
+
+
+}

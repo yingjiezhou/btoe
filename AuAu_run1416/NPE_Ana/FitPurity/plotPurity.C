@@ -1,0 +1,173 @@
+void plotPurity(int pass=5){
+
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    char file[50];
+    sprintf(file,"./%i/yields.dat",1);
+    ifstream data(file);
+    char file1[50];
+    sprintf(file1,"./%i/yields.dat",2);
+    ifstream data1(file1);
+    int const numPtBins=9;
+    double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+    //int const numPtBins=5;
+    //double binning[numPtBins+1]={0.6,1,1.5,2.5,3.5,8.5};
+    int const num=9;
+    //double kunsu_p[num]={0.90,0.87,0.78,0.86,0.79,0.74,0.66,0.58};
+    //double kunsu_p[num]={0.90,0.84,0.65,0.63,0.41,0.30,0.20,0.12}; 
+    //double const kunsu_b[num+1]={1.0,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5}; 
+    double kunsu_e[num]={1,0.86,0.86,0.85,0.86,0.85,0.85,0.85,0.85}; 
+    double kunsu_y[num]={ 1,4008278,2468138,1123100,333933,208449,30757,5510,1756};
+
+    double kunsu_p[num]={0.999999,0.95,0.92,0.78,0.82,0.87,0.88,0.94,0.86}; 
+    double kunsu_pe[num]={0.01,0.01,0.01,0.01,0.01,0.02,0.03,0.10,0.09}; 
+    double kunsu_pe1[num]={0.01,0.01,0.02,0.01,0.04,0.01,0.11,0.18,0.15}; 
+    double const kunsu_b[num+1]={0.6,1.0,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5}; 
+
+    TH1F *hp_k = new TH1F("hp_k","",num,kunsu_b);
+    TH1F *hp_k1 = new TH1F("hp_k1","",num,kunsu_b);
+    TH1F *he_k = new TH1F("he_k","",num,kunsu_b);
+    for(int i =1; i<10;i++){
+	hp_k->SetBinContent(i,1-kunsu_p[i-1]);
+	hp_k1->SetBinContent(i,kunsu_p[i-1]);
+	hp_k->SetBinError(i,kunsu_pe[i-1]);
+	hp_k1->SetBinError(i,kunsu_pe1[i-1]);
+    }
+    hp_k->SetLineColor(1);
+    hp_k->SetMarkerColor(1);
+    hp_k->SetMarkerStyle(8);
+    hp_k1->SetLineColor(1);
+    hp_k1->SetLineColor(kBlue);
+    hp_k1->SetMarkerColor(1);
+    hp_k1->SetMarkerStyle(8);
+    he_k->SetLineColor(kBlue);
+    he_k->SetMarkerColor(kBlue);
+    double y;
+    double y_e;
+    double p1;
+    double p2;
+    double p3;
+    double pT;
+    double eff;
+
+    TH1F *hy1 = new TH1F("hy1","",numPtBins,binning);
+    TH1F *hy11 = new TH1F("hy11","",numPtBins,binning);
+    TH1F *he1 = new TH1F("he1","",numPtBins,binning);
+    TH1F *he11 = new TH1F("he11","",numPtBins,binning);
+    TH1F *hp1 = new TH1F("hp1","",numPtBins,binning);
+    TH1F *hp11 = new TH1F("hp11","",numPtBins,binning);
+    TH1F *hp2 = new TH1F("hp2","",numPtBins,binning);
+    TH1F *hp3 = new TH1F("hp3","",numPtBins,binning);
+
+    TH1F *he = new TH1F("he","",numPtBins,binning);
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    y=0;
+	    y_e=0;
+	    pT=0;
+	    p1 = 0;
+	    p2= 0 ;
+	    p3= 0 ;
+	    eff=0;
+	    double t1 =0;
+	    double t2 =0 ;
+	    data >> pT >> y >> y_e >> p1 >> eff >> p3 >> p2 >> p3;
+	    if(y<.0001)y=0;
+	    int a=y;
+	    int b=y_e;
+	    sprintf(out,"Pt %i %10.0f  %10.0f",pT,a,b);
+	    if(pT!=0){
+		hy1->SetBinContent(pT,a);
+		hy1->SetBinError(pT,b);
+		hp1->SetBinContent(pT,1-p1);
+		hp1->SetBinError(pT,(p1)*b/a);
+		he1->SetBinContent(pT,eff);
+		he1->SetBinError(pT ,eff*b/a);		    
+	 
+		cout <<out << endl;
+	    }
+	}
+
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+    if(data1.is_open()){
+	while(!data1.eof()){
+	    char out[50];
+	    y=0;
+	    y_e=0;
+	    pT=0;
+	    p1 = 0;
+	    p2= 0 ;
+	    p3= 0 ;
+	    eff=0;
+	    data1 >> pT >> y >> y_e >> p1 >> eff;// >> p2 >> p3;
+	    if(y<.0001)y=0;
+	    int a=y;
+	    int b=y_e;
+	    sprintf(out,"Pt %i %10.0f  %10.0f",pT,a,b);
+	    if(pT!=0){
+		hy11->SetBinContent(pT,a);
+		hy11->SetBinError(pT,b);
+		hp11->SetBinContent(pT,p1);
+		hp11->SetBinError(pT,p1*b/a);
+		he11->SetBinContent(pT,eff);
+		he11->SetBinError(pT ,eff*b/a);		    
+		cout <<out << endl;
+	    }
+	}
+
+    } else {
+	cout <<"Nope \n";
+    }
+    data1.close();
+    for(int i =1;i<10;i++){
+	he->SetBinContent(i,hy11->GetBinContent(i)/hy1->GetBinContent(i));
+	//he->SetBinContent(i,hy11->GetBinContent(i)*1091./730./kunsu_y[i-2]);
+	he->SetBinError(i,hy11->GetBinContent(i)/hy1->GetBinContent(i)*sqrt(1/hy11->GetBinContent(i)));
+    }
+    hy1->SetMarkerColor(kRed);
+    hy1->SetLineColor(kRed);
+    hp1->SetMarkerColor(kRed);
+    hp1->SetLineColor(kRed);
+    he1->SetMarkerColor(kRed);
+    he1->SetLineColor(kRed);
+
+    TCanvas *c1 = new TCanvas("c1","c1");
+    hy11->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hy11->GetYaxis()->SetTitle("Electron Yield");
+    //hy1->Draw();
+    hy11->Draw("same");
+    TCanvas *c2 = new TCanvas("c2","c2");
+    hp11->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hp11->GetYaxis()->SetTitle("Hadron Contamination");
+    hp11->GetYaxis()->SetRangeUser(0,1);
+    TLegend *leg = new TLegend(0.2,0.2,0.4,0.4);
+    hp1->SetMarkerStyle(25);
+    leg->AddEntry(hp1,"Rectangular Cuts","PLE");
+    leg->AddEntry(hp_k,"Additional Likelihood Decision","PEL");
+ 
+    //hp11->Draw("same PE");
+    hp1->GetYaxis()->SetRangeUser(0,1);
+    hp1->GetYaxis()->SetTitle("Hadron Fraction");
+    hp1->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    hp1->SetMarkerColor(kRed);
+    hp1->DrawClone("same PE");
+    hp_k->DrawClone("same PE");
+    leg->Draw("same");
+    TCanvas *c22 = new TCanvas("c22","c22");
+    hp_k->Divide(hp1);
+    hp_k->Draw();
+    TCanvas *c3 = new TCanvas("c3","c3");
+    he11->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    he11->GetYaxis()->SetTitle("n#sigma_{e} Efficiency");
+    //he1->Draw("PE");
+    he11->Draw("same PE");
+    he1->Draw("same PE");
+    TCanvas *c4 = new TCanvas("c4","c4");
+    he->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+    he->GetYaxis()->SetTitle("#DeltaLL(e-#pi) Efficiency");
+    he->Draw("PE");
+
+}

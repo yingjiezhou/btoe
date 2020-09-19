@@ -1,0 +1,61 @@
+#include "fitdata2D.C"
+void runFit(int rs=1,int save=1, int doAllFits=1, int q=1, int HT=0)
+{
+///////////////////////////////////
+    gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3); 
+///////////////////////////////////
+    int const numEtaBins=4;
+    double binning[numEtaBins+1]={-0.8,-0.4,0,0.4,0.8};   
+    if(doAllFits){
+        int etaStart=1;
+        int etaEnd=numEtaBins;
+	int qqStart=0;
+	int qqEnd=0;       
+    } else {
+        int etaStart=5;//Here  
+        int etaEnd=etaStart; 
+	int qqStart=q;
+	int qqEnd=q;
+    }
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+    for(int qq =qqStart;qq<qqEnd+1;qq+=1){
+	if(qq>0)int pass=1;
+	if(qq<0)int pass=2;
+	if(qq==0)int pass=0;
+	for(int eta=etaStart;eta<etaEnd+1;eta++){
+	    char dir1[150];char dir2[150];char dir3[150];
+	    char file[50];char dat[50];char datc[50];        
+	    sprintf(dir1,"%1.0f/fits/v1_Eta_%1.0f",pass,eta);
+	    sprintf(file,"%1.0f/yields.dat",pass);
+//////////////////////////////////////////////////////////////////
+	    TFile *f_D = new TFile("../../production/NPE_Tuples_Run14_1.root");
+	    TFile *f_D1 = new TFile("../root/histograms.root");
+	    Res = (TH1F*)f_D1->Get("Res");
+	    Weight = (TH1F*)f_D1->Get("Weight");		 
+	    double res=0;
+	    for(int i = 1;i<10;i++){
+		res+=(Res->GetBinContent(i)*Weight->GetBinContent(i)/Weight->Integral());
+	    }
+	    cout << "Resolution " << res << endl;
+	    double frac = res;
+	    if(qq!=0){
+		if(qq>0)h01_2D = (TH2F*)f_D->Get("hHadronV1_p");		
+		if(qq<0)h01_2D = (TH2F*)f_D->Get("hHadronV1_m");  	    	   	
+
+	    }else{
+		h01_2D = (TH2F*)f_D->Get("hHadronV1_p");  
+		h01_2D1 = (TH2F*)f_D->Get("hHadronV1_m");  	    
+		h01_2D->Add(h01_2D1);
+	    }
+	    if(eta>0){
+		h01_2D->GetYaxis()->SetRangeUser(binning[eta-1],binning[eta]);       
+	    }		
+	    h01 = (TH1F*)h01_2D->ProjectionX();
+	    cout << " Yield  " << h01->Integral() << endl;	
+	    h01->Rebin(4);
+	    fitdata2D(h01,save,file,dir1,eta,1.5,8.5,HT,frac);
+	}//End eta
+    }
+}//End

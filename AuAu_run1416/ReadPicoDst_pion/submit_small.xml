@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Author: Kunsu OH (code maintainer, kunsuoh@gmail.com), Mustafa Mustafa (mmustafa@lbl.gov) -->
+
+<job fileListSyntax="paths" maxFilesPerProcess="25" simulateSubmission="false" filesPerHour="25">
+
+        <stdout discard="true" />
+        <stderr URL="file:./err/$JOBID.err" />
+                
+        <Generator>
+        <Location>./report/</Location>
+        <ScriptLocation>./csh/</ScriptLocation>
+        <ListLocation>./list/</ListLocation>
+        </Generator>
+                                                
+<command>
+starver SL16d
+cp $FILELIST in.list
+root4star -q -b -l runPicoMcAnaMaker.C\(\"in.list\",\"$JOBID\"\) &gt;&amp; /gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/log_tmp/${JOBID}.log
+tar -zcvf ${JOBID}.log.tgz /gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/log_tmp/${JOBID}.log
+</command>
+
+    <input URL="filelist:/gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/&listOfFiles;" />
+    <output fromScratch="*.root" toURL="/gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/production/" />
+    <output fromScratch="*.log.tgz" toURL="/gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/log/" />
+<!-- Define locations of log/elog files -->
+<stdout URL="file:/gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/log_tmp/$JOBID.std.log"/>
+<stderr URL="file:/gpfs01/star/pwg/mkelsey/ReadPicoDst_pion/log_tmp/$JOBID.std.elog"/>
+
+<SandBox installer="ZIP">
+	<Package name="LocalLibraries">
+	  <File>file:./runPicoMcAnaMaker.C</File>
+	  <File>file:./StRoot/</File>
+	  <File>file:./weights_electron.root</File>
+          <File>file:./weights_pion.root</File> 
+	  <File>file:./.sl73_gcc485/</File>
+	</Package>
+</SandBox>
+
+</job>

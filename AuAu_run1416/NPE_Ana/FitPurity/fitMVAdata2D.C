@@ -1,0 +1,535 @@
+#include "prettycanvasAll.C"
+gSystem->Load("libRooFit.so");
+
+using namespace RooFit;
+
+void fitdata2D(TH1F *data,TH1F *data_e,TH1F *data_pi, TH1F *data_2pi,TH1F *data_k,TH1F *data_p,TH1F* data_,TH1F *data_mva,TH1F *data_e_mva,TH1F *data_pi_mva, TH1F *data_2pi_mva,TH1F *data_k_mva,TH1F *data_p_mva,int daughter,int mag, int save, 
+                 char outputfile[],char datfile[],char datc[],char dir1[],char dir2[],char dir3[],char dir4[],char dir5[],char dir6[],
+	       int pt,int eta, int rs,float cutLow,float cutHigh,double ptLow ,double ptHigh)
+{
+    RooMsgService::instance().setGlobalKillBelow(RooFit::ERROR);
+/////Minuit Options
+    bool hesse = true;
+    bool minos = false;
+
+    if(pt>0)const double _start = -5;  
+    if(pt>7)const double _start = -5;  
+    if(pt>0)const double _end = 5;//13;
+    if(pt==0)const double _start = -13;
+    if(pt==0)const double _end = 7;    
+    const double __start = 0.45;
+    const double __end = 2;    
+    RooRealVar *PID = new RooRealVar("PID","PID",_start,_end);
+    RooRealVar *MVA = new RooRealVar("MVA","MVA",__start,__end);
+    RooDataHist *dataHist = new RooDataHist("dataHist","dataHist",RooArgList(*PID),data);
+    RooDataHist *dataHist1 = new RooDataHist("dataHist1","dataHist1",RooArgList(*PID),data_);
+    RooDataHist *dataHist_pi = new RooDataHist("dataHist_pi","dataHist_pi",RooArgList(*PID),data_pi);
+    RooDataHist *dataHist_2pi = new RooDataHist("dataHist_2pi","dataHist_2pi",RooArgList(*PID),data_2pi);
+    RooDataHist *dataHist_k = new RooDataHist("dataHist_k","dataHist_k",RooArgList(*PID),data_k);
+    RooDataHist *dataHist_e = new RooDataHist("dataHist_e","dataHist_e",RooArgList(*PID),data_e);
+    RooDataHist *dataHist_p = new RooDataHist("dataHist_p","dataHist_p",RooArgList(*PID),data_p);
+
+    RooDataHist *dataHist_mva = new RooDataHist("dataHist_mva","dataHist_mva",RooArgList(*MVA),data_mva);
+    RooDataHist *dataHist_pi_mva = new RooDataHist("dataHist_pi_mva","dataHist_pi_mva",RooArgList(*MVA),data_pi_mva);
+    RooDataHist *dataHist_2pi_mva = new RooDataHist("dataHist_2pi_mva","dataHist_2pi_mva",RooArgList(*MVA),data_2pi_mva);
+    RooDataHist *dataHist_k_mva = new RooDataHist("dataHist_k_mva","dataHist_k_mva",RooArgList(*MVA),data_k_mva);
+    RooDataHist *dataHist_e_mva = new RooDataHist("dataHist_e_mva","dataHist_e_mva",RooArgList(*MVA),data_e_mva);
+    RooDataHist *dataHist_p_mva = new RooDataHist("dataHist_p_mva","dataHist_p_mva",RooArgList(*MVA),data_p_mva);
+//Signals
+ 
+    RooRealVar mean1("mean1","mean1",0,-1.5,1);
+    RooRealVar sigma1("sigma1","sigma1",8.35581e-01,0.1,1.2);
+    RooGaussian g1("g1","g1",*PID,mean1,sigma1);
+    
+    RooRealVar mean11("mean11","mean11",1.,0,7.5);
+    RooRealVar sigma11("sigma11","sigma11",0.5,0.01,5);
+    RooRealVar sigma12("sigma12","sigma12",0.02,0.01,1);  
+    RooRealVar alpha("alpha","alpha",-6,-10,10); 
+    RooRealVar n("n","n",1,0,3);  
+    RooCBShape g1_1("g1_1","g1_1",*MVA,mean11,sigma11,alpha,n);
+    RooGaussian g1_2("g1_2","g1_2",*MVA,mean11,sigma12);
+    RooRealVar frac("frac","frac",0.7,0.5,1);
+    RooAddPdf g11("g11","g11",g1_1,g1_2,frac);
+
+    RooRealVar mean2("mean2","mean2",-2,-4,0);
+    RooRealVar sigma2("sigma2","sigma2",0.2,0.15,1.);  
+  
+
+    RooRealVar mean2_2("mean2_2","mean2_2",-2,-5,0);
+    RooRealVar sigma2_2("sigma2_2","sigma_2",0.4,0.15,1.);   
+    RooRealVar sigma2_22("sigma2_22","sigma2_22",0.5,0.1,1.);
+   
+    RooRealVar frac2("frac2","frac2",0.3,0.0,1);
+    RooRealVar frac22("frac22","frac22",0.3,0.,1);
+    RooGaussian g2_1("g2_1","g2_1",*PID,mean2,sigma2);
+    if(1)RooGaussian g2_2("g2_2","g2_2",*PID,mean2_2,sigma2_2);
+    //if(pt<3)RooBifurGauss g2_2("g2_2","g2_2",*PID,mean2_2,sigma2_2,sigma2_22);
+    RooGaussian g2("g2","g2",*PID,mean2,sigma2);
+    //RooBifurGauss g2("g2","g2",*PID,mean2,sigma2,sigma2_22);
+   
+    RooRealVar mean3("mean3","mean3",-2,-3,-1);
+    RooRealVar sigma3("sigma3","sigma3",0.2,0.,1.);  
+    RooRealVar sigma33("sigma33","sigma33",1,0.0,2.);    
+    RooGaussian g3("g3","g3",*PID,mean3,sigma3);  
+ 
+    RooRealVar mean4("mean4","mean4",-1,-2.5,-0.5);
+    RooRealVar sigma4("sigma4","sigma4",0.2,0,0.3.); 
+    RooRealVar sigma44("sigma44","sigma44",1,0,3.);    
+    RooGaussian g4("g4","g4",*PID,mean4,sigma4); 
+
+    RooRealVar mean5("mean5","mean5",4,3,5);
+    RooRealVar sigma5("sigma5","sigma5",1,0.2,2.);  
+    RooRealVar sigma55("sigma55","sigma55",1,0.2,2);  
+    RooGaussian g5("g5","g5",*PID,mean5,sigma5); 
+
+//Background
+    RooRealVar bg1 ("bg1","bg1",-1,-100,1);
+    RooRealVar bg2 ("bg2","bg2",-1,-100,1);
+    RooRealVar bg3 ("bg3","bg3",-1,-100,1);
+    RooRealVar bg11("bg11","bg11",-1,-100,100);
+    RooRealVar bg22 ("bg22","bg22",-1,-100,100);
+    RooRealVar bg33 ("bg33","bg33",-1,-100,100);
+ //RooRealVar bg3("bg3","bg3",0.1,0,1);
+    RooRealVar bg4("bg4","bg4",-9e-3,0.001,.3);
+    RooRealVar bgMean1("bMean1","bgMean1",-1,-2,0.);
+    RooRealVar bgMean2("bMean2","bgMean2",0,-1,1);
+    RooRealVar bgMean3("bMean3","bgMean3",-1,-2,0.);
+    RooRealVar alpha2("alpha2","alpha2",3,-10,.10);
+    RooRealVar n2("n2","n2",1,0,2);
+    //RooCBShape bkgMva1("bkgMva1","bkgMva1",*MVA,bgMean1,bg3,alpha2,n2);
+    //RooGaussian bkgMva("bkgMva","bkgMva",*MVA,bgMean2,bg1);
+    //RooGaussian bkgMva1("bkgMva1","bkgMva1",*MVA,bgMean3,bg3);
+    //RooChebychev bkgMva1("bkgMva1","bkgMva1",*MVA,RooArgList(bg2,bg3,bg4));
+    RooExponential bkgMva("bkgMva","bkgMva",*MVA,bg1);
+    RooExponential bkgMva1("bkgMva1","bkgMva1",*MVA,bg2);
+    RooExponential bkgMva2("bkgMva2","bkgMva2",*MVA,bg3);
+    //RooChebychev bkgMva("bkgMva","bkgMva",*MVA,RooArgList(bg1,bg1));
+    //RooChebychev bkgMva1("bkgMva1","bkgMva1",*MVA,RooArgList(bg2,bg22));
+    //RooChebychev bkgMva2("bkgMva2","bkgMva2",*MVA,RooArgList(bg3,bg33));
+    RooProdPdf e_signal("e_signal","e_signal",g1);
+    RooProdPdf pi_signal("pi_signal","pi_signal",g2);
+    RooProdPdf pi2_signal("pi2_signal","pi2_signal",g5);
+    RooProdPdf k_signal("k_signal","k_signal",g3);
+    RooProdPdf p_signal("p_signal","p_signal",g4);
+
+  
+    RooRealVar e_signal_yield("e_signal_yield","e_signal_yield",000,0,1000000000);
+    RooRealVar pi_signal_yield("pi_signal_yield","pi_signal_yield",00,00,1000000000);
+    RooRealVar pi_signal_yield_2("pi_signal_yield_2","pi_signal_yield_2",010,010,1000000000);
+    RooRealVar pi2_signal_yield("pi2_signal_yield","pi2_signal_yield",0,0,1000000000);
+    RooRealVar pi_signal_yield_3("pi_signal_yield_3","pi_signal_yield_3",010,010,1000000000);
+    RooRealVar pi_signal_yield_4("pi_signal_yield_4","pi_signal_yield_4",010,010,1000000000);
+    RooRealVar pi_signal_yield_33("pi_signal_yield_33","pi_signal_yield_33",010,010,1000000000);
+    RooRealVar pi_signal_yield_44("pi_signal_yield_44","pi_signal_yield_44",010,010,1000000000);
+    RooRealVar pi_signal_yield_55("pi_signal_yield_55","pi_signal_yield_55",010,010,1000000000);
+    RooRealVar k_signal_yield("k_signal_yield","k_signal_yield",000,0,1000000000);
+    RooRealVar p_signal_yield("p_signal_yield","p_signal_yield",000,0,1000000000);
+
+    RooRealVar e_signal_yield_cont("e_signal_yield_cont","e_signal_yield_cont",1000,0,1000000000);
+    RooRealVar pi_signal_yield_cont("pi_signal_yield_cont","pi_signal_yield_cont",1000,0,1000000000);
+    RooRealVar pi_signal_yield_cont_2("pi_signal_yield_cont_2","pi_signal_yield_cont_2",1000,0,1000000000);
+    RooRealVar pi2_signal_yield_cont("pi2_signal_yield_cont","pi2_signal_yield_cont",1000,0,1000000000);
+
+    RooRealVar k_signal_yield_cont("k_signal_yield_cont","k_signal_yield_cont",1000,0,1000000000);
+    RooRealVar p_signal_yield_cont("p_signal_yield_cont","p_signal_yield_cont",1000,0,1000000000);
+
+    RooArgList shapeList;
+    RooArgList yieldList;
+    RooArgList shapeList_mva;
+    RooArgList yieldList_mva;
+    RooArgList shapeList_e_mva;
+    RooArgList yieldList_e_mva;
+    RooArgList shapeList_pi_mva;
+    RooArgList yieldList_pi_mva;
+    RooArgList shapeList_k_mva;
+    RooArgList yieldList_k_mva;
+    RooArgList shapeList_p_mva;
+    RooArgList yieldList_p_mva;
+    RooArgList shapeList_pi;
+    RooArgList yieldList_pi;
+    RooArgList shapeList_2pi;
+    RooArgList yieldList_2pi;
+    RooArgList shapeList_e;
+    RooArgList yieldList_e;
+    RooArgList shapeList_k;
+    RooArgList yieldList_k;
+    RooArgList shapeList_p;
+    RooArgList yieldList_p;
+
+    shapeList.add(e_signal);
+    shapeList.add(pi_signal);
+    //if(pt<10)shapeList.add(g2_2);
+    //shapeList.add(pi2_signal);
+    //shapeList.add(k_signal);
+    //shapeList.add(p_signal);    
+   
+    yieldList.add(e_signal_yield);
+    yieldList.add(pi_signal_yield);
+    //yieldList.add(pi_signal_yield_2);
+    //yieldList.add(k_signal_yield);
+    //yieldList.add(p_signal_yield);
+
+    shapeList_mva.add(g11);
+    shapeList_mva.add(bkgMva);
+    //shapeList_mva.add(bkgMva1);
+    //shapeList_mva.add(bkgMva2);
+    yieldList_mva.add(e_signal_yield);
+    yieldList_mva.add(pi_signal_yield);
+    //yieldList_mva.add(k_signal_yield);
+    //yieldList_mva.add(p_signal_yield);
+
+    shapeList_e_mva.add(g11);
+    yieldList_e_mva.add(e_signal_yield);
+    shapeList_pi_mva.add(bkgMva);
+    yieldList_pi_mva.add(pi_signal_yield_33);
+    shapeList_k_mva.add(bkgMva1);
+    yieldList_k_mva.add(pi_signal_yield_44);
+    shapeList_p_mva.add(bkgMva2);
+    yieldList_p_mva.add(pi_signal_yield_55);
+   
+
+    shapeList_pi.add(pi_signal);
+    yieldList_pi.add(pi_signal_yield_cont);
+    //shapeList_pi.add(g2_2);
+    //yieldList_pi.add(pi_signal_yield_cont_2);
+    shapeList_2pi.add(pi2_signal);
+    yieldList_2pi.add(pi2_signal_yield_cont);
+    shapeList_e.add(e_signal);
+    yieldList_e.add(e_signal_yield_cont);
+    shapeList_k.add(k_signal);
+    yieldList_k.add(k_signal_yield_cont);
+    shapeList_p.add(p_signal);
+    yieldList_p.add(p_signal_yield_cont);
+//All together now
+    RooAddPdf completePDF("completePDF","completePDF",shapeList,yieldList);
+    RooAddPdf completePDF_mva("completePDF_mva","completePDF_mva",shapeList_mva,yieldList_mva);
+    RooAddPdf completePDF_e_mva("completePDF_e_mva","completePDF_e_mva",shapeList_e_mva,yieldList_e_mva);
+    RooAddPdf completePDF_pi_mva("completePDF_pi_mva","completePDF_pi_mva",shapeList_pi_mva,yieldList_pi_mva);
+    RooAddPdf completePDF_k_mva("completePDF_k_mva","completePDF_k_mva",shapeList_k_mva,yieldList_k_mva);
+    RooAddPdf completePDF_p_mva("completePDF_p_mva","completePDF_p_mva",shapeList_p_mva,yieldList_p_mva);
+    RooAddPdf completePDF_e("completePDF_e","completePDF_e",shapeList_e,yieldList_e);
+    RooAddPdf completePDF_pi("completePDF_pi","completePDF_pi",shapeList_pi,yieldList_pi);
+    RooAddPdf completePDF_2pi("completePDF_2pi","completePDF_2pi",shapeList_2pi,yieldList_2pi);
+    RooAddPdf completePDF_k("completePDF_k","completePDF_k",shapeList_k,yieldList_k);
+    RooAddPdf completePDF_p("completePDF_p","completePDF_p",shapeList_p,yieldList_p);
+
+//Now fit Data
+    PID->setRange("range_e",0.45,2);
+    RooAbsReal *nllData_e  = completePDF_e.createNLL(*dataHist_e,Extended(kTRUE),Range("range_e"));
+    RooAddition * nll_e = new RooAddition("nll_e","nll_e",RooArgSet(*nllData_e));  
+    RooMinuit m_e (*nll_e);
+    m_e.setVerbose(kFALSE);
+    //m_e.migrad();
+    PID->setRange("range_e",0,6);
+    RooAbsReal *nllData_e_mva  = completePDF_e_mva.createNLL(*dataHist_e_mva,Extended(kTRUE),Range("range_e"));
+    RooAddition * nll_e_mva = new RooAddition("nll_e_mva","nll_e_mva",RooArgSet(*nllData_e_mva));  
+    RooMinuit m_e_mva (*nll_e_mva);
+    m_e_mva.setVerbose(kFALSE);
+    //m_e_mva.migrad();
+/*
+
+    //mean1.setConstant();
+    //sigma1.setConstant();
+    //sigma1.setRange(sigma1.getVal()-sigma1.getError(),sigma1.getVal()+sigma1.getError());
+    //mean1.setRange(mean1.getVal()-mean1.getError(),mean1.getVal()+mean1.getError());
+ 
+    //alpha.setRange(alpha.getVal()-alpha.getError(),alpha.getVal()+alpha.getError());
+    //sigma11.setRange(sigma11.getVal()-sigma11.getError(),sigma11.getVal()+sigma11.getError());
+    //sigma12.setRange(sigma12.getVal()-sigma12.getError(),sigma12.getVal()+sigma12.getError());
+    //mean11.setRange(mean11.getVal()-mean11.getError(),mean11.getVal()+mean11.getError());
+    //frac.setRange(frac.getVal()-frac.getError(),frac.getVal()+frac.getError());
+    //n.setRange(n.getVal()-n.getError(),n.getVal()+n.getError());
+    RooAbsReal *nllData_pi_mva  = completePDF_pi_mva.createNLL(*dataHist_pi_mva,Extended(kTRUE));
+    RooAddition * nll_pi_mva = new RooAddition("nll_pi_mva","nll_pi_mva",RooArgSet(*nllData_pi_mva));  
+    RooMinuit m_pi_mva (*nll_pi_mva);
+    m_pi_mva.setVerbose(kFALSE);
+    m_pi_mva.migrad();
+    bg1.setRange(bg1.getVal()-bg1.getError(),bg1.getVal()+bg1.getError());
+    bg11.setRange(bg11.getVal()-bg11.getError(),bg11.getVal()+bg11.getError());
+    RooAbsReal *nllData_k_mva  = completePDF_k_mva.createNLL(*dataHist_k_mva,Extended(kTRUE));
+    RooAddition * nll_k_mva = new RooAddition("nll_k_mva","nll_k_mva",RooArgSet(*nllData_k_mva));  
+    RooMinuit m_k_mva (*nll_k_mva);
+    m_k_mva.setVerbose(kFALSE);
+    m_k_mva.migrad();
+    bg2.setRange(bg2.getVal()-bg2.getError(),bg2.getVal()+bg2.getError());
+   bg22.setRange(bg22.getVal()-bg22.getError(),bg22.getVal()+bg22.getError());
+    RooAbsReal *nllData_p_mva  = completePDF_p_mva.createNLL(*dataHist_p_mva,Extended(kTRUE));
+    RooAddition * nll_p_mva = new RooAddition("nll_p_mva","nll_p_mva",RooArgSet(*nllData_p_mva));  
+    RooMinuit m_p_mva (*nll_p_mva);
+    m_p_mva.setVerbose(kFALSE);
+    m_p_mva.migrad();
+    bg3.setRange(bg3.getVal()-bg3.getError(),bg3.getVal()+bg3.getError());
+    bg33.setRange(bg33.getVal()-bg33.getError(),bg33.getVal()+bg33.getError());
+    PID->setRange("range_pi",-3,-0.5);
+    if(pt<3)PID->setRange("range_pi",-2.5,1.5); 
+    RooAbsReal *nllData_pi  = completePDF_pi.createNLL(*dataHist_pi,Extended(kTRUE),Range("range_pi"));
+    RooAddition * nll_pi = new RooAddition("nll_pi","nll_pi",RooArgSet(*nllData_pi));  
+    RooMinuit m_pi (*nll_pi);
+    m_pi.setVerbose(kFALSE);
+    m_pi.migrad();  
+    sigma2.setRange(sigma2.getVal()-sigma2.getError(),sigma2.getVal()+sigma2.getError());
+    mean2.setRange(mean2.getVal()-mean2.getError(),mean2.getVal()+mean2.getError());
+    
+    PID->setRange("range_2pi",2.5,7);  
+    RooAbsReal *nllData_2pi  = completePDF_2pi.createNLL(*dataHist_2pi,Extended(kTRUE),Range("range_2pi"));
+    RooAddition * nll_2pi = new RooAddition("nll_2pi","nll_2pi",RooArgSet(*nllData_2pi));  
+    RooMinuit m_2pi (*nll_2pi);
+    m_2pi.setVerbose(kFALSE);
+    m_2pi.migrad();
+
+    mean5.setConstant();
+    //sigma5.setConstant();
+
+    PID->setRange("range_k",-4.5,-2);
+
+    RooAbsReal *nllData_k  = completePDF_k.createNLL(*dataHist_k,Extended(kTRUE),Range("range_k"));
+    RooAddition * nll_k = new RooAddition("nll_k","nll_k",RooArgSet(*nllData_k));  
+    RooMinuit m_k (*nll_k);
+    m_k.setVerbose(kFALSE);
+    m_k.migrad();
+
+    if(pt!=9)sigma3.setRange(sigma3.getVal()-sigma3.getError(),sigma3.getVal()+sigma3.getError());
+    if(pt!=9)mean3.setRange(mean3.getVal()-mean3.getError(),mean3.getVal()+mean3.getError());
+    PID->setRange("range_p",-4.5,0); 
+     
+    RooAbsReal *nllData_p  = completePDF_p.createNLL(*dataHist_p,Extended(kTRUE),Range("range_p"));
+    RooAddition * nll_p = new RooAddition("nll_p","nll_p",RooArgSet(*nllData_p));  
+    RooMinuit m_p (*nll_p);
+    m_p.setVerbose(kFALSE);
+    m_p.migrad();
+
+    if(pt!=9)sigma4.setRange(sigma4.getVal()-sigma4.getError()*2,sigma4.getVal()+sigma4.getError()*2);
+    if(pt!=9)mean4.setRange(mean4.getVal()-mean4.getError()*2,mean4.getVal()+mean4.getError()*2);
+
+ 
+    if(data_2pi->GetEntries()<5){
+	pi2_signal_yield.setVal(0);
+	if(pt<5)pi2_signal_yield.setConstant(1);
+	mean5.setConstant(0);
+	sigma5.setConstant(0);
+	}*/
+//Now fit All Data
+    PID->setRange("range",-4,7);
+    if(pt<4)PID->setRange("range",-4.5,5); 
+    if(pt>6)PID->setRange("range",-3.5,5); 
+    if(pt>8)PID->setRange("range",-2.5,5); 
+    //if(pt==0)PID->setRange("range",-13,5);    
+    RooAbsReal *nllData = completePDF.createNLL(*dataHist,Extended(kTRUE),Range("range"));
+    RooAbsReal *nllData_mva = completePDF_mva.createNLL(*dataHist_mva,Extended(kTRUE));
+    RooAddition * nll = new RooAddition("nll","nll",RooArgSet(*nllData,*nllData_mva));  
+    RooMinuit m (*nll);
+    m.setVerbose(kFALSE);
+    m.migrad();
+    if(hesse)m.hesse();
+    if(minos)m.minos();
+    // Construct plotables // Don't change anything from hear on unless you want to change how a plot looks or what is output below
+    /*RooPlot *PIDFrame_e = PID->frame();
+    dataHist_e->plotOn(PIDFrame_e,Name("HistM5"));
+    completePDF_e.plotOn(PIDFrame_e,Name("e_Curve"));
+
+    RooPlot *PIDFrame_mva_e = MVA->frame();
+    dataHist_e_mva->plotOn(PIDFrame_mva_e,Name("HistM5"));
+    completePDF_e_mva.plotOn(PIDFrame_mva_e,Name("e_Curve"));
+
+    RooPlot *PIDFrame_mva_pi = MVA->frame();
+  
+    dataHist_pi_mva->plotOn(PIDFrame_mva_pi,Name("HistM5"));
+    completePDF_pi_mva.plotOn(PIDFrame_mva_pi,Name("pi_Curve"));
+ 
+  
+    RooPlot *PIDFrame_mva_k = MVA->frame();
+    dataHist_k_mva->plotOn(PIDFrame_mva_k,Name("HistM5"));
+    completePDF_k_mva.plotOn(PIDFrame_mva_k,Name("kk_Curve"));
+    RooPlot *PIDFrame_mva_p = MVA->frame();
+    dataHist_p_mva->plotOn(PIDFrame_mva_p,Name("HistM5"));
+    completePDF_p_mva.plotOn(PIDFrame_mva_p,Name("pp_Curve"));
+
+    RooPlot *PIDFrame_pi = PID->frame();
+    dataHist_pi->plotOn(PIDFrame_pi,Name("HistM5"));
+    completePDF_pi.plotOn(PIDFrame_pi,Name("pi_Curve"));
+    completePDF_pi.plotOn(PIDFrame_pi,Components(RooArgSet(pi_signal)),LineStyle(6),LineColor(kRed),FillColor(kGreen-2));
+    completePDF_pi.plotOn(PIDFrame_pi,Components(RooArgSet(g2_2)),LineStyle(6),LineColor(kRed),FillColor(kGreen-2));
+    RooPlot *PIDFrame_2pi = PID->frame();
+    dataHist_2pi->plotOn(PIDFrame_2pi,Name("HistM5"));
+    completePDF_2pi.plotOn(PIDFrame_2pi,Name("pi2_Curve"));
+    RooPlot *PIDFrame_k = PID->frame();
+    dataHist_k->plotOn(PIDFrame_k,Name("HistM5"));
+    completePDF_k.plotOn(PIDFrame_k,Name("k_Curve"));
+    RooPlot *PIDFrame_p = PID->frame();
+    dataHist_p->plotOn(PIDFrame_p,Name("HistM"));
+    completePDF_p.plotOn(PIDFrame_p,Name("p_Curve"));
+    */
+    RooPlot *PIDFrame = PID->frame();
+    dataHist->plotOn(PIDFrame,Name("HistM"));
+
+    //dataHistws->plotOn(PIDFrame,Name("HistMws"),LineStyle(1),LineColor(15),FillColor(17),FillStyle(1000));
+    completePDF.plotOn(PIDFrame,Name("PID_Curve"));
+    completePDF.plotOn(PIDFrame,Components(RooArgSet(e_signal)),LineStyle(7),LineColor(kGreen-2),FillColor(kGreen-2),FillStyle(3007));
+    completePDF.plotOn(PIDFrame,Components(RooArgSet(pi_signal)),LineStyle(6),LineColor(kRed));
+    //completePDF.plotOn(PIDFrame,Components(RooArgSet(g2_2)),LineStyle(6),LineColor(kRed),FillColor(kGreen-2));
+    //completePDF.plotOn(PIDFrame,Components(RooArgSet(pi2_signal)),LineStyle(6),LineColor(6),FillColor(kGreen-2));
+    //completePDF.plotOn(PIDFrame,Components(RooArgSet(k_signal)),LineStyle(6),LineColor(kYellow-2));
+    //completePDF.plotOn(PIDFrame,Components(RooArgSet(p_signal)),LineStyle(6),LineColor(kMagenta));
+    //if(pt==0)dataHist1->plotOn(PIDFrame,Name("HistM1"),MarkerColor(kGray),LineColor(kGray));
+    dataHist->plotOn(PIDFrame,Name("HistM"));
+    RooHist* pullHisto = PIDFrame->pullHist("HistM","PID_Curve");
+    RooPlot* pullPlot = PID->frame();
+    pullHisto->SetFillColor(1);
+    pullHisto->SetLineColor(0);
+    pullPlot->addPlotable(pullHisto,"B");
+    RooArgSet *freeparam = completePDF.getParameters(dataHist);
+    int numfreeparam = (freeparam->selectByAttrib("Constant",kFALSE))->getSize();
+    TPaveText* txt = new TPaveText(0.65,0.67,0.87,0.85,"BRNDC");
+    txt->SetTextSize(0.07);
+    txt->SetTextColor(1);
+    txt->SetBorderSize(0.1);
+    txt->SetFillColor(0);
+    txt->SetFillStyle(0);
+    char chi2[50];
+    char entr[50];
+    char ptbin[50];    
+    sprintf(chi2,"%3.4f",PIDFrame->chiSquare("PID_Curve","HistM",numfreeparam));
+    sprintf(entr,"Signal Yield: %i #pm %i",(int)e_signal_yield.getVal(),(int)TMath::Max(fabs(e_signal_yield.getErrorLo()),e_signal_yield.getErrorHi()));
+    if(1){  
+        sprintf(ptbin,"#it{p}_{T} #in [%1.1f,%1.1f] GeV",ptLow,ptHigh);
+        txt->AddText(ptbin);
+        PIDFrame->addObject(txt);
+    }    
+    RooPlot *PIDFrame_mva = MVA->frame();
+    dataHist_mva->plotOn(PIDFrame_mva,Name("HistM2"));     
+    completePDF_mva.plotOn(PIDFrame_mva,Name("MVA_Curve"));
+    completePDF_mva.plotOn(PIDFrame_mva,Components(RooArgSet(g11)),LineStyle(7),LineColor(kGreen-2),FillColor(kGreen-2),FillStyle(3007));
+    completePDF_mva.plotOn(PIDFrame_mva,Components(RooArgSet(bkgMva1)),LineStyle(7),LineColor(kYellow-2),FillColor(kGreen-2),FillStyle(3007));
+    completePDF_mva.plotOn(PIDFrame_mva,Components(RooArgSet(bkgMva)),LineStyle(6),LineColor(kRed),FillColor(kGreen-2));
+    completePDF_mva.plotOn(PIDFrame_mva,Components(RooArgSet(bkgMva2)),LineStyle(6),LineColor(kMagenta),FillColor(kGreen-2));
+    RooHist* pullHisto_mva = PIDFrame_mva->pullHist("HistM2","MVA_Curve");
+    RooPlot* pullPlot_mva = MVA->frame();
+    pullHisto_mva->SetFillColor(1);
+    pullHisto_mva->SetLineColor(0);
+    pullPlot_mva->addPlotable(pullHisto,"B");
+
+//Objects for saving yields and so forth
+    double yields[6];
+    double yields_errors[5];
+    yields[0]=(int)e_signal_yield.getVal();
+    yields[1]=(int)pi_signal_yield.getVal();
+    yields[5]=(int)pi_signal_yield_2.getVal();
+    yields[2]=(int)k_signal_yield.getVal();
+    yields[3]=(int)p_signal_yield.getVal();
+    yields[4]=(int)pi2_signal_yield.getVal();
+    yields_errors[0]=(int)TMath::Max(fabs(e_signal_yield.getErrorLo()),e_signal_yield.getErrorHi());
+    yields_errors[1]=(int)TMath::Max(fabs(pi_signal_yield.getErrorLo()),pi_signal_yield.getErrorHi());
+    yields_errors[2]=(int)TMath::Max(fabs(k_signal_yield.getErrorLo()),k_signal_yield.getErrorHi());
+    yields_errors[3]=(int)TMath::Max(fabs(p_signal_yield.getErrorLo()),p_signal_yield.getErrorHi());
+    yields_errors[4]=(int)TMath::Max(fabs(pi2_signal_yield.getErrorLo()),pi2_signal_yield.getErrorHi());
+    if (save==1){
+        ofstream output (outputfile,ios::app);
+        if(output.is_open()){
+            time_t sec;
+            sec = time(NULL);
+            output <<"Date: " << ctime(&sec) << "\n";
+            if(rs==1)output <<"RS Fit\n";
+            if(rs==1)output <<"WS Fit\n";
+            output <<"DaughterPtbinEtabin:"<< pt << eta << "\n";
+            output <<"SigPMBKGPM:"<<"\n";  
+            output << yields[0] <<" "<< yields_errors[0] << " "<< yields[1] <<" "<< yields_errors[1] << " ";
+            output << "\n";
+            output <<"MassChi2"<< chi2 <<"\n";
+            output.close();
+        }else(cout << "Error Opening Output File!");
+    }
+
+    PID->setRange("range1",cutLow,cutHigh);
+    RooAbsReal* e1_1 = g1.createIntegral(*PID,*PID,"range1");
+    RooAbsReal* had1_1 = g2.createIntegral(*PID,*PID,"range1");
+    RooAbsReal* had1_2 = g2_2.createIntegral(*PID,*PID,"range1");
+    RooAbsReal* had2_1 = g3.createIntegral(*PID,*PID,"range1");
+    RooAbsReal* had3_1 = g4.createIntegral(*PID,*PID,"range1");
+    RooAbsReal* had4_1 = g5.createIntegral(*PID,*PID,"range1");
+
+    double pur1 = e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]  + had1_1->getVal()*yields[1]+ had2_1->getVal()*yields[2] + had3_1->getVal()*yields[3] + had4_1->getVal()*yields[4]) ;
+    double eff =  e1_1->getVal() ; 
+    cout << endl;
+    cout << "Purity of main cuts " << pur1 << endl;
+    cout << e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]) << endl;
+    cout << e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]+ had1_1->getVal()*yields[1]) << endl;
+    cout << e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]+ had1_1->getVal()*yields[1]+had2_1->getVal()*yields[2]) << endl;
+    cout << e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]+ had1_1->getVal()*yields[1]+had2_1->getVal()*yields[2]+ had3_1->getVal()*yields[3]) << endl;
+    cout << e1_1->getVal()*yields[0] / (had1_2->getVal()*yields[5]  +e1_1->getVal()*yields[0]+ had1_1->getVal()*yields[1]+had2_1->getVal()*yields[2]+ had3_1->getVal()*yields[3] + had4_1->getVal()*yields[4]) << endl;
+
+
+    cout << endl;
+    if (save==1){
+        ofstream output1 (datfile,ios::app);
+        if(output1.is_open()){
+            output1 <<  pt <<" " <<  yields[0] <<" "<< yields_errors[0] << " " << pur1  << " " << eff << "\n";
+            output1.close();
+        }else(cout << "Error Opening Output Dat File!");    
+    }
+    cout << "Chi2 of Mass Fit: " << chi2 << endl;
+    cout<< "Yields: \n";
+    cout<<"electrons: "<< yields[0] <<" +/- " << yields_errors[0] << " " << e1_1->getVal() <<endl;
+    cout<<"pions: "<< yields[1] <<" +/- " << yields_errors[1] << " " << had1_1->getVal() << endl;
+    cout<<"pions: "<< yields[5] <<" +/- " << yields_errors[1] << " " << had1_2->getVal() << endl;
+    cout<<"kaons: "<< yields[2] <<" +/- " << yields_errors[2] << " " << had2_1->getVal() <<endl;
+    cout<<"protons: "<< yields[3] <<" +/- " << yields_errors[3] << " " << had3_1->getVal() <<endl;
+    cout<<"merged pi: "<< yields[4] <<" +/- " << yields_errors[4] << " " << had4_1->getVal() <<endl;
+    cout << "====================" << endl;    
+    cout << "Checking purity cuts" << endl;
+    cout << "====================" << endl;
+    for(double i=0; i<30; i++){
+	PID->setRange("range1",-3+3*i/30,3);
+	RooAbsReal *e1 = g1.createIntegral(*PID,*PID,"range1");
+	RooAbsReal *had1 = g2.createIntegral(*PID,*PID,"range1");
+	RooAbsReal *had1_2 = g2_2.createIntegral(*PID,*PID,"range1");
+	RooAbsReal *had2 = g3.createIntegral(*PID,*PID,"range1");
+	RooAbsReal *had3 = g4.createIntegral(*PID,*PID,"range1");
+	RooAbsReal *had4 = g5.createIntegral(*PID,*PID,"range1");
+	double pur1 = e1_1->getVal()*yields[0] / (e1_1->getVal()*yields[0]+had1_1->getVal()*yields[1] + had2_1->getVal()*yields[2] + had3_1->getVal()*yields[3]  + had4_1->getVal()*yields[4] + had1_2->getVal()*yields[5]  ) ;
+	double eff =  e1_1->getVal() ; 
+	cout << "Ranges " << -3+3*i/30 << " " << 3 << " Purity " << pur1 << " eff. " << eff << endl;
+    }
+
+
+    data->GetXaxis()->SetRangeUser(-5,5);
+    PIDFrame->SetMaximum(data->GetMaximum()*1.4);
+    TCanvas *c1 = new TCanvas("c1","full fit");
+    if(pt!=0)prettycanvasAll(c1,PIDFrame,pullPlot,0);  
+    if(pt==0)prettycanvasAll(c1,PIDFrame,pullPlot,1);    
+    TCanvas *c11 = new TCanvas("c11","full fit");
+    prettycanvasAll1(c11,PIDFrame_mva,pullPlot_mva,0);  
+    /*TCanvas *c22 = new TCanvas("c22","electron mva");
+    prettycanvasAll1(c22,PIDFrame_mva_e,pullPlot_mva,0); 
+    TCanvas *c33 = new TCanvas("c33","pion mva");
+    prettycanvasAll1(c33,PIDFrame_mva_pi,pullPlot_mva,0); 
+    TCanvas *c44 = new TCanvas("c44","kaon mva");
+    prettycanvasAll1(c44,PIDFrame_mva_k,pullPlot_mva,0); 
+   TCanvas *c55 = new TCanvas("c55","proton mva");
+    prettycanvasAll1(c44,PIDFrame_mva_p,pullPlot_mva,0); 
+    TCanvas *c2 = new TCanvas("c2","pion");
+    prettycanvasAll(c2,PIDFrame_pi,pullPlot,0);
+    TCanvas *c3 = new TCanvas("c3","kaon");
+    prettycanvasAll(c3,PIDFrame_k,pullPlot,0);
+    TCanvas *c4 = new TCanvas("c4","proton");
+    prettycanvasAll(c4,PIDFrame_p,pullPlot,0);
+    TCanvas *c5 = new TCanvas("c5","electron");
+    prettycanvasAll(c5,PIDFrame_e,pullPlot,0);
+    TCanvas *c6 = new TCanvas("c6","merged pi");
+    prettycanvasAll(c5,PIDFrame_2pi,pullPlot,0);*/
+    if(save==1){
+        char mass_c[150];
+        char mass_pdf[150];    
+        char mass_png[150];
+        char mass_eps[150];   
+        sprintf(mass_c,"%s.C",dir1);
+        sprintf(mass_pdf,"%s.pdf",dir1);
+        sprintf(mass_png,"%s.png",dir1);
+        sprintf(mass_eps,"%s.eps",dir1);
+        c1->SaveAs(Form(mass_c));
+        c1->SaveAs(Form(mass_pdf));
+        c1->SaveAs(Form(mass_png));
+        c1->SaveAs(Form(mass_eps));
+    }
+}
+
+

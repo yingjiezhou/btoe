@@ -1,0 +1,1 @@
+../../../../../../StRoot/StTriggerUtilities/L2Emulator/L2gammaAlgo/L2gammaResult2012.h

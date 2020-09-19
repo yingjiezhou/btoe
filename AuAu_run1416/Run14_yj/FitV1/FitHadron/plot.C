@@ -1,0 +1,96 @@
+void plot(){
+   gROOT->ProcessLine(".x ~/myStyle.C");  
+    TGaxis::SetMaxDigits(3);
+//  
+    int const numEtaBins=4;
+    double binning[numEtaBins+1]={-0.8,-0.4,0,0.4,0.8}; 
+    double binning1[numEtaBins+1]={-0.8,-0.4,0,0.4,0.8};
+    double binning2[numEtaBins+1]={-0.8,-0.4,0,0.4,0.8};
+//    double binning1[numEtaBins+1]={-0.8+0.01,-0.6+0.01,-0.4+0.01,-0.2+0.01,0+0.01,0.2+0.01,0.4+0.01,0.6+0.01,0.8+0.01};   
+    //  double binning2[numEtaBins+1]={-0.8-0.01,-0.6-0.01,-0.4-0.01,-0.2-0.01,-0.01,0.2-0.01,0.4-0.01,0.6-0.01,0.8-0.01}; 
+    double x1[20]={-0.95,-0.85,-0.75,-0.65,-0.55,-0.45,-0.35,-0.25,-0.15,-0.05,0.05,0.15,0.25,0.35,0.45,0.55,0.65,0.75,0.85,0.95};
+    double y1[20] = {0.0022,0.0023,0.0019,0.0015,0.0015,0.0012,0.0009,0.0005,0.0004,0.0001,-0.0003,-0.0003,-0.0006,-0.0011,-0.0015,-0.0017,-0.0016,-0.0022,-0.0023,-0.0032};
+    double x1e[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    double y1e[20] = {0.0003,0.0002,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0001,0.0002,0.0003};
+    TGraphErrors *g1 = new TGraphErrors(20,x1,y1,x1e,y1e);
+    g1->SetMarkerColor(kMagenta);
+    g1->SetLineColor(kMagenta);
+    g1->SetMarkerStyle(26);
+    TH1F *h_p = new TH1F("h_p","",numEtaBins,binning1);
+    TH1F *h = new TH1F("h","",numEtaBins,binning);
+    TH1F *h_m = new TH1F("h_m","",numEtaBins,binning2);
+    TH1F *h_diff = new TH1F("h_diff","",numEtaBins,binning);
+    TF1 *line = new TF1("line","0",-10,10);
+    line->SetLineStyle(7);
+    getData(h,"./0/yields.dat");
+    getData(h_p,"./1/yields.dat");
+    getData(h_m,"./2/yields.dat");
+    TLegend *leg = new TLegend(0.6,0.7,0.8,0.9);
+    h_p->SetLineColor(kRed);
+    h_p->SetMarkerColor(kRed);  
+    h_p->SetMarkerStyle(26); 
+    h_m->SetLineColor(kBlue);
+    h_m->SetMarkerColor(kBlue);  
+    h_m->SetMarkerStyle(25); 
+    leg->AddEntry(h,"#it{#pi}^{+}+#it{#pi^{-}}","PLE");
+    //   leg->AddEntry(h_p,"#it{#pi^{+}}","PLE");
+    //leg->AddEntry(h_m,"#it{#pi^{-}}","PEL");
+    leg->AddEntry(g1,"PRL 108,202301(2012)", "PLE");
+    TCanvas *c1 = new TCanvas("c1","c1");
+    h->GetXaxis()->SetTitle("#eta");
+    h->GetYaxis()->SetTitle("v_{1}");
+    h->GetXaxis()->SetRangeUser(-0.8,0.8);
+    h->GetYaxis()->SetRangeUser(-0.01,0.01);
+    //h_p->Draw("same E1X0 ");
+    //h_m->Draw("same E1X0 ");
+    h->Draw("E1X0 ");
+    g1->Draw("same PE");
+    leg->Draw("same");
+    line->Draw("same");
+    for(int i = 1;i<numEtaBins+1;i++){
+	double temp1 = h_p->GetBinContent(i);
+	double temp11 = h_p->GetBinError(i);	
+	double temp2 = h_m->GetBinContent(i);
+	double temp22 = h_m->GetBinError(i);
+	h_diff->SetBinContent(i,temp1-temp2);
+	h_diff->SetBinError(i,sqrt(temp11*temp11+temp22*temp22));	
+    }
+    TCanvas *c2 = new TCanvas("c2","diff");
+    h_diff->GetXaxis()->SetTitle("#eta");
+    h_diff->GetYaxis()->SetTitle("v_{1}^{#pi^+}-v_{1}^{#pi^-}");
+    h_diff->GetXaxis()->SetRangeUser(-0.8,0.8);
+    h_diff->GetYaxis()->SetRangeUser(-0.005,0.005);
+    h_diff->Draw();
+}
+void getData(TH1F *hb,char file[]){
+    ifstream data(file);
+    if(data.is_open()){
+	while(!data.eof()){	
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    data >> pT >> b >> b_e;	
+	    hb->SetBinContent(pT,b);
+	    hb->SetBinError(pT,b_e);	  
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}
+void getData1(TH1F *hb,char file[]){
+    ifstream data(file);
+    if(data.is_open()){
+	while(!data.eof()){	
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    data >> pT >> b >> b_e;	
+	    hb->SetBinContent(5-pT,b);
+	    hb->SetBinError(5-pT,b_e);	  
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}

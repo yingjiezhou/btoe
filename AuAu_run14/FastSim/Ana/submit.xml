@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job  maxFilesPerProcess="30" fileListSyntax="paths" simulateSubmission="false">
+<command>
+starver SL16d
+cp /star/u/xiao00/Run14_Analysis/FastSim/setup.csh .
+cp -r /star/u/xiao00/Run14_Analysis/FastSim/.sl64_gcc482/ .
+source setup.csh
+ln -s /star/u/xiao00/Run14_Analysis/FastSim/StRoot/macros/run_StEvtGen_Ana.C
+root -l -b -q  /star/u/xiao00/Run14_Analysis/FastSim/StRoot/macros/run_StEvtGen_Ana.C\(\"&filelist;\",\"TypeID_Ana_&typeID;.root\"\)
+</command>
+        <stdout URL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/log/Type_ID_&typeID;.log"/>
+        <stderr URL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/err/Type_ID_&typeID;.err"/>
+	<Generator>
+          <Location>/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/report/</Location>
+          <ScriptLocation>/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/csh/</ScriptLocation>
+          <ListLocation>/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/list/</ListLocation>
+	</Generator>
+	<output fromScratch="*.root" toURL="file:/star/data01/pwg/xiao00/Fast_simulation/FastSim_Ana/production/"/>
+</job>

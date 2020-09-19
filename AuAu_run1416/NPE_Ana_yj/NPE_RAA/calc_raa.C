@@ -1,0 +1,332 @@
+void calc_raa(){
+    gROOT->ProcessLine(".x ~/myStyle.C");
+
+    // DUKE                                                                                                                                                                                                                                                         
+    double yDuke[20];
+    double xDukeB[20] = {0.250E+00, 0.750E+00, 0.125E+01, 0.175E+01, 0.225E+01, 0.275E+01, 0.325E+01, 0.375E+01, 0.425E+01, 0.475E+01, 0.525E+01, 0.575E+01, 0.625E+01, 0.675E+01, 0.725E+01, 0.775E+01, 0.825E+01, 0.875E+01, 0.925E+01, 0.975E+01};
+    double yDukeB[20] = {0.952E+00, 0.960E+00, 0.943E+00, 0.964E+00, 0.107E+01, 0.112E+01, 0.109E+01, 0.105E+01, 0.982E+00, 0.897E+00, 0.848E+00, 0.815E+00, 0.759E+00, 0.725E+00, 0.721E+00, 0.683E+00, 0.642E+00, 0.637E+00, 0.623E+00, 0.602E+00};
+    double yDukeD[20] = {0.740E+00, 0.803E+00, 0.102E+01, 0.850E+00, 0.692E+00, 0.591E+00, 0.535E+00, 0.474E+00, 0.482E+00, 0.471E+00, 0.461E+00, 0.477E+00, 0.459E+00, 0.464E+00, 0.454E+00, 0.450E+00, 0.423E+00, 0.478E+00, 0.445E+00, 0.439E+00};
+        
+    TGraph * gDukeB = new TGraph(20,xDukeB,yDukeB);
+    gDukeB->SetLineStyle(3);
+    gDukeB->SetLineWidth(2);
+    TGraph * gDukeC = new TGraph(20,xDukeB,yDukeD);
+    gDukeC->SetLineColor(kRed);
+    gDukeC->SetLineStyle(3);
+    gDukeC->SetLineWidth(2);
+
+
+    //TFile * npeRaa = new TFile("/gpfs01/star/pwg/mkelsey/forYifei/electronRAA/finalBtoERaa.root");
+    TFile * npeRaa = new TFile("finalBtoERaa.root"); // b fraction from old run14?? zyj
+    TGraphErrors * gNpe = (TGraphErrors*)npeRaa->Get("gr_B_Raa_com_sts");
+    TGraphErrors * gNpeSys = (TGraphErrors*)npeRaa->Get("gr_B_Raa_com_sys");
+    TGraphErrors * gNpeSys2 = (TGraphErrors*)npeRaa->Get("gr_all_B_Npe_Raa_com_sys");
+    TGraphErrors * gNpec = (TGraphErrors*)npeRaa->Get("gr_C_Raa_com_sts");
+    TGraphErrors * gNpecSys = (TGraphErrors*)npeRaa->Get("gr_C_Raa_com_sys");
+    TGraphErrors * gNpecSys2 = (TGraphErrors*)npeRaa->Get("gr_all_C_Npe_Raa_com_sys");
+
+    TFile* fi = new TFile("../DCA_Fit/root/FracB.root");
+    auto fb = (TH1F*)fi->Get("fb");
+    auto fb_sys= (TH1F*)fi->Get("fb_sys");
+    auto FONLL =(TGraphErrors *)fi->Get("FONLL");
+    //pp = (TGraphAsymmErrors *)fi->Get("pp");
+    //pp_sys=(TGraphAsymmErrors *)fi->Get("pp_sys");
+    auto ratio= (TGraphAsymmErrors *)fi->Get("ratio");
+    auto ratio_sys= (TGraphAsymmErrors *)fi->Get("ratio_sys");
+    auto duke_ratio= (TGraph*)fi->Get("duke_ratio");
+    duke_ratio->SetLineStyle(3);
+    TFile* fi1 = new TFile("NPE_RAA.root");
+    auto raa_stat= (TGraphErrors*)fi1->Get("raa_stat");
+    auto raa_sys= (TGraphErrors*)fi1->Get("raa_sys");
+    TFile *input_Total_Raa=new TFile("NPEHTRaa080-1.root","READ"); // NPE Raa ?? zyj
+    TH1F *Npe_Raa_sts=(TH1F *) input_Total_Raa->Get("NPERaaStat_AuAu_0")->Clone("Npe_Raa_sts");
+    TH1F *Npe_Raa_sys=(TH1F *) input_Total_Raa->Get("NPERaaSys_AuAu_0")->Clone("Npe_Raa_sys");
+
+    double yy[5] =   {0.202692307692308,0.280,
+                      0.385,
+                      0.514,
+                      0.589};
+    double ee1[5] =  {0.0492769230769231,0.049,
+                      0.051,
+                      0.046,
+                      0.051};
+    double ee2l[5] = {0,0.026,
+                      0.026,
+                      0.027,
+                      0.051};
+    double ee2h[5] = {0,0.024,
+                      0.040,
+                      0.035,
+                      0.033};
+/*    double yy[5] =   {0.202,0.31697,
+		      0.418603,
+		      0.48473,
+		      5.8E-01};
+    double ee1[5] =  {0.049,0.0603727,
+		      0.0664046,
+		      0.0943932,6.5E-02};
+    double ee2l[5] = {0,0.030116,
+		      0.032119,
+		      0.074922,
+		      7.3E-02};
+    double ee2h[5] = {0,0.023401,
+		      0.054527,
+		      0.103078,
+		      4.3E-02};
+*/
+    double xx2[5] =   {2.25,3,4,5,7};
+    double xxe[5] =   {0,0,0,0,0};
+    
+
+    TGraphAsymmErrors *pp = new TGraphAsymmErrors(5,xx2,yy,xxe,xxe,ee1,ee1);
+    TGraphAsymmErrors *pp_sys = new TGraphAsymmErrors(5,xx2,yy,xxe,xxe,ee2l,ee2h);
+
+
+
+
+    double mybin[6]={2.25,2.5,3.5,4.5,5.5,8.5};
+    TH1F *check = new TH1F("check","",4,mybin);
+    //TH1F *raa_c = new TH1F("raa_c","",4,mybin);
+    TGraphAsymmErrors * raa_b = new TGraphAsymmErrors();
+    TGraphAsymmErrors * raa_c =new TGraphAsymmErrors();
+
+    TGraphAsymmErrors * raa_b_s = new TGraphAsymmErrors();
+    TGraphAsymmErrors * raa_c_s =new TGraphAsymmErrors();
+    TGraphAsymmErrors * raa_b_s2 = new TGraphAsymmErrors();
+    TGraphAsymmErrors * raa_c_s2 =new TGraphAsymmErrors();
+    double vals[4];
+    double total[4];
+    double totalsys[4];
+    double totalc[4];
+    double totalsysc[4];
+    for( int i = 2; i<6;i++){
+	double temp1 = fb->GetBinContent(i+4);//binning starts low
+	double er1 = fb->GetBinError(i+4);//binning starts low     
+	double temp2 = 0;double temp3=0;
+	pp->GetPoint(i-1,temp3,temp2);
+	double er2h = pp->GetErrorYhigh(i-1);
+	double er2l = pp->GetErrorYlow(i-1);
+	double r = 0 ;double x = 0;
+	double r_e;
+	//raa_stat->GetPoint(i,x,r);
+	//r_e = raa_stat->GetErrorY(i);
+	r=Npe_Raa_sts->GetBinContent(i-1);
+	r_e = Npe_Raa_sts->GetBinError(i-1);
+	cout << "checking bins " << fb->GetBinCenter(i+4) << " " << temp3 << " " << x << " vals " << temp1 << " " << temp2 << " " << r << " " <<endl;
+	double bval = temp1/(temp2) * r;
+	double cval = (1-temp1)/(1-temp2)*r;
+	
+	raa_b->SetPoint(i-2,fb->GetBinCenter(i+4),bval);
+	raa_b_s->SetPoint(i-2,fb->GetBinCenter(i+4),bval);
+	raa_b_s2->SetPoint(i-2,fb->GetBinCenter(i+4),bval);
+	raa_c->SetPoint(i-2,fb->GetBinCenter(i+4),cval);
+	raa_c_s->SetPoint(i-2,fb->GetBinCenter(i+4),cval);
+	raa_c_s2->SetPoint(i-2,fb->GetBinCenter(i+4),cval);
+	vals[i-2] = bval;
+	double low1 = bval*sqrt(er1*er1/temp1/temp1 + er2l*er2l/temp2/temp2);// + r_e*r_e/r/r);
+	double high1 = bval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2);// + r_e*r_e/r/r);
+	double low2 = cval*sqrt(er1*er1/temp1/temp1 + er2l*er2l/temp2/temp2);// + r_e*r_e/r/r);
+	double high2 = cval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2);// + r_e*r_e/r/r);
+	double sss = r_e*r_e/r/r;
+	raa_b->SetPointError(i-2,0,0,low1,high1);
+	raa_c->SetPointError(i-2,0,0,low2,high2);
+	total[i-2]=bval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2 + r_e*r_e/r/r);
+
+	er1 = fb_sys->GetBinError(i+4);
+        er2h = pp_sys->GetErrorYhigh(i-1);
+	er2l = pp_sys->GetErrorYlow(i-1);
+	//r_e = raa_sys->GetErrorY(i);
+	r_e = Npe_Raa_sys->GetBinError(i-1);
+	low1 = bval*sqrt(er1*er1/temp1/temp1 + er2l*er2l/temp2/temp2);// + r_e*r_e/r/r);
+	high1 = bval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2);// + r_e*r_e/r/r);
+        low2 = cval*sqrt(er1*er1/temp1/temp1 + er2l*er2l/temp2/temp2);// + r_e*r_e/r/r);
+        high2 = cval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2);// + r_e*r_e/r/r);
+	raa_b_s->SetPointError(i-2,0.07,0.07,low1,high1);
+        raa_c_s->SetPointError(i-2,0.07,0.07,low2,high2);
+        check->SetBinContent(i-1,bval/cval);
+	totalsys[i-2] = bval*sqrt(er1*er1/temp1/temp1 + er2h*er2h/temp2/temp2 + r_e*r_e/r/r);
+	low1 = bval*sqrt(sss + r_e*r_e/r/r);                                                                                        
+        high1 = bval*sqrt(sss + r_e*r_e/r/r);
+        low2 = cval*sqrt(sss + r_e*r_e/r/r);
+        high2 = cval*sqrt(sss + r_e*r_e/r/r);
+
+	raa_b_s2->SetPointError(i-2,0.1,0.1,low1,high1);
+        raa_c_s2->SetPointError(i-2,0.1,0.1,low2,high2);
+	check->SetBinContent(i-1,bval/cval);
+    }
+
+    raa_c->SetLineColor(kRed);
+    raa_c->SetMarkerColor(kRed);
+    raa_c->SetMarkerStyle(21);
+    raa_c_s->SetLineColor(kRed);
+    raa_c_s->SetMarkerColor(kRed);
+    raa_c_s->SetMarkerStyle(21);
+    raa_c_s->SetFillColor(kRed-3);
+    raa_c_s->SetFillStyle(3005);
+    raa_b_s->SetFillStyle(3004);
+    raa_c_s2->SetLineColor(kRed);
+    raa_c_s2->SetMarkerColor(kRed);
+    raa_c_s2->SetMarkerStyle(21);
+    raa_c_s2->SetFillColor(kGray);
+    raa_c_s2->SetFillStyle(1000);
+    raa_b_s2->SetFillColor(kGray);                                                                                                                                              
+    raa_b_s2->SetFillStyle(1000);
+
+    raa_b->GetXaxis()->SetRangeUser(2,8.5);
+    raa_b->GetYaxis()->SetRangeUser(0,2);
+    raa_b->GetYaxis()->SetTitle("R_{AA}");
+    raa_b->GetXaxis()->SetTitle("#it{p}_{T} [GeV]");
+
+    TF1 *line = new TF1("line","1",-100,100);
+    line->SetLineStyle(7);
+
+    TLegend *leg = new TLegend(0.55,0.65,0.7,0.9);
+    leg->SetTextSize(0.03);
+    leg->AddEntry(raa_b,"#it{b}#rightarrow#it{e}","PLE");
+    leg->AddEntry(raa_c,"#it{c}#rightarrow#it{e}","PLE");
+    TLegend *leg1 = new TLegend(0.7,0.57,0.9,0.9);
+    leg1->SetTextSize(0.03);
+    leg1->AddEntry(gDukeB,"DUKE #it{b}#rightarrow#it{e}","L");
+    leg1->AddEntry(gDukeC,"DUKE #it{c}#rightarrow#it{e}","L");
+    TPaveText *Name = new TPaveText(0.17,0.8,0.45,0.9,"BRNDC");
+    Name->AddText("STAR Preliminary");
+    Name->SetFillColorAlpha(0, 0);
+    Name->SetTextAlign(12);
+    Name->SetBorderSize(0);
+    TPaveText *Name1 = new TPaveText(0.17,0.7,0.45,0.8,"BRNDC");
+    Name1->AddText("Au+Au #sqrt{s_{NN}}=200 GeV");
+    Name1->SetFillColorAlpha(0, 0);
+    Name1->SetTextAlign(12);
+    Name1->SetTextSize(0.05);
+    Name1->SetBorderSize(0);
+    TPaveText *Name2 = new TPaveText(0.17,0.63,0.45,0.7,"BRNDC");
+    Name2->AddText("0-80%");
+    Name2->SetFillColorAlpha(0, 0);
+    Name2->SetTextAlign(12);
+    Name2->SetTextSize(0.05);
+    Name2->SetBorderSize(0);
+
+    TCanvas *c1 = new TCanvas("c1","RAA",700,600);
+    TPad *pad1 = new TPad("pad1","pad1",0.0,0.25,1.0,1.0);
+    TPad *pad2 = new TPad("pad2","pad2",0.0,0.0,1.0,0.245);
+    pad1->Draw();
+    pad2->Draw();
+    pad1->SetBottomMargin(0.02);
+    pad1->SetTopMargin(0.08);
+    pad2->SetTopMargin(0.015);
+    pad2->SetBottomMargin(0.4);
+    //pad2->SetBorderMode(0);
+    pad1->SetBorderMode(0);
+    pad1->cd();
+    raa_b->Draw("APE");
+    raa_c->Draw("PE same");
+    raa_b_s2->Draw("same E2");
+    raa_c_s2->Draw("same E2");
+    raa_b_s->Draw("same 5");
+    raa_c_s->Draw("same 5");
+    raa_b->Draw("EP same");
+    raa_c->Draw("EP same");
+    gDukeB->Draw("same l");
+    gDukeC->Draw("same l");
+    line->Draw("same");
+    Name->Draw("same");
+    Name1->Draw("same");
+    Name2->Draw("same");
+    leg->Draw("same");
+    leg1->Draw("same");
+    gNpe->SetMarkerStyle(25);
+    gNpec->SetMarkerStyle(26);
+    gNpeSys->SetMarkerStyle(25);
+    gNpecSys->SetMarkerStyle(26);
+    gNpeSys2->SetMarkerStyle(25);
+    gNpecSys2->SetMarkerStyle(26);
+    //gNpe->SetMarkerSize(2.2);
+    //gNpec->SetMarkerSize(2.);
+    gNpe->SetLineWidth(2);
+    gNpec->SetLineWidth(2);
+    gNpeSys->SetLineWidth(2);
+    gNpecSys->SetLineWidth(2);
+//    gNpeSys->SetMarkerSize(2.2);
+    //  gNpecSys->SetMarkerSize(2.);
+    gNpeSys2->SetLineColorAlpha(1,0.2);
+    gNpecSys2->SetLineColorAlpha(1,0.2);
+    gNpeSys2->SetLineWidth(8);
+    gNpecSys2->SetLineWidth(8);
+    gNpeSys2->SetLineColor(kBlue);
+    gNpeSys->SetLineColor(kBlue);
+    gNpe->SetLineColor(kBlue);
+    gNpeSys2->SetMarkerColor(kBlue);
+    gNpeSys2->SetFillColor(kGray);
+    gNpeSys->SetFillColor(kBlue);
+    gNpeSys->SetFillStyle(3005);
+
+    gNpeSys->SetMarkerColor(kBlue);
+    gNpe->SetMarkerColor(kBlue);
+    gNpecSys2->SetLineColor(kGreen-2);
+    gNpecSys->SetLineColor(kGreen-2);
+    gNpec->SetLineColor(kGreen-2);
+    gNpecSys2->SetMarkerColor(kGreen-2);
+    gNpecSys2->SetFillColor(kGray);
+    gNpecSys->SetFillColor(kGreen-2);
+    gNpecSys->SetFillStyle(3004);
+    gNpecSys->SetMarkerColor(kGreen-2);
+    gNpec->SetMarkerColor(kGreen-2);
+    double totalold[4];
+    double valsold[4];
+    for (auto i=0;i<4;i++){
+	totalold[i] = sqrt(gNpe->GetErrorY(i)*gNpe->GetErrorY(i)+gNpeSys->GetErrorY(i)*gNpeSys->GetErrorY(i)+gNpeSys2->GetErrorY(i)*gNpeSys2->GetErrorY(i));
+    double _x;
+	double _y;
+	gNpe->GetPoint(i,_x,_y);
+	valsold[i]=_y;
+	gNpec->SetPointError(i,0,gNpec->GetErrorY(i));
+	gNpeSys2->SetPointError(i,0.07,gNpeSys2->GetErrorY(i));
+	gNpecSys2->SetPointError(i,0.07,gNpecSys2->GetErrorY(i));
+	gNpeSys->SetPointError(i,0.035,gNpeSys->GetErrorY(i));
+	gNpecSys->SetPointError(i,0.035,gNpecSys->GetErrorY(i));
+    }
+/*
+    gNpeSys2->Draw("same E2");
+    gNpecSys2->Draw("same E2");
+    gNpeSys->Draw("same 5");
+    gNpecSys->Draw("same 5");
+    gNpe->Draw("same pe");
+    gNpec->Draw("samep pe");
+*/
+    //gPad->RedrawAxis();
+    pad2->cd();
+    
+    for (auto i=0;i<4;i++){
+	cout <<"Total errors " << sqrt(total[i]*total[i]+totalsys[i]*totalsys[i])/vals[i] << " " << totalold[i]/valsold[i] << " " << fb->GetBinCenter(i+6) << " sigma from model " <<(gDukeB->Eval(fb->GetBinCenter(i+6))-vals[i])/sqrt(total[i]*total [i]+totalsys[i]*totalsys[i])<<" sigma from 1 " <<(1-vals[i])/sqrt(total[i]*total [i]+totalsys[i]*totalsys[i])<<endl;
+    }
+    TLegend *legg = new TLegend(0.54,0.815,0.93,0.94);
+    char label[100];
+    sprintf(label,"Const. Fit = %1.2f #pm% 1.2f(stat.) \#pm %1.2f(syst.)",1.95,0.28,0.24);
+    TF1 *prox = new TF1("prox","1.95",-100,100);
+    prox->SetLineColor(kBlue);
+    prox->SetLineStyle(5);
+    legg->AddEntry(prox,label,"l");
+    ratio->GetYaxis()->SetRangeUser(0.5,3.3);
+    ratio->SetTitle(0);
+    ratio->GetYaxis()->SetTitleSize(0.15);
+    ratio->GetYaxis()->SetLabelSize(0.1);
+    ratio->GetYaxis()->CenterTitle();
+//    ratio->GetYaxis()->SetNdivisions(200);
+    ratio->GetYaxis()->SetTitleOffset(0.33);
+    ratio->GetXaxis()->SetTitleSize(0.22);
+    ratio->GetXaxis()->SetRangeUser(2, 8.5);
+    ratio->GetXaxis()->SetLabelSize(0.18);
+    ratio->GetXaxis()->SetTitleOffset(0.8);
+    ratio_sys->SetFillColor(1);
+    ratio_sys->SetFillStyle(3004);
+    ratio->GetFunction("fit")->Delete();
+    ratio->Draw("APE1");
+    ratio_sys->Draw("same E5");
+    ratio->Draw("same PE1");
+    duke_ratio->Draw("same");
+    legg->Draw("same");
+    line->Draw("same");
+    gPad->RedrawAxis();
+
+    
+}

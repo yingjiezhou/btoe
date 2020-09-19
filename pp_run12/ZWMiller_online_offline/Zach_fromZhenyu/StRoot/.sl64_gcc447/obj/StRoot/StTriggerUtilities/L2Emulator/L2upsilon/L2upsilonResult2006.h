@@ -1,0 +1,1 @@
+../../../../../../StRoot/StTriggerUtilities/L2Emulator/L2upsilon/L2upsilonResult2006.h

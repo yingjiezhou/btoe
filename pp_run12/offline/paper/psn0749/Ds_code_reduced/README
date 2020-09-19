@@ -1,0 +1,90 @@
+Codes for GPCxxxx; Ds production in 200 GeV Au+Au, 2014 and 2016 data
+
+The codes for the two years of data are provided separately. Below find the details and how-to-run for each of the different stages 
+Final results and plotting macros are in 'Results'
+
+::::::::::: 2016 :::::::::::::::::::
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+production:
+    The codes in this directtory produces the Ds trees from the picoDst. There are two sub-directories that produce the tress for the two data taking periods in 2016. 'st_phys' has the bulk (~1 B) of the data and has the production tag 'AuAu_200_production_2016'. 'st_sst' has the code for the st_sst stream which have the production tag 'AuAu200_production2_2016'
+   How-to-run:
+For st_phys,
+        Do 'cons' to compile (with SL16j that was removed, can use SL19c) 
+        To test the code: ./test.csh, log file is 'test.log' and output is 'test.DsBg_fromPico.root'
+        submit scripts to run all picoDst: ./submitPicoD0AnaMakerAll.sh /star/u/fuchuan/data02/Ds/Ds_code_GPC/2016/production/stphys/submit_physics_all.list (log file is submit_test.log, if you want to run please change the output path to your directtory) 
+
+For st_sst,
+        Do 'cons' to compile (with SL19c)
+        To test the code: ./test.csh, log file is 'test.log' and output is 'test.DsBg_fromPico.root'
+        submit scripts to run all picoDst: ./submitPicoD0AnaMakerAll.sh /star/u/fuchuan/data02/Ds/Ds_code_GPC/2016/production/st_sst/pico_sst_nfs_good.list (log file is submit_test.log, if you want to run please change the output path to your directtory)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+reconstruction:
+    This stage runs over the Ds Trees to produce invariant mass histograms with the analysis cuts. The main macro is 'Selector.C'
+    How-to-run:
+    To test the code: ./run.csh test.list test.root test.log, log file is 'test.log' and output is 'test.root'.
+    To run all statistics: ./run.csh /star/u/fuchuan/data02/Ds/Ds_code_GPC/2016/reconstruction/DataCut_phyAndsst_run16.list all.root all.log.    
+        Invariant mass histograms from the full production is in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/analysis/DataCut_0080_1_8_KPipT0.5_phyAndsst_run16.root' 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+fastsim:
+   Directories here have codes to run the data-driven fast simulation and calculate the Ds reconstruction efficiencies
+   runfastsim:
+        Code to run data-driven fast simulation and produce Ds trees from it. 
+        How-to-run:
+        To test the code: ./runTest.sh (output is 'test.root').
+        To produce all Ds trees for reconstruction efficiencies: ./runPythia.sh (outputs are in 'production/') 
+        Outputs from the full production are in 'run.list' 
+
+    efficiency:
+        Runs over the DsTrees from fastsim with the analysis cuts for efficiency evaluation
+        How-to-run:
+        To test the code: ./runTest.sh (contains 4 steps: first get 'Eff_test.root' with acceptance, HFT-to-TPC matching and pre-topological variable cuts, then apply BDT classifer to calculate BDT response (output is 'Eff_test.tmvaBDT.root'), then get 'DefaultBDTEff_test.root' with acceptance, HFT-to-TPC matching, pre-topological variable and BDT response cuts, TPC and PID efficiency weights, final get reconstruction efficiencies as functions of pt and centrality (output is DefaultBDTEff_test_Final.root)).
+        To run all statistics: ./runAll.sh  
+       Ds reconstruction efficiencies are in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/analysis/eff_root/'
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+::::::::::: 2014 :::::::::::::::::::
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+production:
+    The codes in this directtory produces the Ds trees from the picoDst. The trees were produced using the library version SL16d from the picos produces by LBL group on PDSF (also used for D0 measurements). The picoDst list is in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/2014/production/pico_Run14P16id_good.list', but might not be accessible 
+   How-to-run:
+        Do 'cons' to compile (with SL16d) 
+        To test the code: ./test.csh, log file is 'test.log' and output is 'Ds_TestTree_run14.root'
+        To run all statistics: ./submitPicoD0AnaMakerAll.sh /star/u/fuchuan/data02/Ds/Ds_code_GPC/2014/production/pico_Run14P16id_good.list (the picos might not be accessible).  
+   The full Ds tree list from the production are in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/2014/production/DsTree_phy_run14.list'
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+reconstruction:
+    Details and How-to-run are same as for 2016
+     To run all statistics: ./run.csh /star/u/fuchuan/data02/Ds/Ds_code_GPC/2014/reconstruction/DataCut_phy_run14.list all.root all.log.
+        Invariant mass histograms from the full production is in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/analysis/DataCut_0080_1_8_KPipT0.5_run14.root'
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+fastsim:
+    Details and How-to-run are same as for 2016
+    
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+::::::::::::::::::::::analysis:::::::::::::::::
+    This section has the codes to evaluate the raw spectra(dN/(2pi.pTdpTdy.BR.Nevt)), corrected spectra and the systematic uncertainties
+    Ds_RawYield_DiffFit_Split_run14.C and Ds_RawYield_DiffFit_Split_run16.C are for raw spectra.
+    SysError_Ds_run1416.C are for corrected spectra and the systematic uncertainties, and combined results from 2014 and 2016 with systematic uncertainties. 
+    
+    How-to-run:
+        Raw spectra: ./runDs_RawYield.csh Ds_RawYield_DiffFit_Split_run14 (Ds_RawYield_DiffFit_Split_run16).
+        All raw spectra are in '/star/u/fuchuan/data02/Ds/Ds_code_GPC/analysis/Raw_root/'
+
+        Spectra and the systematic uncertainties: root -b -l -q SysError_Ds_run1416.C (outputs are 'SysError_run1416.root' that contains sys. error from each source and 'Spectrum_run1416_Ds.root' that contains corrected spectra with sys. and stat. errors for 2014 and 2016, respectively, and combined results from 2014 and 2016). 
+
+::::::::::: Results :::::::::::::::::::
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    root -b -l -q DsD0_Ratio.C (output is 'root/DsD0_Ratio.root' that contains Ds/D0 ratio as a function of pt for 0-10%, 10-40% and 40-80%; and Ds(dN/dy)/D0(dN/dy) ratio as a function of Npart).
+
+    fig1a_invmass.C makes Figure.1(a) in paper draft. Run with 'root -l -b -q fig1a_invmass.C'
+    fig1b_spectrum.C makes Figure.1(b) in paper draft. Run with 'root -l -b -q fig1b_spectrum.C'
+    fig2_DsD0_ALICE.C makes Figure.2 in paper draft. Run with 'root -l -b -q fig2_DsD0_ALICE.C'
+    fig3_DsD0_Model.C makes Figure.3 in paper draft. Run with 'root -l -b -q fig3_DsD0_Model.C'
+    fig4_dNdy_Ratio_OnePanel.C makes Figure.4 in paper draft. Run with 'root -l -b -q fig4_dNdy_Ratio_OnePanel.C'
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+::::::::::::::::::::::::::::::::::::::::

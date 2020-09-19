@@ -1,0 +1,545 @@
+/*!
+ * \class  StMuAnalysisMaker
+ * \brief  A typical Analysis Class for MuDst
+ * \author Wei-Ming Zhang, KSU, Mar 2004 
+ *
+ * This is an example of a maker to perform analysis using MuDst.
+ *
+ * $Id: StMuAnalysisMaker.cxx,v 1.1 2004/08/10 16:09:11 perev Exp $
+ * -------------------------------------------------------------------------
+ * $Log: StMuAnalysisMaker.cxx,v $
+ * Revision 1.1  2004/08/10 16:09:11  perev
+ * new GridCollector stuff
+ *
+ * -------------------------------------------------------------------------
+ */
+//
+//  Include header files. 
+#include "exception"
+#include "TFile.h"
+#include "StMessMgr.h"
+#include "TH1.h"
+#include "TH2.h"
+
+#include "StMuDSTMaker/COMMON/StMuTrack.h"
+#include "StMuDSTMaker/COMMON/StMuMcTrack.h"
+#include "StMuDSTMaker/COMMON/StMuEvent.h"
+#include "StMuDSTMaker/COMMON/StMuDst.h"
+#include "StMuDSTMaker/COMMON/StMuDebug.h"
+#include "StBTofHeader.h"
+#include "StMuAnalysisMaker.h"
+#include "StRoot/StRefMultCorr/StRefMultCorr.h"
+
+ClassImp(StMuAnalysisMaker)
+
+   // The constructor. Initialize data members here.
+StMuAnalysisMaker::StMuAnalysisMaker(const Char_t *name, std::string jobid ) : StMaker(name)
+{ mEventCounter = 0; mFile = 0; mId=jobid;}
+
+StMuAnalysisMaker::~StMuAnalysisMaker() { /* noop */ }
+//
+//  Called once at the beginning.
+Int_t StMuAnalysisMaker::Init()
+{
+   NTRIG=6;
+   triggers[0] = 520001;   
+   triggers[1] = 520011;   
+   triggers[2] = 520021;   
+   triggers[3] = 520031;   
+   triggers[4] = 520041;   
+   triggers[5] = 520051;   
+
+   /*NTRIG=5;
+     triggers[0] = 450050;   
+     triggers[1] = 450060;   
+     triggers[2] = 450005;   
+     triggers[3] = 450015;   
+     triggers[4] = 450025;*/   
+
+   cntbad=0;
+
+   std::ifstream fin(mInList);
+   std::string runname; int cnt=0;
+   while(std::getline(fin,runname)) {
+      runMap[cnt] = runname; cnt++;
+   }
+   for (std::map<int,std::string>::iterator it=runMap.begin(); it!=runMap.end(); it++) std::cout << "run = " << it->first << ": indx = " << it->second << std::endl;
+
+   funSpec = new TF1("funSpec","exp([0]+[1]*x)",0,10);
+   funSpec->SetParameters(1.15055e+01,-2.47083e+00);
+
+   char name[500], name1[500];
+
+   Verror = 1.0e-5;
+
+   mRefMultCorr = new StRefMultCorr("grefmult");
+   mRefMultCorr->setVzForWeight(6, -6.0, 6.0);
+   mRefMultCorr->readScaleForWeight("StRoot/StRefMultCorr/macros/weight_grefmult_vpd30_vpd5_Run14_P16id.txt");
+
+   //  Output file and histogram booking
+   mFileName = "out_mr24_hijing/muAnalysis_hijing_zerobias_tpceff_centlocal_" + mId + ".root";
+   mFile =  new TFile(mFileName.c_str(), "RECREATE");
+   std::cout << mId << ": outName = " << mFile->GetName() << std::endl;
+
+   hVxVy[0] = new TH2F("hVxVy_0","",2000,-0.3,-0.1,2000,-0.3,-0.1); hVxVy[0]->Sumw2();
+   hVxVy[1] = new TH2F("hVxVy_1","",2000,-0.3,-0.1,2000,-0.3,-0.1); hVxVy[1]->Sumw2();
+   hEventId = new TH1F("hEventId","",2000,0,200000); hEventId->Sumw2();
+   hVzCorr = new TH2F("hVzCorr","",600,-30.,30.,600,-30.,30.);   // VzVpd vs. VzTpc
+   hRefCorr = new TH2F("hRefCorr","",1000,0,1000,1000,0,1000);  // gRefMult vs. refMult
+   hRcTPCPtEta = new TH2F("hRcTPCPtEta","",500,0.,10.,100,-1.,1.);
+   hMcTPCPtEta = new TH2F("hMcTPCPtEta","",500,0.,10.,100,-1.,1.);
+   hRcHFTPtEta = new TH2F("hRcHFTPtEta","",500,0.,10.,100,-1.,1.);
+   hMcHFTPtEta = new TH2F("hMcHFTPtEta","",500,0.,10.,100,-1.,1.);
+   hMcHFTGoodPtEta = new TH2F("hMcHFTGoodPtEta","",500,0.,10.,100,-1.,1.);
+   hPtCorr = new TH2F("hPtCorr","",500,0.,10.,500,-1.,1.);
+   hNHitsPxl1Ist = new TH2F("hNHitsPxl1Ist","",1000,0,5000,10000,0,40000); hNHitsPxl1Ist->Sumw2();
+   hNHitsPxl2Ist = new TH2F("hNHitsPxl2Ist","",1000,0,5000,10000,0,20000); hNHitsPxl2Ist->Sumw2();
+   hNHitsPxl1Ssd = new TH2F("hNHitsPxl1Ssd","",100,0,500,1000,0,20000);
+   hNHitsPxl2Ssd = new TH2F("hNHitsPxl2Ssd","",100,0,500,1000,0,5000);
+
+
+   hGlobalPt = new TH1D("hglobalPt","globalPt",100,0.,3.);
+   hPrimaryPt = new TH1D("hprimaryPt","primaryPt",100,0.,10.0);
+   hPrimaryPtHft = new TH1D("hprimaryPtHft","primaryPt",100,0.,10.0);
+   hL3Pt = new TH1D("hl3Pt","l3Pt",100,0.,3.);
+   hRefMult = new TH1D("hrefMult","refMult",100,0.,100.);
+
+   hPrimCorr2 = new TH2F("hPrimCorr2","",5000,0,10000,5000,0,10000); hPrimCorr2->Sumw2();
+
+   for (int ic=0;ic<NCENT;ic++) {
+      for (int ip=0;ip<NPID;ip++) {
+         sprintf(name,"hMcPtEta_c%d_p%d",ic,ip);  hMcPtEta [ic][ip] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hMcPtEta [ic][ip]->Sumw2();
+         sprintf(name,"hMcPtPhi_c%d_p%d",ic,ip);  hMcPtPhi [ic][ip] = new TH2F(name,"",120,0,12,64,-3.2,3.2);  hMcPtPhi [ic][ip]->Sumw2();
+         sprintf(name,"hMc2PtEta_c%d_p%d",ic,ip); hMc2PtEta[ic][ip] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hMc2PtEta[ic][ip]->Sumw2();
+         sprintf(name,"hMc2PtPhi_c%d_p%d",ic,ip); hMc2PtPhi[ic][ip] = new TH2F(name,"",120,0,12,64,-3.2,3.2);  hMc2PtPhi[ic][ip]->Sumw2();
+         for (int icut=0;icut<NCUT;icut++) {
+            sprintf(name,"hRcPtEta_c%d_p%d_cut%d",ic,ip,icut);  hRcPtEta [ic][ip][icut] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hRcPtEta [ic][ip][icut]->Sumw2();
+            sprintf(name,"hRcPtPhi_c%d_p%d_cut%d",ic,ip,icut);  hRcPtPhi [ic][ip][icut] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hRcPtPhi [ic][ip][icut]->Sumw2();
+            sprintf(name,"hRc2PtEta_c%d_p%d_cut%d",ic,ip,icut); hRc2PtEta[ic][ip][icut] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hRc2PtEta[ic][ip][icut]->Sumw2();
+            sprintf(name,"hRc2PtPhi_c%d_p%d_cut%d",ic,ip,icut); hRc2PtPhi[ic][ip][icut] = new TH2F(name,"",120,0,12,140,-1.2,1.2); hRc2PtPhi[ic][ip][icut]->Sumw2();
+         }
+      }
+   }
+   Signal_tree = new TTree("Signal_tree","Signal Tree");
+   Signal_tree->Branch("sig_p",&sig_p,"sig_p/F");
+   Signal_tree->Branch("sig_pt",&sig_pt,"sig_pt/F");
+   Signal_tree->Branch("sig_dcaxy",&sig_dcaxy,"sig_dcaxy/F");
+   Signal_tree->Branch("sig_dca",&sig_dca,"sig_dca/F");
+   Signal_tree->Branch("sig_dcaz",&sig_dcaz,"sig_dcaz/F");
+   Signal_tree->Branch("sig_eta",&sig_eta,"sig_eta/F");
+   Signal_tree->Branch("sig_phi",&sig_phi,"sig_phi/F");
+   Signal_tree->Branch("sig_hft",&sig_hft,"sig_hft/F");
+   Signal_tree->Branch("sig_phi2",&sig_phi2,"sig_phi2/F");
+   Signal_tree->Branch("sig_charge",&sig_charge,"sig_charge/F");
+   Signal_tree->Branch("sig_id",&sig_id,"sig_id/F");
+   Signal_tree->Branch("sig_yloc",&sig_yloc,"sig_yloc/F");
+   Signal_tree->Branch("event_centrality",&event_centrality,"event_centrality/F");
+   Signal_tree->Branch("sig_head",&sig_head,"sig_head/F");
+   Signal_tree->Branch("sig_parentid",&sig_parentid,"sig_parentid/F");
+   Signal_tree->Branch("sig_gparentid",&sig_gparentid,"sig_gparentid/F");
+   Signal_tree->Branch("sig_ggparentid",&sig_ggparentid,"sig_ggparentid/F");
+   Signal_tree->Branch("sig_parentpt",&sig_parentpt,"sig_parentpt/F");
+   Signal_tree->Branch("sig_gparentpt",&sig_gparentpt,"sig_gparentpt/F");
+   Signal_tree->Branch("sig_ggparentpt",&sig_ggparentpt,"sig_ggparentpt/F");
+   Signal_tree->Branch("sig_parentphi",&sig_parentphi,"sig_parentphi/F");
+   Signal_tree->Branch("sig_gparentphi",&sig_gparentphi,"sig_gparentphi/F");
+   Gen_tree = new TTree("Gen_tree","Gen Tree");
+   Gen_tree->Branch("gen_p",&gen_p,"gen_p/F");
+   Gen_tree->Branch("gen_pt",&gen_pt,"gen_pt/F");
+   Gen_tree->Branch("gen_dcaxy",&gen_dcaxy,"gen_dcaxy/F");
+   Gen_tree->Branch("gen_dca",&gen_dca,"gen_dca/F");
+   Gen_tree->Branch("gen_eta",&gen_eta,"gen_eta/F");
+   Gen_tree->Branch("gen_phi",&gen_phi,"gen_phi/F");
+   Gen_tree->Branch("gen_phi2",&gen_phi2,"gen_phi2/F");
+   Gen_tree->Branch("gen_id",&gen_id,"gen_id/F");
+   Gen_tree->Branch("event_centrality",&gen_event_centrality,"event_centrality/F");
+   Gen_tree->Branch("gen_vx",&gen_vx,"gen_vx/F");
+   Gen_tree->Branch("gen_vy",&gen_vy,"gen_vy/F");
+   Gen_tree->Branch("gen_vz",&gen_vz,"gen_vz/F");
+   Gen_tree->Branch("gen_head",&gen_head,"gen_head/F");
+   Gen_tree->Branch("gen_parentid",&gen_parentid,"gen_parentid/F");
+   Gen_tree->Branch("gen_gparentid",&gen_gparentid,"gen_gparentid/F");
+   Gen_tree->Branch("gen_ggparentid",&gen_ggparentid,"gen_ggparentid/F");
+   Gen_tree->Branch("gen_parentpt",&gen_parentpt,"gen_parentpt/F");
+   Gen_tree->Branch("gen_gparentpt",&gen_gparentpt,"gen_gparentpt/F");
+   Gen_tree->Branch("gen_ggparentpt",&gen_ggparentpt,"gen_ggparentpt/F");
+
+
+   return StMaker::Init();
+}
+//
+//  Called every event after Make(). 
+void StMuAnalysisMaker::Clear(Option_t *opt)
+{
+   StMaker::Clear();
+}
+//
+//  Called once at the end.
+Int_t StMuAnalysisMaker::Finish()
+{
+   //  Summarize the run.
+   cout << "StMuAnalysisMaker::Finish()\n";
+   cout << "\tProcessed " << mEventCounter << " events." << endl;
+   //
+   //  Output histograms
+   cout << "\tHistograms will be stored in file '"
+      <<  mFileName.c_str() << "'" << endl;
+
+   //  Write histos to file and close it.
+   if( mFile){
+      mFile->Write();  
+      mFile->Close();
+   }
+
+   std::cout << cntbad <<  std::endl;
+
+   return kStOK;
+}
+//
+//  This method is called every event.
+Int_t StMuAnalysisMaker::Make()
+{
+   mEventCounter++;  // increase counter
+
+   //    DEBUGVALUE2(mEventCounter);
+   //  Get MuDst
+   StMuDst* mu; 
+   mu =  (StMuDst*) GetInputDS("MuDst"); 
+   //    DEBUGVALUE2(mu);
+
+   if (!mu){
+      gMessMgr->Warning() << "StMuAnalysisMaker::Make : No MuDst" << endm;
+      return kStOK;        // if no event, we're done
+   }
+   //
+   //  Check StMuEvent branch
+   StMuEvent* muEvent;
+   muEvent = (StMuEvent*) mu->event();
+
+   StThreeVectorF pVtx = muEvent->primaryVertexPosition();
+
+   float vzVpd = -999.;
+   if (StBTofHeader* header = mu->btofHeader()) {
+      vzVpd = header->vpdVz();
+      //std::cout << "vz = " << pVtx.z() << ": vzVpd = " << vzVpd << ": diff = " << fabs(vzVpd - pVtx.z()) << std::endl;
+   }
+
+   if (fabs(pVtx.z()) > 6.0) return kStOK;
+   //if(fabs(vzVpd - pVtx.z())>3.0) return kStOK;
+   
+   hVxVy[0]->Fill(pVtx.x(), pVtx.y());
+
+   std::vector<unsigned int> mTriggerIds = muEvent->triggerIdCollection().nominal().triggerIds();
+   bool passTrigger = 0;
+   for (int itrig=0;itrig<NTRIG;itrig++) {
+      if (std::find(mTriggerIds.begin(), mTriggerIds.end(), triggers[itrig]) != mTriggerIds.end()) passTrigger=1;
+   }
+   //if (!passTrigger) return kStOK;
+
+   int midint = std::stoi(mId);
+   int runid = std::stoi(runMap.at(midint));
+   int refMult = muEvent->grefmult();
+   mRefMultCorr->init((Int_t)runid);
+   mRefMultCorr->initEvent(refMult,pVtx.z(),muEvent->runInfo().zdcCoincidenceRate());
+   float refMultc = mRefMultCorr->getRefMultCorr() ;
+   float gweight  = mRefMultCorr->getWeight() ;
+   //int centrality = mRefMultCorr->getCentralityBin9();
+   int centrality = get_centrality(refMult);
+   if (centrality<0 || centrality>8) return kStOK;
+
+   std::cout << "Run = " << muEvent->runId() << ": runMine = " << runid << std::endl;
+
+   if (fabs(pVtx.x()) < Verror && fabs(pVtx.y()) < Verror && fabs(pVtx.z()) < Verror) {std::cout << "zero vertex" << std::endl; return kStOK;}
+   hVxVy[1]->Fill(pVtx.x(), pVtx.y());
+   hEventId->Fill(muEvent->eventId());
+
+   int vzbin = -1;
+   if (pVtx.z()>=-6 && pVtx.z()<-4) vzbin=0;
+   else if (pVtx.z()>=-4 && pVtx.z()<-2) vzbin=1;
+   else if (pVtx.z()>=-2 && pVtx.z()<0)  vzbin=2;
+   else if (pVtx.z()>=0  && pVtx.z()<2)  vzbin=3;
+   else if (pVtx.z()>=2  && pVtx.z()<4)  vzbin=4;
+   else if (pVtx.z()>=4  && pVtx.z()<6)  vzbin=5;
+   else if (pVtx.z()>=6)  vzbin=5;
+   else if (pVtx.z()<-6)  vzbin=0;
+   else vzbin=0;
+
+   //
+   //  Printout information of StMuEvent 
+   muEventInfo(*mu); 
+
+   //
+   //  MC track information, fix the mapping
+   TClonesArray *mcTracks = mu->mcArray(MCTrack);
+   int nMcTracks = mcTracks->GetEntriesFast();
+
+   int index2McTrack       [100000];
+   int index2McPrimary     [100000];
+   for(int i=0;i<100000;i++) index2McTrack      [i] = -1;
+   for(int i=0;i<100000;i++) index2McPrimary    [i] = -1;
+
+   printf("Mc track # = %d\n",nMcTracks);
+   for(int i=0;i<nMcTracks;i++) {
+      StMuMcTrack *mcT = (StMuMcTrack *)mcTracks->UncheckedAt(i);
+      if(!mcT) continue;
+      int id = mcT->Id();
+      int gId = mcT->GePid();
+      if(!(gId==3 || gId==2))continue;
+      fillGenTree(mctrack,pVtx,mcTracks);
+   }
+
+   StMuTrack* muTrack; 
+   int nTracks;
+   nTracks= mu->globalTracks()->GetEntries();
+   printf("Global track # = %d\n",nTracks);
+   for (int l=0; l<nTracks; l++) { 
+      muTrack =  (StMuTrack*) mu->globalTracks(l); 
+      if(!muTrack) continue;
+
+      const StThreeVectorF mom = muTrack->momentum();
+      const float pt = mom.perp();
+      const float eta = mom.pseudoRapidity();
+      const float phi = mom.phi();
+      if(pt<0.2 || fabs(eta)>1.0) continue;
+
+      if(!accept(muTrack)) continue;
+      hGlobalPt->Fill(muTrack->pt());
+
+      unsigned int map0 = muTrack->topologyMap().data(0);
+      bool isHFT  = ((map0>>1) & 0x1) && ((map0>>2) & 0x3) && ((map0>>4) & 0x3);     
+      int idTruth = muTrack->idTruth();
+      if(idTruth<0) {std::cout << "id = " << idTruth << ": pt = " << pt << ": eta = " << eta << std::endl; continue;}
+      int qTruth = muTrack->qaTruth();
+      int index2Mc = index2McTrack[idTruth];
+      if(index2Mc>=0) {
+         StMuMcTrack *mcT = (StMuMcTrack *)mcTracks->UncheckedAt(index2Mc);
+         if(mcT) {
+            float pt_mc = mcT->pT();
+            int idVtx = mcT->IdVx();
+            if (idVtx!=1) continue;
+            int gId = mcT->GePid();
+            if(!(gId==2 || gId==3))continue;
+            if (isHFT) cutPass[1] = 1;
+	    muTrack->nHitsFit() > 15;
+	    fillTree(muTrack,mcT,pVtx);
+         }
+      }
+   }
+
+   return kStOK;
+}
+//
+//  A simple track filter
+bool StMuAnalysisMaker::accept(StMuTrack* track)
+{
+   //return track && track->flag() >= 0 && track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20  && (1.0*track->nHitsFit()/track->nHits() > 0.52);
+   //return track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20  && (1.0*track->nHitsFit()/track->nHits() > 0.52);
+   return track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20;
+}
+bool StMuAnalysisMaker::accept_pion(StMuTrack* track)
+{
+   //return track && track->flag() >= 0 && track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20 && fabs(track->nSigmaPion())<2.0 && (1.0*track->nHitsFit()/track->nHits() > 0.52);
+   return track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20 && fabs(track->nSigmaProton())<2.0 && (1.0*track->nHitsFit()/track->nHits() > 0.52) && track->charge()<0;
+}
+bool StMuAnalysisMaker::accept2(StMuTrack* track)
+{
+   return track && track->flag() >= 0 && track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20 && track->nSigmaPion()>0 && track->nSigmaPion()<2.0 ;//&& (1.0*track->nHitsFit()/track->nHits() > 0.52);
+}
+bool StMuAnalysisMaker::acceptb(const StMuTrack* track)
+{
+   return track && track->flag() >= 0 && track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20 && fabs(track->nSigmaPion())<2.0;// && (1.0*track->nHitsFit()/track->nHits() > 0.52);
+}
+bool StMuAnalysisMaker::accept2b(const StMuTrack* track)
+{
+   return track && track->flag() >= 0 && track->dcaGlobal().mag()<1.5 && (int)track->nHitsFit()>20 && track->nSigmaPion()>0 && track->nSigmaPion()<2.0;// && (1.0*track->nHitsFit()/track->nHits() > 0.52);
+}
+//
+//  Prototype 
+void StMuAnalysisMaker::muEventInfo(const StMuDst& mu)
+{
+   StMuEvent* ev = mu.event();
+   if(!ev) return;
+
+   StThreeVectorF pVtx = ev->primaryVertexPosition();
+   float vzVpd = -999.;
+   if (StBTofHeader* header = mu.btofHeader()) {
+      vzVpd = header->vpdVz();
+   }
+   hVzCorr->Fill(pVtx.z(), vzVpd);
+   if(fabs(vzVpd)<100.) {
+   }
+
+   int gRefMult = ev->grefmult();
+   int refMult = ev->refMultNeg()+ev->refMultPos();
+   hRefMult->Fill(refMult);
+   hRefCorr->Fill(refMult, gRefMult);
+
+   int nPxl1 = ev->numberOfPxlInnerHits();
+   int nPxl2 = ev->numberOfPxlOuterHits();
+   int nIst = ev->numberOfIstHits();
+   int nSsd = ev->numberOfSsdHits();
+   hNHitsPxl1Ist->Fill(nIst, nPxl1);
+   hNHitsPxl2Ist->Fill(nIst, nPxl2);
+   hNHitsPxl1Ssd->Fill(nSsd, nPxl1);
+   hNHitsPxl2Ssd->Fill(nSsd, nPxl2);
+
+}
+int StMuAnalysisMaker::get_phibin(float phi) {
+   static float phibinshftr[] = {-3.14159 , -2.80359 , -2.17527 , -1.54696 , -0.918637 , -0.290319 , 0.338 , 0.966319 , 1.59464 , 2.22296 , 2.85127 , 3.14159};
+   int phibin=-1;
+   return phibin;
+}
+
+int StMuAnalysisMaker::get_phibin2(float phi) {
+   static float pii = std::acos(-1.0); static float wid = pii/6; static float off = -pii/12;
+   int phibin=-1;
+   
+   if ((phi > 6*pii/6+off) && (phi < pii)) phibin = 0;
+   if ((phi > -pii) && (phi < -5*pii/6+off)) phibin = 0;
+   if ((phi > -5*pii/6+off) && (phi < -4*pii/6+off)) phibin = 1;
+   if ((phi > -4*pii/6+off) && (phi < -3*pii/6+off)) phibin = 2;
+   if ((phi > -3*pii/6+off) && (phi < -2*pii/6+off)) phibin = 3;
+   if ((phi > -2*pii/6+off) && (phi < -1*pii/6+off)) phibin = 4;
+   if ((phi > -1*pii/6+off) && (phi < 0*pii/6+off))  phibin = 5;
+   if ((phi > 0*pii/6+off)  && (phi < 0))            phibin = 6;
+   if ((phi > 0) && (phi < 1*pii/6+off))             phibin = 6;
+   if ((phi > 1*pii/6+off) && (phi < 2*pii/6+off))   phibin = 7;
+   if ((phi > 2*pii/6+off) && (phi < 3*pii/6+off))   phibin = 8;
+   if ((phi > 3*pii/6+off) && (phi < 4*pii/6+off))   phibin = 9;
+   if ((phi > 4*pii/6+off) && (phi < 5*pii/6+off))   phibin = 10;
+   if ((phi > 5*pii/6+off) && (phi < 6*pii/6+off))   phibin = 11;
+
+   return phibin;
+}
+
+int StMuAnalysisMaker::get_centrality(float mul) {
+
+   static float centcuts[] = {10, 21, 41, 73, 119, 182, 266, 376, 443, 1000};
+   int centbin=-1;
+   for (int ic=0;ic<NCENT;ic++) {
+      if (mul>=centcuts[ic] && mul<centcuts[ic+1]) {centbin = ic; break;}
+   }
+
+   return centbin;
+} 
+void StMuAnalysisMaker::fillGenTree(const StMuTrack* track,StThreeVectorF pVtx,TClonesArray *mcTracks){
+    StThreeVectorF const pMom = tmc->Pxyz();
+    float pt = pMom.perp();
+    float ptot = pMom.mag();
+    int charge=0;
+    gen_id = tmc->GePid();
+    if(gen_id==3)charge=-1;
+    else if(gen_id==2)charge=1;
+    else charge=0;        
+    gen_pt = pt;
+    gen_p = ptot;
+    gen_eta = pMom.pseudoRapidity();
+    gen_phi = pMom.phi();
+    gen_phi2 = TMath::Pi()+TMath::ATan2(-pMom.y(),-pMom.x());
+    int tempp1;
+    float tempp2;
+    int tempp3=0;
+    getParent(mcTracks,tmc,tempp1,tempp3,tempp2,true);
+    gen_event_centrality = centrality;
+    gen_head=tempp3;
+    int parentGid=0;
+    int gparentGid=0;
+    int ggparentGid=0;
+    float parentPt=0;
+    float gparentPt=0;
+    float ggparentPt=0;
+    if(tmc->parentId() == tmc->Id()){
+        parentGid  = tmc->GePid();
+    }
+    else if(tmc->parentId() != Pico::USHORTMAX){
+        StMuMcTrack *mcParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(tmc->parentId()-1);
+        parentGid  = mcParentTrk->GePid();
+        parentPt  = mcParentTrk->Mom().perp();
+        if(mcParentTrk->parentId() != Pico::USHORTMAX && mcParentTrk->parentId() != mcParentTrk->Id()){
+            StMuMcTrack *mcgParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(mcParentTrk->parentId()-1);
+            gparentGid  = mcgParentTrk->GePid();
+            gparentPt  = mcgParentTrk->Mom().perp();
+            if(mcgParentTrk->parentId() != Pico::USHORTMAX && mcgParentTrk->parentId() != mcgParentTrk->Id()){
+                StMuMcTrack *mcggParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(mcgParentTrk->parentId()-1);
+                ggparentGid  = mcggParentTrk->GePid();
+                ggparentPt  = mcggParentTrk->Mom().perp();
+
+            }
+        }
+    }
+    gen_parentpt = parentPt;
+    gen_gparentpt = gparentPt;
+    gen_ggparentpt = ggparentPt;
+    gen_parentid = parentGid;
+    gen_gparentid = gparentGid;
+    gen_ggparentid = ggparentGid;
+    Gen_tree->Fill();
+}
+void StMuAnalysisMaker::getParent(TClonesArray *mcTracks, StMuMcTrack const * const mcTrk, int & parentid, int & parentGid, float & parentMcPt, bool isMore = true)
+{
+
+    if(mcTrk->parentId() == mcTrk->Id()){
+	parentGid  = mcTrk->GePid();
+	parentid  = mcTrk->parentId();
+	parentMcPt = mcTrk->Mom().perp();
+    }
+    else if(mcTrk->parentId() != Pico::USHORTMAX && mcTrk->parentId() != mcTrk->Id())
+    {
+	StMuMcTrack *mcParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(mcTrk->parentId()-1);
+	parentGid  = mcParentTrk->GePid();
+	parentid  = mcParentTrk->parentId();
+	parentMcPt = mcParentTrk->Mom().perp();
+	if (mcTrk->parentId() != mcParentTrk->parentId() && isMore ) getParent(mcTracks,mcParentTrk,parentid,parentGid,parentMcPt,true);
+	//delete mcParentTrk;                                                                                                                                                                                                                                         
+    }
+}
+void StMuAnalysisMaker::fillTree(StMuTrack* tp,StMuMcTrack *tmc,StThreeVectorF pVtx){
+    float pt = tp->gPt();
+    StThreeVectorF const pMom = tp->p();
+    float ptot = pMom.mag();
+    sig_dcaxy = tp->dcaD(tp->IdVx());;
+    sig_dca = tp->dca(tp->IdVx());//dca3d;
+    sig_eta = pMom.psuedorapidity();
+    sig_phi = pMom.phi();
+    sig_charge = tp->charge();
+    sig_id = tmc->GePid();
+    int tempp1;
+    float tempp2;
+    int tempp3=0;
+    getParent(mcTracks,tmc,tempp1,tempp3,tempp2,true);
+    int parentGid=0;
+    int gparentGid=0;
+    int ggparentGid=0;
+    float parentPt=0;
+    float gparentPt=0;
+    float ggparentPt=0;
+    if(tmc->parentId() == tmc->Id()){
+        parentGid  = tmc->GePid();
+    }
+    else if(tmc->parentId() != Pico::USHORTMAX){
+        StMuMcTrack *mcParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(tmc->parentId()-1);
+        parentGid  = mcParentTrk->GePid();
+        parentPt  = mcParentTrk->Mom().perp();
+        if(mcParentTrk->parentId() != Pico::USHORTMAX && mcParentTrk->parentId() != mcParentTrk->Id()){
+            StMuMcTrack *mcgParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(mcParentTrk->parentId()-1);
+            gparentGid  = mcgParentTrk->GePid();
+            gparentPt  = mcgParentTrk->Mom().perp();
+            if(mcgParentTrk->parentId() != Pico::USHORTMAX && mcgParentTrk->parentId() != mcgParentTrk->Id()){
+                StMuMcTrack *mcggParentTrk = (StMuMcTrack*)mcTracks->UncheckedAt(mcgParentTrk->parentId()-1);
+                ggparentGid  = mcggParentTrk->GePid();
+                ggparentPt  = mcggParentTrk->Mom().perp();
+
+            }
+        }
+    }
+
+    sig_parentphi = parentphi;
+    sig_gparentphi = gparentphi;
+    sig_parentid = parentGid;
+    sig_gparentid = gparentGid;
+    sig_ggparentid = ggparentGid;
+    sig_parentpt = parentPt;
+    sig_gparentpt = gparentPt;
+    sig_ggparentpt = ggparentPt;
+    Signal_tree->Fill();
+}

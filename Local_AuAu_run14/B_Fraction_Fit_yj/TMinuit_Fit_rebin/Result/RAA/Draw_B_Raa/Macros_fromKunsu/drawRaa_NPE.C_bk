@@ -1,0 +1,122 @@
+void drawRaa_NPE(){
+    gStyle->SetOptStat(0);
+    gStyle->SetEndErrorSize(5);
+    double histMax = 5.9;
+    double histMin = 0.14;
+
+    // DUKE
+    double xDukeB[20] = {0.250E+00, 0.750E+00, 0.125E+01, 0.175E+01, 0.225E+01, 0.275E+01, 0.325E+01, 0.375E+01, 0.425E+01, 0.475E+01, 0.525E+01, 0.575E+01, 0.625E+01, 0.675E+01, 0.725E+01, 0.775E+01, 0.825E+01, 0.875E+01, 0.925E+01, 0.975E+01};
+    double yDukeB[20] = {0.952E+00, 0.960E+00, 0.943E+00, 0.964E+00, 0.107E+01, 0.112E+01, 0.109E+01, 0.105E+01, 0.982E+00, 0.897E+00, 0.848E+00, 0.815E+00, 0.759E+00, 0.725E+00, 0.721E+00, 0.683E+00, 0.642E+00, 0.637E+00, 0.623E+00, 0.602E+00};
+    TGraph * gDukeBtoE = new TGraph(20,xDukeB,yDukeB);
+    double yDukeD[20] = {0.740E+00, 0.803E+00, 0.102E+01, 0.850E+00, 0.692E+00, 0.591E+00, 0.535E+00, 0.474E+00, 0.482E+00, 0.471E+00, 0.461E+00, 0.477E+00, 0.459E+00, 0.464E+00, 0.454E+00, 0.450E+00, 0.423E+00, 0.478E+00, 0.445E+00, 0.439E+00};
+    TGraph * gDukeDtoE = new TGraph(20,xDukeB,yDukeD);
+
+    gDukeBtoE->SetLineColor(2);
+    gDukeBtoE->SetLineStyle(4);
+    gDukeBtoE->SetLineWidth(2);
+    gDukeDtoE->SetLineColor(4);
+    gDukeDtoE->SetLineStyle(4);
+    gDukeDtoE->SetLineWidth(2);
+
+    // STAR
+    TFile * npeXiao = new TFile("Raa_B_D.root","READ");
+    TGraphErrors * gNpe = (TGraphErrors*)npeXiao->Get("gr_B_Raa_com_sts");
+    TGraphErrors * gNpeSys = (TGraphErrors*)npeXiao->Get("gr_B_Raa_com_sys");
+    TGraphErrors * gNpeSys2 = (TGraphErrors*)npeXiao->Get("gr_all_B_Npe_Raa_com_sys");
+    TGraphErrors * gNpec = (TGraphErrors*)npeXiao->Get("gr_C_Raa_com_sts");
+    TGraphErrors * gNpecSys = (TGraphErrors*)npeXiao->Get("gr_C_Raa_com_sys");
+    TGraphErrors * gNpecSys2 = (TGraphErrors*)npeXiao->Get("gr_all_C_Npe_Raa_com_sys");
+
+
+    gNpe->SetMarkerStyle(21);
+    gNpe->SetMarkerColor(2);
+    gNpe->SetLineColorAlpha(2,1);
+    gNpeSys->SetLineColorAlpha(2,1);
+    gNpeSys2->SetLineColorAlpha(1,0.25);
+    gNpeSys2->SetLineWidth(6);
+    
+    gNpec->SetMarkerStyle(21);
+    gNpec->SetMarkerColor(4);
+    gNpec->SetLineColorAlpha(4,1);
+    gNpecSys->SetLineColorAlpha(4,1);
+    gNpecSys2->SetLineColorAlpha(1,0.25);
+    gNpecSys2->SetLineWidth(6);
+
+    gNpe->SetMarkerStyle(20);
+    gNpec->SetMarkerStyle(24);
+    gNpe->SetMarkerSize(2.2);
+    gNpec->SetMarkerSize(2.);
+    gNpe->SetLineWidth(2);
+    gNpec->SetLineWidth(2);
+    gNpeSys->SetLineWidth(2);
+    gNpecSys->SetLineWidth(2);
+    gNpeSys->SetMarkerSize(2.2);
+    gNpecSys->SetMarkerSize(2.);
+    gNpeSys2->SetLineColorAlpha(1,0.2);
+    gNpecSys2->SetLineColorAlpha(1,0.2);
+    gNpeSys2->SetLineWidth(8);
+    gNpecSys2->SetLineWidth(8);
+
+    TLine * line = new TLine(0.1,1,8.49,1);
+    line->SetLineStyle(2);
+
+    // Drawing
+    TCanvas * ccFinal = new TCanvas("ccFinal","ccFinal",0,0,700,600);
+    ccFinal->SetLogy();
+    
+    TH1F * hdum = new TH1F("hdum","hdum",100,0.1,8.49);
+    hdum->SetMaximum(histMax);
+    hdum->SetMinimum(histMin);
+    hdum->GetYaxis()->SetTitle("R_{AA}");
+    hdum->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    hdum->SetFillColorAlpha(1,0.25);
+    hdum->SetLineColor(0);
+    hdum->GetXaxis()->SetLabelSize(0.055);
+    hdum->GetYaxis()->SetLabelSize(0.055);
+    hdum->Draw();
+    
+    gDukeBtoE->Draw("same");
+    gDukeDtoE->Draw("same");
+    
+    gNpeSys2->Draw("samez");
+    gNpecSys2->Draw("samez");
+    gNpeSys->Draw("samep[]");
+    gNpecSys->Draw("samep[]");
+    gNpe->Draw("samepz");
+    gNpec->Draw("samepz");
+    line->Draw("same");
+    
+    leg0 = new TLegend(0.575,0.66,0.808,0.92);
+    leg0->SetFillStyle(0);
+    leg0->SetFillColor(0);
+    leg0->SetTextSize(0.04);
+      leg0->SetHeader("  ");
+    leg0->AddEntry(gNpe,"#font[32]{B}#rightarrow#font[32]{e}","p");
+    leg0->AddEntry(gNpec,"#font[32]{D}#rightarrow#font[32]{e}","p");
+    leg0->AddEntry(gDukeBtoE,"DUKE : #font[32]{B}#rightarrow#font[32]{e}","l");
+    leg0->AddEntry(gDukeDtoE,"DUKE : #font[32]{D}#rightarrow#font[32]{e}","l");
+    leg0->Draw("same");
+    
+    TLegend * leg5 = new TLegend(0.169,0.044,0.309,0.345);
+    leg5->SetFillStyle(0);
+    leg5->SetFillColor(0);
+    leg5->SetTextSize(0.033);
+    leg5->SetTextFont(132);
+    leg5->AddEntry(gNpeSys2,"Au+Au global uncertainty","L");
+    leg5->Draw("same");
+    
+    TLatex latex, latex2;
+    latex.SetTextSize(0.045);
+    latex.SetTextAlign(13);  //align at top
+    latex.SetTextColor(2);
+    latex2.SetTextSize(0.045);
+    latex2.SetTextAlign(13);  //align at top
+    latex2.SetTextFont(22);
+
+    latex.DrawLatex(5.2,5,"#font[32]{STAR Preliminary}");
+    latex2.DrawLatex(0.5,4.5,"Au+Au #sqrt{s_{NN}} = 200 GeV");
+    latex2.DrawLatex(0.5,3.5,"0-80%");
+
+    
+    ccFinal->SaveAs("btoeRaaFinal.pdf");
+}

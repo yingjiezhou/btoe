@@ -1,0 +1,312 @@
+int const numPtBins=9;
+double binning[numPtBins+1]={0.6,1,1.2,1.5,2.0,2.5,3.5,4.5,5.5,8.5};
+double binning1[numPtBins+1]={0.6,1,1.2,1.5,2.0+0.2,2.5+0.2,3.5+0.2,4.5+0.2,5.5+0.2,8.5+0.2};
+double pt_center[numPtBins]={0.8,1.1,1.35,1.75,2.25,3,4,5,7};
+double non_flow[numPtBins]={0,0,0,0,0.0112232,0.0224369,0.0436608,0.0655775,0.0919113};
+void CombineV2(int corr=0){
+    gROOT->ProcessLine(".x ~/myStyle.C");
+    
+
+    TPaveText *Name = new TPaveText(0.2,0.8,0.5,0.9,"BRNDC");
+    Name->AddText("STAR Preliminary");
+    Name->SetFillColorAlpha(0, 0);
+    Name->SetTextAlign(12);
+    Name->SetBorderSize(0);
+    TPaveText *Name1 = new TPaveText(0.2,0.7,0.5,0.8,"BRNDC");
+    Name1->AddText("Au+Au #sqrt{s_{NN}}=200 GeV");
+    Name1->SetFillColorAlpha(0, 0);
+    Name1->SetTextAlign(12);
+    Name1->SetBorderSize(0);
+    TPaveText *Name2 = new TPaveText(0.2,0.64,0.5,0.7,"BRNDC");
+    Name2->AddText("0-80%");
+    Name2->SetFillColorAlpha(0, 0);
+    Name2->SetTextAlign(12);
+    Name2->SetBorderSize(0);
+    TGraph * gDukeB = new TGraph();
+    gDukeB->SetLineStyle(3);
+    gDukeB->SetLineWidth(2);
+    getData(gDukeB,"v2_b2e_cen-00-80.dat");
+
+    TFile *f14 = new TFile("../NPE_ANA/FitV2/root/2014_v2.root");
+    g1 = (TGraphErrors*)f14->Get("2014_v2");g1->SetName("g1");
+    g1_sys = (TGraphErrors*)f14->Get("2014_v2_sys");
+    g1_nf = (TGraphAsymmErrors*)f14->Get("2014_v2_nf");
+    TFile *f16 = new TFile("../Run16/FitV2/root/2016_v2.root");
+    g2 = (TGraphErrors*)f16->Get("2016_v2");
+    g2_sys = (TGraphErrors*)f16->Get("2016_v2_sys");
+    g2_nf = (TGraphErrors*)f16->Get("2016_v2_sys");
+    TFile *f161= new TFile("../Run16/FitV2/root/2016_v2_fms.root");
+    gfms = (TGraphErrors*)f161->Get("2016_v2_fms");
+    gfms_sys = (TGraphErrors*)f161->Get("2016_v2_sys_fms");
+    gfms_nf = (TGraphAsymmErrors*)f161->Get("2016_v2_nf_fms");
+    double binns1[5]={2.0+0.13,2.5+0.13,3.5+0.13,4.5+0.13,5.5+0.13};
+    double binns[5]={2.0,2.5,3.5,4.5,5.5};
+    TH1F* hfms = new TH1F("hfms","hfms",4,binns1);
+    TH1F* h = new TH1F("h","h",4,binns);
+    for(int i =0;i<4;i++){
+	double _x;double _y;
+	gfms->GetPoint(i+5,_x,_y);
+	hfms->SetBinContent(i+1,_y);
+	hfms->SetBinError(i+1,gfms->GetErrorY(i+5));
+	
+    }
+    TGraphErrors* g = new TGraphErrors();
+    TGraphErrors* g_sys = new TGraphErrors();
+    TGraphAsymmErrors* g_nf = new TGraphAsymmErrors();
+    double vals[5];
+    double errs[5];
+    double nfs[5];
+    for(int i  =0 ;i<4;i++){
+        double w1 = g1->GetErrorY(i+5);
+        double w2 = g2->GetErrorY(i+5);
+        double s1 = g1_sys->GetErrorY(i+5);
+        double s2 = g2_sys->GetErrorY(i+5);
+	double x1,cen1;
+	double x2,cen2;
+        g1->GetPoint(i+5,x1,cen1);
+	g2->GetPoint(i+5,x2,cen2);
+
+	double nf = g1_nf->GetErrorY(i+6);
+        double stat1 = sqrt(w1*w1);
+        double stat2 = sqrt(w2*w2);
+
+        double w11 = sqrt(w1*w1);
+        double w22 = sqrt(w2*w2);
+
+        double val = (cen1/w1/w1+cen2/w2/w2)/(1/w1/w1+1/w2/w2);
+        double sys = (s1/w1/w1+s2/w2/w2)/(1/w1/w1+1/w2/w2);
+	cout << x1 << " "<< x2 << " " << cen1 << " " << cen2 << " " << w1 << " " << w2 <<  " "<< 1/sqrt(1/w1/w1+1/w2/w2) << " " << nf <<endl;
+
+        if(i>0){
+	    vals[i]=val;errs[i] = sqrt(1/(1/w1/w1+1/w2/w2) + sys*sys); //+ nf*nf);
+	    g->SetPoint(i,x1,val);
+	    g->SetPointError(i,0,1/sqrt(1/w1/w1+1/w2/w2));
+	    g_sys->SetPoint(i,x1,val);
+            g_sys->SetPointError(i,0.0,sys);
+	    g_nf->SetPoint(i,x1,val);
+            g_nf->SetPointError(i,0.05,0.05,nf,0);
+        }
+        else{  
+	    vals[i]=cen1;errs[i] = sqrt(w1*w1 + s1*s1);// + nf*nf);
+	    g->SetPoint(i,x1,cen1);
+            g->SetPointError(i,0,w1);
+            g_sys->SetPoint(i,x1,cen1);
+            g_sys->SetPointError(i,0.,s1);
+            g_nf->SetPoint(i,x1,cen1);
+            g_nf->SetPointError(i,0.05,0.05,nf,0);
+
+        }
+	nfs[i]=nf;
+	cout << "here " << g->GetErrorY(i) << endl;
+    }
+    for(int i =0;i<4;i++){
+        double _x;double _y;
+        g->GetPoint(i,_x,_y);
+        h->SetBinContent(i+1,_y);
+        h->SetBinError(i+1,g->GetErrorY(i));
+
+    }/*
+    for(int i =5;i<9;i++){
+        double _x;double _y;
+        gfms->GetPoint(i,_x,_y);
+	double e1 = gfms->GetErrorY(i);
+	double e2 = gfms_sys->GetErrorY(i);
+	double e3 = gfms_nf->GetErrorYlow(i);
+	vals[i-5]=_y;
+	errs[i-5]=sqrt(e1*e1+e2*e2);
+	nfs[i-5]=e3;
+	cout << "here " << e1 << " " << e2 << " " << e3 << " " << _y << endl;
+	}*/
+    g->SetMarkerColor(1);
+    g->SetLineColor(1);
+    g->SetMarkerStyle(8);
+    g_sys->SetFillColor(1);
+    g_sys->SetFillStyle(3005);
+    g_nf->SetFillColor(kGray);
+    g_nf->SetFillStyle(1000);
+    gfms_nf->SetFillColor(kGray);
+    gfms_nf->SetFillStyle(1000);
+    double sum;
+    for(int i = 0;i<4;i++){
+	cout << "Significances " << vals[i] << " " << errs[i] << " " << vals[i]/errs[i]<< endl;
+	sum+=(vals[i]-nfs[i])/errs[i];
+    }
+    cout << "Chi2 " << sum << endl;
+    TLegend *leg = new TLegend(0.2,0.6,0.9,0.9);
+    g1->SetMarkerColor(1);
+    g1->SetLineColor(1);
+    g1->SetMarkerStyle(8);
+    g1_sys->SetFillColor(1);
+    g1_sys->SetFillStyle(3005);
+    g1_nf->SetFillColor(kGray);
+    g1_nf->SetFillStyle(1000);
+    g2->SetMarkerColor(kBlue);
+    g2->SetLineColor(kBlue);
+    g2->SetMarkerStyle(25);
+    g2_sys->SetLineColor(kBlue);
+    g2_sys->SetFillColor(kBlue);
+    g2_sys->SetFillStyle(3006);
+    g2_nf->SetFillColor(kGray);
+    g2_nf->SetFillStyle(1000);
+    hfms->SetMarkerColor(kBlue);
+    hfms->SetLineColor(kBlue);
+    hfms->SetMarkerStyle(25);
+    gfms_sys->SetMarkerColor(kBlue);
+    gfms_sys->SetLineColor(kBlue);
+    gfms_sys->SetMarkerStyle(25);
+    gfms_sys->SetFillStyle(3004);
+    gfms_sys->SetFillColor(kBlue);
+    TCanvas *c2 = new TCanvas("c2","sep");
+    g1->GetXaxis()->SetTitle("#it{p}_{T} (GeV/#it{c})");
+    g1->GetYaxis()->SetTitle("v_{2} (#it{b} #rightarrow #it{e})");
+    g1->GetYaxis()->SetRangeUser(-0.05,0.2);
+    g1->GetXaxis()->SetRangeUser(1,5.5);
+    g1->Draw("APE");
+    g1_nf->Draw("same E2");
+    g1_sys->Draw("same 5");
+    g1->Draw("same EP");
+    g2_nf->Draw("same E2");
+    g2_sys->Draw("same 5");
+    g2->Draw("same EP");
+    Name->Draw("same");
+    Name1->Draw("same");
+    Name2->Draw("same");    
+    TF1 *f1 = new TF1("f1","0",-100,100);
+    f1->SetLineStyle(7);
+    f1->Draw("same");
+    gPad->RedrawAxis();
+    TCanvas *c22 = new TCanvas("c22","average");
+    TLegend* leg = new TLegend(0.54,0.7,0.83,0.9);
+    leg->AddEntry(g,"TPC Event Plane 0-80%","pe");
+    leg->AddEntry(hfms,"FMS Event Plane 0-60%","pe");
+    leg->AddEntry(gDukeB,"Duke #it{b}#rightarrow#it{e} 0-80%","l");
+    h->GetXaxis()->SetTitle("#it{p}_{T} (GeV/#it{c})");
+    h->GetYaxis()->SetTitle("v_{2} (#it{b} #rightarrow #it{e})");
+    h->GetYaxis()->SetRangeUser(-0.05,0.2);
+    h->GetXaxis()->SetRangeUser(2,5.5);
+    gStyle->SetEndErrorSize(0);
+    h->Draw("PE X0");
+    g_nf->Draw("same E2");
+    h->Draw("same PE X0");
+    gfms_nf->Draw("same E2");
+    hfms->Draw("same PE X0");
+    Name->Draw("same");
+    Name1->Draw("same");
+    //Name2->Draw("same");
+    f1->Draw("same");
+    gDukeB->Draw("same l");
+    leg->Draw("same");
+    gStyle->SetEndErrorSize(5);
+    
+    g_sys->Draw("same []");
+    gfms_sys->Draw("same []");
+
+    gPad->RedrawAxis();
+
+}
+void getData(TH1F *hb, TH1F*hb_sys,char file[], int corr){
+    ifstream data(file);
+   
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    double c = 0;
+	    double c_e= 0 ;	
+	    double Corr = 1;
+	    data >> pT >> b >> b_e >> c;
+	    if(corr==1)Corr = Cos->GetBinContent(pT);
+	    hb->SetBinContent(pT,b/Corr);
+	    hb->SetBinError(pT,b_e/Corr);
+	    hb_sys->SetBinContent(pT,b/Corr);
+	    hb_sys->SetBinError(pT,c/Corr);
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}
+void getData1(TH1F *hbd,TH1F *hb, TH1F*hb_sys,char file[]){
+    ifstream data(file);
+    if(data.is_open()){
+	while(!data.eof()){
+	    char out[50];
+	    double b=0;
+	    double b_e=0;
+	    double pT=0;
+	    double c = 0;
+	    double c_e= 0 ;	    
+	    data >> pT >> b >> b_e >> c;
+	    double temp = hb_sys->GetBinError(pT);
+	    double temp1 = hbd->GetBinContent(pT);
+	    cout << temp1 << " " << b << " " << (temp1-b) << " " << temp << endl;
+	    double error = sqrt((temp1-b)*(temp1-b)+temp*temp);
+	    hb->SetBinContent(pT,b);
+	    hb->SetBinError(pT,b_e);
+	    hb_sys->SetBinError(pT,error);
+	}	
+    } else {
+	cout <<"Nope \n";
+    }
+    data.close();
+}
+void doAve(TH1F* hb,TH1F* hb_sys,TH1F* hc,TH1F* hc_sys,TGraphErrors * g3,TGraphErrors * g3_sys,TGraphAsymmErrors * g3_nf){
+   for(int i =5; i<10;i++){
+	double temp1 = hb->GetBinContent(i);
+	double temp2 = hb->GetBinError(i);
+	double temp22 = hb_sys->GetBinError(i);
+	double temp3 = hc->GetBinContent(i);       
+	double temp4 = hc->GetBinError(i);
+	double temp44 = hc_sys->GetBinError(i);
+	double center = hb->GetBinCenter(i);//pt_center[i-1];
+	if(temp1>0 && temp3>0){
+	    double temp = temp1/temp2/temp2 + temp3/temp4/temp4;
+	    double er = 1/temp2/temp2 + 1/temp4/temp4;
+	    double temp_er = temp22/temp2/temp2 + temp44/temp4/temp4;	    
+	    double err = sqrt(1/er + temp_er/er*temp_er/er);     
+	    g3->SetPoint(i,center,temp/er);
+	    g3_sys->SetPoint(i,center,temp/er);
+	    g3_nf->SetPoint(i,center,temp/er);
+	    g3->SetPointError(i,0,sqrt(1/er));
+	    g3_sys->SetPointError(i,0.05,temp_er/er);	
+	    cout << " Point " << i << " " << temp/er/ sqrt(1/er + temp_er/er*temp_er/er + non_flow[i-1]*non_flow[i-1]) << endl; 
+	}else if(temp1>0 && temp3==0){
+	    double err = sqrt(temp2*temp2+temp22*temp22);
+	    g3->SetPoint(i,center,temp1);
+	    g3_sys->SetPoint(i,center,temp1);
+	    g3_nf->SetPoint(i,center,temp1);
+	    g3->SetPointError(i,0,temp2);
+	    g3_sys->SetPointError(i,0.05,temp22);
+	    cout << " Point " << i << " " << temp1/sqrt(temp2*temp2 + temp22*temp22+ non_flow[i-1]*non_flow[i-1]) <<endl;
+
+	}
+	else if(temp1==0 && temp3>0){
+	    double err = sqrt(temp4*temp4+temp44*temp44);
+	    g3->SetPoint(i,center,temp3);
+	    g3_sys->SetPoint(i,center,temp3);
+	    g3_nf->SetPoint(i,center,temp3);
+	    g3->SetPointError(i,0,temp4);
+	    g3_sys->SetPointError(i,0.05,temp44);	    
+	    cout << " Point " << i << " " << temp3/sqrt(temp4*temp4 + temp44*temp44 + non_flow[i-1]*non_flow[i-1]) <<endl;
+
+	}
+	g3_nf->SetPointEYhigh(i,0);
+	g3_nf->SetPointEYlow(i,non_flow[i-1]);
+	g3_nf->SetPointEXhigh(i,0.05);
+        g3_nf->SetPointEXlow(i,0.05);
+
+    }
+}
+void getData(TGraph *g,char file[]){
+    int cnt=0;
+    ifstream data(file);
+    if(data.is_open()){
+        while(!data.eof()){
+            double x;double y;
+            data >> x >> y;
+            g->SetPoint(cnt,x,y);cnt++;
+        }
+    }
+}

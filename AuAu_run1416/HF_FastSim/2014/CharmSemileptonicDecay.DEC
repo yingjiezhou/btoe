@@ -1,0 +1,40 @@
+Decay D0
+      0.021700000 K*-     e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.035500000 K-      e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.000760000 K_1-    e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.001374504 K_2*-   e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.002890000 pi-     e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.001900000 rho-    e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+#
+Enddecay
+CDecay anti-D0
+#
+Decay D+
+      0.055300000 anti-K*0 e+      nu_e                           PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.088300000 anti-K0 e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.002773020 anti-K_10 e+      nu_e                          PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.002927076 anti-K_2*0 e+      nu_e                         PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.004050000 pi0     e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.001330000 eta     e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.000385142 eta'    e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.002200000 rho0    e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.001600000 omega   e+      nu_e                            PHOTOS   ISGW2; #[Reconstructed PDG2011]
+      0.041000000 K-      pi+     e+      nu_e                    PHOTOS   PHSP; #[Reconstructed PDG2011]
+      0.001078397 anti-K0 pi0     e+      nu_e                    PHOTOS   PHSP; #[Reconstructed PDG2011]
+Enddecay
+CDecay D-
+#
+Decay D_s+
+      0.0239 phi e+ nu_e 	PHOTOS ISGW2;
+      0.0303 eta e+ nu_e     PHOTOS ISGW2;
+      0.0039 K0 e+ nu_e       PHOTOS ISGW2;
+      0.0018 K*0 e+ nu_e       PHOTOS ISGW2;
+Enddecay 
+CDecay D_s-
+#
+Decay Lambda_c+
+      0.036 Lambda0 e+ nu_e  PHOTOS PHSP;#BaryonPCR 1 1 1 1;
+Enddecay
+CDecay anti-Lambda_c-
+#
+End

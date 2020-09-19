@@ -1,0 +1,11 @@
+Sun Apr 28 21:01:05 EDT 2019
+found 1030 purity files
+*** Float Point Exception is OFF ***
+ *** Start at Date : Sun Apr 28 21:01:06 2019
+QAInfo:You are using STAR_LEVEL : SL16d, ROOT_LEVEL : 5.34.30 and node : rcas6284.rcf.bnl.gov 
+
+Processing readPurity.C("/star/data01/pwg/yjzhou19/run14_MuDstread_Yj/script/out/out_ht_purity/st_physics_15138075.purity.root")...
+/star/data01/pwg/yjzhou19/run14_MuDstread_Yj/script/out/out_ht_purity/st_physics_15138075.purity.root
+
+This is the end of ROOT -- Goodbye
+
