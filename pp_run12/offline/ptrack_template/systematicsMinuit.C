@@ -119,6 +119,7 @@ Double_t scX[numPtBins], scY[numPtBins];
 
 Int_t rangeLow, rangeHigh;
 Int_t rangefit = 1.5;
+Int_t sysRangeFit = 1.5;
 
 Bool_t kSymmetrize = kTRUE; // if true, symmetrize templates about dPhi=0
 Bool_t oneParamFit = kFALSE; // if false, do 2 param fit
@@ -132,7 +133,7 @@ Double_t hjpsiconTot[] = {0.12, 0.12, 0.1, 0.06, 0.05, 0.035, 0.035, 0.28643, 0.
 TLatex* drawLatex(Double_t x, Double_t y, char* text, Int_t textFont, Double_t textSize, Int_t colorIndex);
 
 
-void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="default", Bool_t doPileup = kFALSE, Bool_t doPythia = kFALSE, Bool_t doFitRange = kFALSE, Bool_t doJpsi = kFALSE)
+void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="default", Bool_t doPileup = kFALSE, Bool_t doPythia = kFALSE, Bool_t doFitRange = kFALSE, Bool_t doJpsi = kFALSE, Bool_t doOneParamFit = kFALSE)
 {
 //  bUp = kTRUE;
 //  bDown = kTRUE;
@@ -141,7 +142,8 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   TH1F::SetDefaultSumw2();
   TH1D::SetDefaultSumw2();
   
-  if(doFitRange) rangefit = 3;
+  if(doFitRange) sysRangeFit = 3;
+  if(doOneParamFit) oneParamFit = kTRUE;
 
   char name[1000];
   
@@ -157,7 +159,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   //  Bool_t makePDF = checkMakePDF();
   //  Bool_t makeROOT = checkMakeRoot();
   if(makeROOT){
-    sprintf(fname,"FFOutput/sysChange_%s_%s_FIT.root",FileNameR, FileName);
+    sprintf(fname,"FFOutput/sys/sysChange_%s_%s_FIT.root",FileNameR, FileName);
     file = new TFile(fname,"RECREATE");
     if (file->IsOpen()==kFALSE)
     {
@@ -166,7 +168,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     }
   }
   
-  sprintf(fname,"FFOutput/sysChange_default_%s_FIT.root",FileName);
+  sprintf(fname,"FFOutput/sys/sysChange_default_%s_FIT.root",FileName);
   TFile *fdef = new TFile(fname,"READ");
   TGraphAsymmErrors *grd = (TGraphAsymmErrors*)fdef->Get("HT0"); // old pythia template
   
@@ -188,7 +190,25 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
   TFile *fD = new TFile(name,"READ");
   
-  if(doPileup || doPythia || oneParamFit || doFitRange) sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
+  // check if is not use default root file as sys.
+  Bool_t isNotDef = kFALSE;
+  
+  Bool_t doRecGpt = kFALSE; // phe partner e gpt
+  Bool_t doRecMass = kFALSE; // phe pair mass cut
+  Bool_t doPuritySigmae = kFALSE; // change nsigmae
+  Bool_t doPurityPoe = kFALSE;
+  Bool_t doPurityAdc0 = kFALSE;
+  Bool_t doRecGpt2 = kFALSE; // phe partner e gpt, 04 cut
+  
+  if(strcmp ("nsigmae", FileNameR) == 0) doPuritySigmae = kTRUE;
+  if(strcmp ("poe", FileNameR) == 0) doPurityPoe = kTRUE;
+  if(strcmp ("trig", FileNameR) == 0) doPurityAdc0 = kTRUE;
+  if(strcmp ("masscut", FileNameR) == 0) doRecMass = kTRUE;
+  if(strcmp ("gpt", FileNameR) == 0) doRecGpt = kTRUE;
+  if(strcmp ("gpt04", FileNameR) == 0) doRecGpt2 = kTRUE;
+  
+  if(doPuritySigmae || doPurityPoe || doPurityAdc0 || doRecMass || doRecGpt || doRecGpt2) isNotDef = kTRUE;
+  if(doPileup || doPythia || (oneParamFit && !isNotDef) || doFitRange) sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
   else sprintf(name,Form("FFOutput/npe_tree_%s_processed_%s.root", FileName, FileNameR));
   TFile *fS = new TFile(name,"READ");
   
@@ -257,7 +277,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   //  pileU->Divide(1,2);
   
   FILE* pFile;
-  pFile = fopen(Form("FFOutput/SysChange_%s.txt", FileNameR),"w");
+  pFile = fopen(Form("FFOutput/sys/SysChange_%s.txt", FileNameR),"w");
   
   //  for(Int_t ptbin=0; ptbin<numPtBins; ptbin++)
   for(Int_t ptbin=0; ptbin<7; ptbin++)
@@ -560,6 +580,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     //    else
     doFit(gMinuit,p01[ptbin],p00[ptbin],e01U[ptbin],e00U[ptbin],e01D[ptbin],e00D[ptbin]);
     
+    if(oneParamFit) FITPARAS = p00[ptbin];
     if(oneParamFit && bUp) FITPARAS = p00[ptbin]+e00U[ptbin];
     if(oneParamFit && bDown) FITPARAS = p00[ptbin]-e00D[ptbin];
     gMinuitS->SetFCN(chi2_0S);
@@ -594,7 +615,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       eA0US[plotCountSys] = e00US[ptbin];
       eA0DS[plotCountSys] = e00DS[ptbin];
       //      eA0S[plotCountSys] = e00S[ptbin];
-      if(doPythia || doFitRange){
+      if(doPythia){
         Double_t x,y;
         grd->GetPoint(plotCount0, x, y);
         Rb0[plotCount0] = y;
@@ -706,6 +727,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     //    else
     doFit(gMinuit,p21[ptbin],p20[ptbin],e21U[ptbin],e20U[ptbin],e21D[ptbin],e20D[ptbin]);
   
+    if(oneParamFit) FITPARAS = p20[ptbin];
     if(oneParamFit && bUp) FITPARAS = p20[ptbin]+e20U[ptbin];
     if(oneParamFit && bDown) FITPARAS = p20[ptbin]-e20D[ptbin];
     gMinuitS->SetFCN(chi2_2S);
@@ -748,7 +770,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       
       //      eA0S[plotCountSys] = e20S[ptbin];
 //      cout<<FileNameR<<"  "<<Rb0S[plotCountSys]<<"    "<<Rb0[plotCount0]<<endl;
-      if(doPythia || doFitRange){
+      if(doPythia){
         Double_t x,y;
         grd->GetPoint(plotCount0, x, y);
         Rb0[plotCount0] = y;
@@ -1013,7 +1035,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   //    gr0->SetMarkerStyle(22);
   gr0->SetMarkerSize(1.4);
   
-  if(doPythia || doFitRange){
+  if(doPythia){
     grd->SetMarkerStyle(20);
     grd->SetMarkerSize(1.4);
     //  gr0->SetLineColor(kRed);
@@ -1069,7 +1091,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   //  grF->Draw("same");
   //  grFmax->Draw("same");
   //  grFmin->Draw("same");
-  if(doPythia || doFitRange) grd->Draw("same P");
+  if(doPythia) grd->Draw("same P");
   else gr0->Draw("same P");
   
   gr0S->Draw("same P");
@@ -1475,8 +1497,8 @@ void chi2_0S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   
   Int_t ptbin = currentPtBin;
   
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
+  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
+  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
   if(projData0S[ptbin]->GetNbinsX()!= projC[ptbin]->GetNbinsX()){
     cout<<"Warning: unequal bins! bin1 = "<< projData0S[ptbin]->GetNbinsX()<<" bin2 = "<<projC[ptbin]->GetNbinsX()<<endl;
     return 0;
@@ -1517,8 +1539,8 @@ void chi2_2S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   
   Int_t ptbin = currentPtBin;
   
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
+  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
+  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
   if(projData2S[ptbin]->GetNbinsX()!= projC[ptbin]->GetNbinsX()){
     cout<<"Warning: unequal bins! bin1 = "<< projData2S[ptbin]->GetNbinsX()<<" bin2 = "<<projC[ptbin]->GetNbinsX()<<endl;
     return 0;

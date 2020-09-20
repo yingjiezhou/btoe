@@ -2,12 +2,12 @@ TGraphAsymmErrors *getPrelimnaryStat();
 TGraphAsymmErrors *getPrelimnarySys();
 TGraph *getFonll();
 
-void DrawSysStat(const char* FileName="Sep16_09172020"){
+void DrawSysStat(const char* FileName="Sep16_09202020"){
   gROOT->ProcessLine(".x ~/myStyle.C");
   const char* fname="TotalSys"; //totalSys
   
   const int numPtBins = 9;
-  auto fyj = new TFile("FFOutput/sysChange_default_Sep16_FIT.root","READ");
+  auto fyj = new TFile("FFOutput/sys/sysChange_default_Sep16_FIT.root","READ");
   auto gr0 = (TGraphAsymmErrors *)fyj->Get("HT0");
   
   Double_t Rb0[numPtBins];
@@ -26,17 +26,17 @@ void DrawSysStat(const char* FileName="Sep16_09172020"){
   gr0 = new TGraphAsymmErrors(7,p00,p01,dx,dx,p10,p11); // zyj
   TFile* fSys;
   TString fileList[20] = {
-    "FFOutput/sysChange_pileup_Sep16_FIT.root",
-    "FFOutput/sysChange_purity_Sep16_FIT.root",
-    "FFOutput/sysChange_rec_Sep16_FIT.root",
-    "FFOutput/sysChange_gpt_Sep16_FIT.root",
-    "FFOutput/sysChange_masscut_Sep16_FIT.root",
-    "FFOutput/sysChange_nsigmae_Sep16_FIT.root",
-    "FFOutput/sysChange_poe_Sep16_FIT.root",
-    "FFOutput/sysChange_trig_Sep16_FIT.root",
-//    "FFOutput/sysChange_fitrange_Sep16_FIT.root",
-    "FFOutput/sysChange_pythia_Sep16_FIT.root"
-    //    "FFOutput/sysChange_jpsi_Sep16_FIT.root"
+    "FFOutput/sys/sysChange_pileup_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_purity_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_rec_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_gpt_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_masscut_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_nsigmae_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_poe_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_trig_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_pythia_Sep16_FIT.root",
+    "FFOutput/sys/sysChange_fitrange_Sep16_FIT.root"
+    //    "FFOutput/sys/sysChange_jpsi_Sep16_FIT.root"
   };
   
   TCanvas* fp[20];
