@@ -167,6 +167,13 @@ private:
   TH1F *  mh1delPhiHad;
   TH1F *  mh1TrigCount;
   
+  TH2F* mh2nSigmaElec[4];
+  TH2F* mh2Pion_nSigmaElec[4];
+  TH2F* mh2Kaon_nSigmaElec[4];
+  TH2F* mh2Proton_nSigmaElec[4];
+  TH2F* mh2nSigmaElec_pT[4];
+  TH2F* mEta_ptUnlike[4];
+  
   TNtuple *fqaCheck; //!<! output ntuple
   TNtuple *fincCheck; //!<! output ntuple
 
