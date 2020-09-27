@@ -10,7 +10,7 @@ Bool_t checkPaintAllTrigs();
 void checkBatchMode();
 Bool_t checkMakePDF();
 Bool_t checkMakeRoot();
-void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool_t doPurity = kFALSE, Bool_t doRec = kFALSE)
+void offline(const char* FileName="Sep19", const char* FileNameR="default")
 {
   TH1F::SetDefaultSumw2();
   gROOT->SetBatch(kTRUE);
@@ -22,21 +22,31 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
   
   //=========================================================
   // for sys. study
+  Bool_t doPurity = kFALSE;
+  Bool_t doRec = kFALSE;
   Bool_t doRecGpt = kFALSE; // phe partner e gpt
   Bool_t doRecMass = kFALSE; // phe pair mass cut
   Bool_t doPuritySigmae = kFALSE; // change nsigmae
   Bool_t doPurityPoe = kFALSE;
   Bool_t doPurityAdc0 = kFALSE;
   Bool_t doRecGpt2 = kFALSE; // phe partner e gpt, 04 cut
-  
+  Bool_t doMinusP = kFALSE;
+  Bool_t doMinusR = kFALSE;
+  Bool_t doPileup = kFALSE;
+  Bool_t doMinusPp = kFALSE;
+
+  if(strcmp ("purityPlus", FileNameR) == 0) doPurity = kTRUE;
+  if(strcmp ("purityMinus", FileNameR) == 0) doMinusP = kTRUE;
+  if(strcmp ("recPlus", FileNameR) == 0) doRec = kTRUE;
+  if(strcmp ("recMinus", FileNameR) == 0) doMinusR = kTRUE;
+  if(strcmp ("pileupPlus", FileNameR) == 0) doPileup = kTRUE;
+  if(strcmp ("pileupMinus", FileNameR) == 0) doMinusPp = kTRUE;
   if(strcmp ("nsigmae", FileNameR) == 0) doPuritySigmae = kTRUE;
   if(strcmp ("poe", FileNameR) == 0) doPurityPoe = kTRUE;
   if(strcmp ("trig", FileNameR) == 0) doPurityAdc0 = kTRUE;
   if(strcmp ("masscut", FileNameR) == 0) doRecMass = kTRUE;
   if(strcmp ("gpt", FileNameR) == 0) doRecGpt = kTRUE;
   if(strcmp ("gpt04", FileNameR) == 0) doRecGpt2 = kTRUE;
-  
-  
   //===================================================================================
   // Set Output options
   //  Int_t number;
@@ -51,14 +61,14 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
   // Open ROOT File
   char name[1000];
   
-  if(doPurity || doRec) sprintf(name,"output/data/%s_default.root",FileName);
-  else sprintf(name,"output/data/%s_%s.root",FileName, FileNameR);
+  if(doPurity || doRec || doPileup || doMinusP || doMinusR || doMinusPp) sprintf(name,"input/data/%s_default.root",FileName);
+  else sprintf(name,"input/data/%s_%s.root",FileName, FileNameR);
 
-  if(doPurityAdc0) sprintf(name,"output/data/%s_trig.root",FileName);
-  if(doPuritySigmae) sprintf(name,"output/data/%s_nsigmae.root",FileName);
-  if(doPurityPoe) sprintf(name,"output/data/%s_poe.root",FileName);
-  if(doRecMass) sprintf(name,"output/data/%s_masscut.root",FileName);
-  if(doRecGpt) sprintf(name,"output/data/%s_gpt.root",FileName);
+  if(doPurityAdc0) sprintf(name,"input/data/%s_trig.root",FileName);
+  if(doPuritySigmae) sprintf(name,"input/data/%s_nsigmae.root",FileName);
+  if(doPurityPoe) sprintf(name,"input/data/%s_poe.root",FileName);
+  if(doRecMass) sprintf(name,"input/data/%s_masscut.root",FileName);
+  if(doRecGpt) sprintf(name,"input/data/%s_gpt.root",FileName);
   
   
   TFile *f = new TFile(name,"READ");
@@ -124,17 +134,19 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
   for(auto i=0; i<numPtBins; i++){ // combine HT0 and HT2
     if(i<2) {
       if(doPurity) epsilonPurity[i] = hpur0->GetBinContent(i+1)+hpur0->GetBinError(i+1);
+      else if(doMinusP) epsilonPurity[i] = hpur0->GetBinContent(i+1)-hpur0->GetBinError(i+1);
       else epsilonPurity[i] = hpur0->GetBinContent(i+1);
       hpurt->SetBinContent(i+1, epsilonPurity[i]);
       hpurt->SetBinError(i+1, hpur0Tmp->GetBinError(i+1));
     }
     else {
       if(doPurity) epsilonPurity[i] = hpur2->GetBinContent(i+1)+hpur2->GetBinError(i+1);
+      else if(doMinusP) epsilonPurity[i] = hpur2->GetBinContent(i+1)-hpur2->GetBinError(i+1);
       else epsilonPurity[i] = hpur2->GetBinContent(i+1);
       hpurt->SetBinContent(i+1, epsilonPurity[i]);
       hpurt->SetBinError(i+1, hpur2Tmp->GetBinError(i+1));
     }
-    cout<<hpurt->GetBinContent(i+1)<<"    purity"<<endl;;
+    cout<<"purity: "<<hpurt->GetBinContent(i+1)<<endl;;
   }
   hpurt->GetYaxis()->SetRangeUser(0, 1);
   hpurt->GetXaxis()->SetTitle("p_{T,e} GeV/c");
@@ -153,17 +165,11 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
   if(doPurityPoe)hrec = (TH1F*)frec->Get("ReceffPOESys");
   
   for(auto i=0; i<9; i++){
-    if(doRec) {
-      epsilon[i] = hrec->GetBinContent(i+1)+hrec->GetBinError(i+1);
-      hrect->SetBinContent(i+1, epsilon[i]);
-      hrect->SetBinError(i+1, 1e-8);
-    }
-    else {
-      epsilon[i] = hrec->GetBinContent(i+1);
-      cout<<"epsilon[i] "<<epsilon[i]<<endl;
-      hrect->SetBinContent(i+1, epsilon[i]);
-      hrect->SetBinError(i+1, 1e-8); // for PHE, stat error is small
-    }
+    if(doRec) epsilon[i] = hrec->GetBinContent(i+1)+hrec->GetBinError(i+1);
+    else if(doMinusR)epsilon[i] = hrec->GetBinContent(i+1)-hrec->GetBinError(i+1);
+    else epsilon[i] = hrec->GetBinContent(i+1);
+    hrect->SetBinContent(i+1, epsilon[i]);
+    hrect->SetBinError(i+1, 1e-8);
   }
   
   
@@ -818,10 +824,10 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
       pileupCorrection[ptbin][trig]->Sumw2();
       for(Int_t ii=0; ii < pileupCorrection[ptbin][trig]->GetXaxis()->GetLast();ii++)
       {
-        pileupCorrection[ptbin][trig]->SetBinContent(ii,pileCorrect);
+        if(doPileup)pileupCorrection[ptbin][trig]->SetBinContent(ii,pileCorrect + pileCorrect*(puE[1]/pu[1]));
+        else if(doMinusPp)pileupCorrection[ptbin][trig]->SetBinContent(ii,pileCorrect - pileCorrect*(puE[1]/pu[1]));
+        else pileupCorrection[ptbin][trig]->SetBinContent(ii,pileCorrect);
         pileupCorrection[ptbin][trig]->SetBinError(ii,pileCorrect*(puE[1]/pu[1])); // Assign percentage of fit error to pileup correction error
-        //        pileupCorrection[ptbin][trig]->SetBinContent(ii,pileCorrect);
-        //        pileupCorrection[ptbin][trig]->SetBinError(ii,1e-8); // Assign percentage of fit error to pileup correction error
       }
       
       c[trig]->cd(ptbin+1);
@@ -1127,7 +1133,6 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default", Bool
       if(ptbin == 0)pileTmp->Draw();
       else pileTmp->Draw("same");
     }
-    
   }
   fitSlope->cd();
   fs->GetYaxis()->SetRangeUser(-1.2e-4, 2.2e-4);

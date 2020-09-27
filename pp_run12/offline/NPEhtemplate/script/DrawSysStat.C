@@ -2,10 +2,10 @@ TGraphAsymmErrors *getPrelimnaryStat();
 TGraphAsymmErrors *getPrelimnarySys();
 TGraph *getFonll();
 
-void DrawSysStat(const char* FileName="Sep16_09202020"){
+void DrawSysStat(TString FileName="Sep16_0927", bool oneParamFit = kFALSE){
   gROOT->ProcessLine(".x ~/myStyle.C");
-  const char* fname="TotalSys"; //totalSys
   
+  if(oneParamFit)FileName.Append("_fixPara");
   const int numPtBins = 9;
   auto fyj = new TFile("FFOutput/sys/sysChange_default_Sep16_FIT.root","READ");
   auto gr0 = (TGraphAsymmErrors *)fyj->Get("HT0");
@@ -26,35 +26,58 @@ void DrawSysStat(const char* FileName="Sep16_09202020"){
   gr0 = new TGraphAsymmErrors(7,p00,p01,dx,dx,p10,p11); // zyj
   TFile* fSys;
   TString fileList[20] = {
-    "FFOutput/sys/sysChange_pileup_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_purity_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_rec_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_gpt_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_masscut_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_nsigmae_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_poe_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_trig_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_pythia_Sep16_FIT.root",
-    "FFOutput/sys/sysChange_fitrange_Sep16_FIT.root"
+//    "FFOutput/sys/sysChange_pileup_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_purity_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_rec_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_gpt_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_masscut_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_nsigmae_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_poe_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_trig_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_pythia_Sep16_FIT.root",
+//    "FFOutput/sys/sysChange_fitrange_Sep16_FIT.root"
     //    "FFOutput/sys/sysChange_jpsi_Sep16_FIT.root"
+    "FFOutput/sys/sysChange_pileupMinus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_pileupPlus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_purityMinus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_purityPlus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_recMinus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_recPlus_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_gpt_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_masscut_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_nsigmae_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_poe_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_trig_Sep16_FIT.root",
+//     "FFOutput/sys/sysChange_fitrange2_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_fitrange_Sep16_FIT.root",
+     "FFOutput/sys/sysChange_pythia_Sep16_FIT.root",
+    
   };
   
   TCanvas* fp[20];
   TLegend* leg[20];
   TPaveText* lbl[20];
   
-  TString filename[20] = { "Pileup", "Purity", "RecEff", "gp_{T}", "PHEMass", "n#sigma_{e}", "p/E_{0}",  "TrigEff", "PYTHIA tune", "FitRange"};//, "jpsi"};
+  TString filename[20] = { "Pileup(-)", "Pileup(+)","Purity(-)","Purity(+)","RecEff(-)","RecEff(+)", "gp_{T}", "PHEMass", "n#sigma_{e}", "p/E_{0}",  "TrigEff", "FitRange", "PYTHIA tune"};//, "jpsi"};
+//  TString filename[20] = { "Pileup", "Purity", "RecEff", "gp_{T}", "PHEMass", "n#sigma_{e}", "p/E_{0}",  "TrigEff", "FitRange", "PYTHIA tune"};//, "jpsi"};
   int nSys;
   double x[20][numPtBins],y[20][numPtBins];
   double sysP[numPtBins]={0.}, sysM[numPtBins]={0.}, pTSys[numPtBins]={0.}, dxSys[numPtBins]={0};
   double sysEP[numPtBins]={0.}, sysEM[numPtBins]={0.};
   //  auto newArray = new TGraphErrors[20];
   TGraphErrors *grc[20];
-  TGraphErrors *gr[20];
+  TGraphAsymmErrors *gr[20];
   
   int sysNum = 0;
+  double tmp[9];
   for(int i = 0; i < 20; i++)
   {
+    
+    if(oneParamFit && i!=0 && i!=1 && i!=12){
+      auto stmp = fileList[i];
+      stmp.ReplaceAll("_FIT.root", "_FIT_OnePara.root");
+      fileList[i] = stmp;
+    }
     fSys = new TFile(fileList[i]);
     if(!fSys->IsOpen())
       continue;
@@ -62,11 +85,11 @@ void DrawSysStat(const char* FileName="Sep16_09202020"){
     
     cout << "Opened " << fileList[i]<< endl;
     
-    TGraphErrors* grcTemp = (TGraphErrors*)fSys->Get("sysChange");
+    TGraphErrors* grcTemp = (TGraphErrors*)fSys->Get("sysChange"); //percent change
     grc[i] = (TGraphErrors*)grcTemp->Clone(Form("sysChange_%d", i));
     
-    TGraphErrors* grTemp = (TGraphErrors*)fSys->Get("sysChange_stat");
-    gr[i] = (TGraphErrors*)grTemp->Clone(Form("sysChange_stat_%d", i));
+    TGraphAsymmErrors* grTemp = (TGraphAsymmErrors*)fSys->Get("sysChange_stat");
+    gr[i] = (TGraphAsymmErrors*)grTemp->Clone(Form("sysChange_stat_%d", i));
     nSys = grTemp->GetN(); // Get plot array dimension
     for(int ii = 0; ii < nSys; ii++)
     {
@@ -74,20 +97,22 @@ void DrawSysStat(const char* FileName="Sep16_09202020"){
       pTSys[ii] = x[i][ii];
       sysEP[ii] = grTemp->GetErrorYhigh(ii);;
       sysEM[ii] = grTemp->GetErrorYlow(ii);
-      
-      if(i<3){
-        if(y[i][ii] > -0.5 && y[i][ii] < 0.5){
+      // plus, minus pick one
+      if(i<6){
+        if(i==0 || i==2 || i==4) tmp[ii] = y[i][ii];
+        else{
+          if(y[i][ii] < tmp[ii])y[i][ii] = tmp[ii];
           sysP[ii] += y[i][ii]*y[i][ii];
           sysM[ii] += y[i][ii]*y[i][ii];
           cout << "pT: " << pTSys[ii] << " Sys%(+/-): %" << TMath::Sqrt(y[i][ii]*y[i][ii])*100<< endl;
+          grc[i]->SetPoint(ii, pTSys[ii], y[i][ii]);
         }
-        grc[i]->SetPoint(ii, pTSys[ii], TMath::Sqrt(y[i][ii]*y[i][ii]));
       }
       else {
         if(y[i][ii] > -0.5 && y[i][ii] < 0.5) // Add up the squares of all positive contrib in each pt
         {
           if(y[i][ii]>sysEP[ii] && y[i][ii]>sysEM[ii]){
-            //            cout<<y[i][ii]<<"  "<<sysEP[ii]<<"  "<<sysEM[ii]<<"xxxx";
+//            cout<<y[i][ii]<<"  "<<sysEP[ii]<<"  "<<sysEM[ii]<<"xxxx";
             sysP[ii] += (y[i][ii]*y[i][ii]-sysEP[ii]*sysEP[ii]);
             sysM[ii] += (y[i][ii]*y[i][ii]-sysEM[ii]*sysEM[ii]);
             cout << "pT: " << pTSys[ii] << " Sys%(+/-): %" << TMath::Sqrt(y[i][ii]*y[i][ii]-sysEP[ii]*sysEP[ii])*100 << " / %" << TMath::Sqrt(y[i][ii]*y[i][ii]-sysEM[ii]*sysEM[ii])*100 << endl;
@@ -224,20 +249,19 @@ void DrawSysStat(const char* FileName="Sep16_09202020"){
 
   legc->SetNColumns(4);
   legc->Draw("same");
-  pchange->SaveAs(Form("pic/allPercentChange_%s.pdf", FileName));
-//  pchange->SaveAs(Form("pic/PrelimSys_%s.pdf", FileName));
+  pchange->SaveAs(Form("pic/allSys_%s.pdf", FileName.Data()));
   
   // Place canvases in order
   char name[1000];
   TCanvas* temp = new TCanvas();
-  sprintf(name, "pic/sysChange_%s_stat.pdf[", FileName);
+  sprintf(name, "pic/perSysChange_%s_stat.pdf[", FileName.Data());
   temp->Print(name);
-  sprintf(name, "pic/sysChange_%s_stat.pdf", FileName);
+  sprintf(name, "pic/perSysChange_%s_stat.pdf", FileName.Data());
   for(int i = 0; i < sysNum; i++){
     temp=fp[i];
     temp->Print(name);
   }
-  sprintf(name, "pic/sysChange_%s_stat.pdf]", FileName);
+  sprintf(name, "pic/perSysChange_%s_stat.pdf]", FileName.Data());
   temp->Print(name);
   //============================================================================
   TGraphAsymmErrors *pstat = getPrelimnaryStat();
@@ -353,7 +377,7 @@ void DrawSysStat(const char* FileName="Sep16_09202020"){
   
   leg2->Draw("same");
   
-  fpp->SaveAs(Form("pic/%s_%s.pdf",fname, FileName));
+  fpp->SaveAs(Form("pic/totalSys_%s.pdf", FileName.Data()));
   //  auto sf = new TFile("run12NPEh_rBPoints.root", "RECREATE");
   //  sf->cd();
   //  gr0->Write("StatError");

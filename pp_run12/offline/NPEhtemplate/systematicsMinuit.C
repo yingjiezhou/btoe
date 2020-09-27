@@ -117,11 +117,10 @@ Double_t RbPP[2],EbPP[2],pTPP[2],SFPP[2],eSFPP[2];
 // For Scale Check
 Double_t scX[numPtBins], scY[numPtBins];
 
-Int_t rangeLow, rangeHigh;
-Int_t rangefit = 1.5;
-Int_t sysRangeFit = 1.5;
-
 Bool_t kSymmetrize = kTRUE; // if true, symmetrize templates about dPhi=0
+Int_t rangeBinLow, rangeBinHigh;
+Float_t rangefit = 1.5;
+Float_t sysRangeFit = 1.5;
 Bool_t oneParamFit = kFALSE; // if false, do 2 param fit
 Bool_t bUp = kFALSE;
 Bool_t bDown = kFALSE;
@@ -132,8 +131,7 @@ Double_t hjpsiconTot[] = {0.12, 0.12, 0.1, 0.06, 0.05, 0.035, 0.035, 0.28643, 0.
 
 TLatex* drawLatex(Double_t x, Double_t y, char* text, Int_t textFont, Double_t textSize, Int_t colorIndex);
 
-
-void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="default", Bool_t doPileup = kFALSE, Bool_t doPythia = kFALSE, Bool_t doFitRange = kFALSE, Bool_t doJpsi = kFALSE, Bool_t doOneParamFit = kFALSE)
+void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="default", Bool_t doPythia = kFALSE, Bool_t doFitRange = kFALSE, Bool_t doJpsi = kFALSE, Bool_t doOneParamFit = kFALSE)
 {
 //  bUp = kTRUE;
 //  bDown = kTRUE;
@@ -142,8 +140,10 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   TH1F::SetDefaultSumw2();
   TH1D::SetDefaultSumw2();
   
-  if(doFitRange) sysRangeFit = 3;
+  if(doFitRange) sysRangeFit = 3.;
+  if(strcmp ("fitrange2", FileNameR) == 0)  sysRangeFit = 1.7;
   if(doOneParamFit) oneParamFit = kTRUE;
+
 
   char name[1000];
   
@@ -160,6 +160,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   //  Bool_t makeROOT = checkMakeRoot();
   if(makeROOT){
     sprintf(fname,"FFOutput/sys/sysChange_%s_%s_FIT.root",FileNameR, FileName);
+    if(oneParamFit) sprintf(fname,"FFOutput/sys/sysChange_%s_%s_FIT_OnePara.root",FileNameR, FileName);
     file = new TFile(fname,"RECREATE");
     if (file->IsOpen()==kFALSE)
     {
@@ -178,11 +179,11 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   
   //sprintf(name,"output/sim/Done_pythia_npe_tree_May4.root"); // from Zach
 
-  sprintf(name,"output/sim/pythia_npe_tree_May18.root"); // from Zach, old
+  sprintf(name,"input/sim/pythia_npe_tree_May18.root"); // from Zach, old
 //  sprintf(name,"minBiasTemplates111915/readTreeOutput/input/pythia_npe_tree_May9.root"); // from yjzhou
-  if(doPythia) sprintf(name,"output/sim/pythia_npe_tree_May26.root"); // from new pythia tune
+  if(doPythia) sprintf(name,"input/sim/pythia_npe_tree_May26.root"); // from new pythia tune
 //  if(doPythia) sprintf(name,"/Users/zhouyingjie/Local/PWG/btoe/pp_run12/sim/checkCode/offline/Jpsi_sys/rootfile/hf.root"); // with no prompt jpsi,(since non-prompt jpsi is small, can be just from HF, mean non-prompt also removed)
-  if(doPythia && doJpsi) sprintf(name,"output/sim/pythia_npe_tree_May18_hf_OctetJpsi.root");// new, bak
+  if(doPythia && doJpsi) sprintf(name,"input/sim/pythia_npe_tree_May18_hf_OctetJpsi.root");// new, bak
 
   
   TFile *fT = new TFile(name,"READ");
@@ -206,9 +207,10 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   if(strcmp ("masscut", FileNameR) == 0) doRecMass = kTRUE;
   if(strcmp ("gpt", FileNameR) == 0) doRecGpt = kTRUE;
   if(strcmp ("gpt04", FileNameR) == 0) doRecGpt2 = kTRUE;
-  
-  if(doPuritySigmae || doPurityPoe || doPurityAdc0 || doRecMass || doRecGpt || doRecGpt2) isNotDef = kTRUE;
-  if(doPileup || doPythia || (oneParamFit && !isNotDef) || doFitRange) sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
+
+//  if(doPuritySigmae || doPurityPoe || doPurityAdc0 || doRecMass || doRecGpt || doRecGpt2) isNotDef = kTRUE;
+//  if(doPythia || (oneParamFit && !isNotDef) || doFitRange) sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
+  if(doPythia || doFitRange) sprintf(name,Form("FFOutput/npe_tree_%s_processed_default.root", FileName));
   else sprintf(name,Form("FFOutput/npe_tree_%s_processed_%s.root", FileName, FileNameR));
   TFile *fS = new TFile(name,"READ");
   
@@ -244,8 +246,8 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   deltaPhi2 ->Divide(3,3);
   fitResult0->Divide(3,3);
   fitResult2->Divide(3,3);
-  fitResult02->Divide(3,2, 0, 0, 0);
-  fitRatio->Divide(3,2, 0, 0, 0);
+  fitResult02->Divide(3,3, 0, 0, 0);
+  fitRatio->Divide(3,3, 0, 0, 0);
   pileC->Divide(3,3);
 //  deltaPhiSys->Divide(3,3);
   //fitResultC->Divide(3,3);
@@ -353,42 +355,16 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     
     pileupCorrect[ptbin][0] = (TH1D*)fD->Get(Form("pileupCorrection_%i_0",ptbin));
     pileupCorrect[ptbin][1] = (TH1D*)fD->Get(Form("pileupCorrection_%i_2",ptbin));
-    pileupCorrectS[ptbin][0] = (TH1D*)fS->Get(Form("pileupCorrection_%i_0",ptbin));
-    pileupCorrectS[ptbin][1] = (TH1D*)fS->Get(Form("pileupCorrection_%i_2",ptbin));
+    pileupCorrectS[ptbin][0] = (TH1D*)fS->Get(Form("pileupCorrection_%i_0",ptbin))->Clone(Form("sys_pileupCorrection_%i_0",ptbin));
+    pileupCorrectS[ptbin][1] = (TH1D*)fS->Get(Form("pileupCorrection_%i_2",ptbin))->Clone(Form("sys_pileupCorrection_%i_2",ptbin));
     
     pileupCorrect[ptbin][0]->Sumw2(); pileupCorrect[ptbin][1]->Sumw2();
     projData0[ptbin]->Sumw2(); projData2[ptbin]->Sumw2();
     pileupCorrectS[ptbin][0]->Sumw2(); pileupCorrectS[ptbin][1]->Sumw2();
     projData0S[ptbin]->Sumw2(); projData2S[ptbin]->Sumw2();
-    
-    // To test systematic shift in pileup subtraction
-    if(doPileup){
-      TH1D* changeHist;
-      for(int i = 0; i < 2; i++){
-        changeHist = pileupCorrectS[ptbin][i];
-        //        changeHist->SetMarkerStyle(20);
-        TH1D* beforeShift = (TH1D*) changeHist->Clone();
-        beforeShift->SetLineColor(kBlack);
-        beforeShift->SetMarkerColor(kBlack);
-        if(i == 0)
-          beforeShift->SetTitle("Pileup Correction Systematic HT0/HT2");
-        beforeShift->GetYaxis()->SetTitle("1/N dN/d(#Delta#phi)");
-        TAxis* ax = changeHist->GetXaxis();
-        for(int chn = ax->GetFirst(); chn <= ax->GetLast(); chn++)
-        {
-          double current = changeHist->GetBinContent(chn);
-          double error = changeHist->GetBinError(chn);
-          changeHist->SetBinContent(chn, current+error);
-        }
-        //        changeHist->SetTitle("pt ");
-        changeHist->SetLineColor(kRed);
-        changeHist->SetMarkerColor(kBlack);
-        pileupCorrectS[ptbin][i] = (TH1D*)changeHist->Clone(Form("UppileupCorrection_%i_%i",ptbin,i));
-      }
-    }
-    
+
     // Do any rebinning
-    Int_t RB = 2;
+    Int_t RB = 1;
     projB[ptbin]->Rebin(RB);
     projC[ptbin]->Rebin(RB);
     if(doJpsi)projCB[ptbin]->Rebin(RB);
@@ -569,29 +545,24 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     //=======================================================================================
 
     currentPtBin = ptbin;
-    cout << "!!!!!!! HT0 ptbin: " << highpt[ptbin] << "-" << lowpt[ptbin] <<" !!!!!!!"<< endl;
     TMinuit* gMinuit = new TMinuit(2);
     TMinuit* gMinuitS = new TMinuit(2);
-
-    gMinuit->SetFCN(chi2_0);
-    currentPtBin = ptbin;
-    //    if(!oneParamFit) doFit(gMinuit,p01[ptbin], e01U[ptbin],e01D[ptbin]);
-    ////    doFit(gMinuit,p01[ptbin],p00[ptbin],e01[ptbin],e00[ptbin]);
-    //    else
-    doFit(gMinuit,p01[ptbin],p00[ptbin],e01U[ptbin],e00U[ptbin],e01D[ptbin],e00D[ptbin]);
-    
-    if(oneParamFit) FITPARAS = p00[ptbin];
-    if(oneParamFit && bUp) FITPARAS = p00[ptbin]+e00U[ptbin];
-    if(oneParamFit && bDown) FITPARAS = p00[ptbin]-e00D[ptbin];
-    gMinuitS->SetFCN(chi2_0S);
-    if(oneParamFit) doFit(gMinuitS,p01S[ptbin], e01US[ptbin],e01DS[ptbin]);
-    else doFit(gMinuitS,p01S[ptbin],p00S[ptbin],e01US[ptbin],e00US[ptbin],e01DS[ptbin],e00DS[ptbin]);
-    //    doFit(gMinuit,p01S[ptbin],p00S[ptbin],e01S[ptbin],e00S[ptbin]);
-    
     //=======================================================================================
     // assign to plotting variables
     if(highpt[ptbin] < 5)
     {
+      cout << "!!!!!!! HT0 ptbin: " << highpt[ptbin] << "-" << lowpt[ptbin] <<" !!!!!!!"<< endl;
+      gMinuit->SetFCN(chi2_0);
+      currentPtBin = ptbin;
+      doFit(gMinuit,p01[ptbin],p00[ptbin],e01U[ptbin],e00U[ptbin],e01D[ptbin],e00D[ptbin]);
+      
+      if(oneParamFit) FITPARAS = p00[ptbin];
+      if(oneParamFit && bUp) FITPARAS = p00[ptbin]+e00U[ptbin];
+      if(oneParamFit && bDown) FITPARAS = p00[ptbin]-e00D[ptbin];
+      gMinuitS->SetFCN(chi2_0S);
+      if(oneParamFit) doFit(gMinuitS,p01S[ptbin], e01US[ptbin],e01DS[ptbin]);
+      else doFit(gMinuitS,p01S[ptbin],p00S[ptbin],e01US[ptbin],e00US[ptbin],e01DS[ptbin],e00DS[ptbin]);
+      
       pT[ptbin] = (lowpt[ptbin]+highpt[ptbin])/2.;
       dx[plotCount0] = 0.;
       ptOFF1[plotCount0] = pT[ptbin];
@@ -628,7 +599,8 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       sysChangeUp[plotCountSys] = sqrt(abs(eb0US[plotCountSys]*eb0US[plotCountSys]-eb0U[plotCountSys]*eb0U[plotCountSys]));
       sysChangeDown[plotCountSys] = sqrt(abs(eb0DS[plotCountSys]*eb0DS[plotCountSys]-eb0D[plotCountSys]*eb0D[plotCountSys]));
 //      cout<<eb0US[plotCountSys]<<"                    error                 "<<eb0U[plotCountSys]<<endl;
-      sysChange[plotCountSys] = 100.*(Rb0S[plotCountSys]-Rb0[plotCount0])/Rb0[plotCount0];
+      //sysChange[plotCountSys] = 100.*(Rb0S[plotCountSys]-Rb0[plotCount0])/Rb0[plotCount0];
+      sysChange[plotCountSys] = abs(Rb0S[plotCountSys]-Rb0[plotCount0]);
       sysChangeAbs[plotCountSys] = abs(Rb0S[plotCountSys]-Rb0[plotCount0]);
       cout<<FileNameR<<"  HT0 ptbin:"<<lowpt[ptbin]<<" - "<<highpt[ptbin]<<"   perc. change:"<<sysChange[plotCountSys] <<endl;
 
@@ -644,9 +616,9 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       //      pileupCorrect[ptbin][0]->SetMarkerColor(kBlack);
       //      pileupCorrect[ptbin][0]->SetLineColor(kBlack);
 //      pileupCorrect[ptbin][0]->GetYaxis()->SetRangeUser(-0.01, 0.04);
-      pileupCorrect[ptbin][0]->GetYaxis()->SetRangeUser(0., 0.01);
-
+      pileupCorrect[ptbin][0]->GetYaxis()->SetRangeUser(0., 0.015);
       pileupCorrect[ptbin][0]->Draw();
+      pileupCorrectS[ptbin][0]->SetLineColor(kRed);
       pileupCorrectS[ptbin][0]->Draw("same");
       //      sysError[plotCountSys] = ((e01[ptbin]*e01[ptbin])/(p01[ptbin]*p01[ptbin]) + (e01S[ptbin]*e01S[ptbin])/(p01S[ptbin]*p01S[ptbin]))*sysChange[plotCountSys];
       ptSys[plotCountSys] = pT[ptbin];
@@ -717,28 +689,26 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       l1->Draw("same");
 //      lbl[ptbin]->Draw("same");
     }
-    
     //=======================================================================================
-    cout << "!!!!!!! HT2 ptbin: " <<  highpt[ptbin] << "-" << lowpt[ptbin] <<" !!!!!!!"<< endl;
-    gMinuit->SetFCN(chi2_2);
-    //    if(!oneParamFit) doFit(gMinuit,p21[ptbin], e21U[ptbin],e21D[ptbin]);
-    //
-    ////    doFit(gMinuit,p21[ptbin],p20[ptbin],e21[ptbin],e20[ptbin]);
-    //    else
-    doFit(gMinuit,p21[ptbin],p20[ptbin],e21U[ptbin],e20U[ptbin],e21D[ptbin],e20D[ptbin]);
-  
-    if(oneParamFit) FITPARAS = p20[ptbin];
-    if(oneParamFit && bUp) FITPARAS = p20[ptbin]+e20U[ptbin];
-    if(oneParamFit && bDown) FITPARAS = p20[ptbin]-e20D[ptbin];
-    gMinuitS->SetFCN(chi2_2S);
-
-    //    doFit(gMinuit,p21S[ptbin],p20S[ptbin],e21S[ptbin],e20S[ptbin]);
-    if(oneParamFit) doFit(gMinuitS,p21S[ptbin], e21US[ptbin],e21DS[ptbin]);
-    else doFit(gMinuitS,p21S[ptbin],p20S[ptbin],e21US[ptbin],e20US[ptbin],e21DS[ptbin],e20DS[ptbin]);
     
-    // assign to plotting variables
     if(highpt[ptbin] > 4.6)
     {
+      cout << "!!!!!!! HT2 ptbin: " <<  highpt[ptbin] << "-" << lowpt[ptbin] <<" !!!!!!!"<< endl;
+      gMinuit->SetFCN(chi2_2);
+      //    if(!oneParamFit) doFit(gMinuit,p21[ptbin], e21U[ptbin],e21D[ptbin]);
+      //
+      ////    doFit(gMinuit,p21[ptbin],p20[ptbin],e21[ptbin],e20[ptbin]);
+      //    else
+      doFit(gMinuit,p21[ptbin],p20[ptbin],e21U[ptbin],e20U[ptbin],e21D[ptbin],e20D[ptbin]);
+    
+      if(oneParamFit) FITPARAS = p20[ptbin];
+      if(oneParamFit && bUp) FITPARAS = p20[ptbin]+e20U[ptbin];
+      if(oneParamFit && bDown) FITPARAS = p20[ptbin]-e20D[ptbin];
+      gMinuitS->SetFCN(chi2_2S);
+
+      //    doFit(gMinuit,p21S[ptbin],p20S[ptbin],e21S[ptbin],e20S[ptbin]);
+      if(oneParamFit) doFit(gMinuitS,p21S[ptbin], e21US[ptbin],e21DS[ptbin]);
+      else doFit(gMinuitS,p21S[ptbin],p20S[ptbin],e21US[ptbin],e20US[ptbin],e21DS[ptbin],e20DS[ptbin]);
       
       pT[ptbin] = (lowpt[ptbin]+highpt[ptbin])/2.;
       ptOFF1[plotCount0] = pT[ptbin];
@@ -781,7 +751,8 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
 
       sysChangeUp[plotCountSys] = sqrt(abs(eb0US[plotCountSys]*eb0US[plotCountSys]-eb0U[plotCountSys]*eb0U[plotCountSys]));
       sysChangeDown[plotCountSys] = sqrt(abs(eb0DS[plotCountSys]*eb0DS[plotCountSys]-eb0D[plotCountSys]*eb0D[plotCountSys]));
-      sysChange[plotCountSys] = 100.*(Rb0S[plotCountSys]-Rb0[plotCount0])/Rb0[plotCount0];
+      //sysChange[plotCountSys] = 100.*(Rb0S[plotCountSys]-Rb0[plotCount0])/Rb0[plotCount0];
+      sysChange[plotCountSys] = abs(Rb0S[plotCountSys]-Rb0[plotCount0]);
       sysChangeAbs[plotCountSys] = abs(Rb0S[plotCountSys]-Rb0[plotCount0]);
 
       cout<<FileNameR<<"  HT2 ptbin:"<<lowpt[ptbin]<<" - "<<highpt[ptbin]<<"  perc. change :"<<sysChange[plotCountSys] <<endl;
@@ -794,9 +765,10 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
       //      pileupCorrect[ptbin][1]->SetMarkerColor(kBlack);
       //      pileupCorrect[ptbin][1]->SetLineColor(kBlack);
 //      pileupCorrect[ptbin][1]->GetYaxis()->SetRangeUser(-0.01, 0.04);
-      pileupCorrect[ptbin][1]->GetYaxis()->SetRangeUser(0., 0.01);
+      pileupCorrect[ptbin][1]->GetYaxis()->SetRangeUser(0., 0.015);
 
       pileupCorrect[ptbin][1]->Draw();
+      pileupCorrectS[ptbin][1]->SetLineColor(kRed);
       pileupCorrectS[ptbin][1]->Draw("same");
       //      beforeShift->Draw();
       //      pileupCorrectS->Draw("same");
@@ -838,7 +810,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     dClone->GetYaxis()->SetLabelSize(0.05);
     cClone2->SetLineColor(kBlack);
     bClone2->SetLineColor(kRed);
-    if(ptbin>1 && ptbin<6){
+    if(ptbin>1 && ptbin<7){
       fitResult02->cd(ptbin+1);
       dClone->Draw();
       cClone->Draw("same");
@@ -1160,7 +1132,6 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
 //  fitRes->Draw("same");
   
   TCanvas* fitA = new TCanvas("fitA","Test Fit Param A",150,0,1150,1000);
-  //  if(oneParamFit){
   grA->SetName("grA");
   TExec *ex = new TExec("ex","drawtext();");
   grA->GetListOfFunctions()->Add(ex);
@@ -1174,13 +1145,11 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
   grA->SetMarkerStyle(20);
   grA->SetMarkerColor(kRed);
   grA->Draw("AP");
-  gStyle->SetOptFit(1111);
-  grA->Fit("pol0","Q", "", 2,9);
-  //  grA->Fit("pol0","Q");
-  TF1* fitResA = grA->GetFunction("pol0");
-  fitResA->Draw("same");
-  //  }
-  
+//  gStyle->SetOptFit(1111);
+//  grA->Fit("pol0","Q", "", 2,9);
+//  TF1* fitResA = grA->GetFunction("pol0");
+//  fitResA->Draw("same");
+
   TCanvas* fitAS = new TCanvas("fitAS","Test Fit Param AS",150,0,1150,1000);
   if(!oneParamFit){
     fitAS->cd();
@@ -1192,11 +1161,6 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     grAS->SetMarkerStyle(20);
     grAS->SetMarkerColor(kRed);
     grAS->Draw("AP");
-    gStyle->SetOptFit(1111);
-    //  grA->Fit("pol0","Q", "", 0, 8);
-    grAS->Fit("pol0","Q");
-    TF1* fitResAS = grAS->GetFunction("pol0");
-    fitResAS->Draw("same");
   }
   
   // Write to Root File if open
@@ -1265,9 +1229,10 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     // Place canvases in order
     TCanvas* temp = new TCanvas();
     sprintf(name, "FFOutput/sys/%s_%s.pdf[", FileName, FileNameR);
+    if(oneParamFit)sprintf(name, "FFOutput/sys/%s_%s_OnePara.pdf[", FileName, FileNameR);
     temp->Print(name);
     sprintf(name, "FFOutput/sys/%s_%s.pdf", FileName, FileNameR);
-    
+    if(oneParamFit)sprintf(name, "FFOutput/sys/%s_%s_OnePara.pdf[", FileName, FileNameR);
     temp = deltaPhi;
     temp->Print(name);
 //    temp = fitResult0;
@@ -1281,7 +1246,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     // temp = fitResultC;
     // temp->Print(name);
     temp = pileC;
-    if(doPileup) temp->Print(name);
+    temp->Print(name);
     temp = c1;
     temp->Print(name);
     temp = syc;
@@ -1294,6 +1259,7 @@ void systematicsMinuit(const char* FileName="Sep19", const char* FileNameR="defa
     
     
     sprintf(name, "FFOutput/sys/%s_%s.pdf]", FileName, FileNameR);
+    if(oneParamFit)sprintf(name, "FFOutput/sys/%s_%s_OnePara.pdf]", FileName, FileNameR);
     temp->Print(name);
   }
   if(makeROOT)
@@ -1421,10 +1387,10 @@ void chi2_0(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag){
   int nDof = 0;
   
 //  cout<<projData0[ptbin]->GetXaxis()->FindBin(3)<<"   xxxxx"<<projData0[ptbin]->GetXaxis()->FindBin(-3)<<"  "<<projData0[ptbin]->GetXaxis()->FindBin(1.5)<<"  "<<projData0[ptbin]->GetXaxis()->FindBin(1.75)<<projData0[ptbin]->GetBinCenter(125)<<endl;
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
+  rangeBinLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
+  rangeBinHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
 
-  for(int k=rangeLow;k<rangeHigh;k++){
+  for(int k=rangeBinLow;k<rangeBinHigh;k++){
     
     double y1  = projC[ptbin]     -> GetBinContent(k+1);
     double y2  = projB[ptbin]     -> GetBinContent(k+1);
@@ -1465,9 +1431,9 @@ void chi2_2(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag){
   double chiSq = 0.;
   int nDof = 0;
   
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
-  for(int k=rangeLow;k<rangeHigh;k++){
+  rangeBinLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*rangefit);
+  rangeBinHigh  = projData0[ptbin]->GetXaxis()->FindBin(rangefit);
+  for(int k=rangeBinLow;k<rangeBinHigh;k++){
     
     double y1  = projC[ptbin]     -> GetBinContent(k+1);
     double y2  = projB[ptbin]     -> GetBinContent(k+1);
@@ -1497,8 +1463,8 @@ void chi2_0S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   
   Int_t ptbin = currentPtBin;
   
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
+  rangeBinLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
+  rangeBinHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
   if(projData0S[ptbin]->GetNbinsX()!= projC[ptbin]->GetNbinsX()){
     cout<<"Warning: unequal bins! bin1 = "<< projData0S[ptbin]->GetNbinsX()<<" bin2 = "<<projC[ptbin]->GetNbinsX()<<endl;
     return 0;
@@ -1508,7 +1474,7 @@ void chi2_0S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   double chiSq = 0.;
   int nDof = 0;
   
-  for(int k=rangeLow;k<rangeHigh;k++){
+  for(int k=rangeBinLow;k<rangeBinHigh;k++){
     
     double y1  = projC[ptbin]     -> GetBinContent(k+1);
     double y2  = projB[ptbin]     -> GetBinContent(k+1);
@@ -1539,8 +1505,8 @@ void chi2_2S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   
   Int_t ptbin = currentPtBin;
   
-  rangeLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
-  rangeHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
+  rangeBinLow  = projData0[ptbin]->GetXaxis()->FindBin(-1.*sysRangeFit);
+  rangeBinHigh  = projData0[ptbin]->GetXaxis()->FindBin(sysRangeFit);
   if(projData2S[ptbin]->GetNbinsX()!= projC[ptbin]->GetNbinsX()){
     cout<<"Warning: unequal bins! bin1 = "<< projData2S[ptbin]->GetNbinsX()<<" bin2 = "<<projC[ptbin]->GetNbinsX()<<endl;
     return 0;
@@ -1551,7 +1517,7 @@ void chi2_2S(Int_t &npar,Double_t *gin,Double_t &func,Double_t *par,Int_t iflag)
   double chiSq = 0.;
   int nDof = 0;
   
-  for(int k=rangeLow;k<rangeHigh;k++){
+  for(int k=rangeBinLow;k<rangeBinHigh;k++){
     
     double y1  = projC[ptbin]     -> GetBinContent(k+1);
     double y2  = projB[ptbin]     -> GetBinContent(k+1);
