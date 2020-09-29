@@ -42,10 +42,7 @@ void readTreeHadron(TString filelist="readTreeHadron.list"){
   if (chain == 0) return;
   
   //define variables
-  Int_t   Event, numberofcElectrons, numberofbElectrons,numberofbcElectrons, numberofHadrons, noTracks;   //
-  Float_t celectron_id,celectron_status,celectron_pt,celectron_pz,celectron_phi,celectron_eta,celectron_y; //track info
-  Float_t belectron_id,belectron_status,belectron_pt,belectron_pz,belectron_phi,belectron_eta,belectron_y;
-  Float_t bcelectron_id,bcelectron_status,bcelectron_pt,bcelectron_pz,bcelectron_phi,bcelectron_eta,bcelectron_y;
+  Int_t numberofHadrons;   //
   Float_t assoh_id,assoh_status,assoh_pt,assoh_pz,assoh_phi,assoh_eta,assoh_y, assoh_etaS;
   
   auto hLc = new TH1D("hLc", "", 200, 0., 20.);
