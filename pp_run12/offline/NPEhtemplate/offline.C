@@ -127,7 +127,7 @@ void offline(const char* FileName="Sep19", const char* FileNameR="default")
   auto hpur0Tmp = (TH1F*)hpur0->Clone("hPStat_HT0"); // save for stat. error
   auto hpur2Tmp = (TH1F*)hpur2->Clone("hPStat_HT2");
   
-  if(doPurity){
+  if(doPurity || doMinusP){
     hpur0 = (TH1F*)fpur->Get("hPuritySys_HT0");
     hpur2 = (TH1F*)fpur->Get("hPuritySys_HT2");
   }

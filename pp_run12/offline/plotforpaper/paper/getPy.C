@@ -35,47 +35,47 @@ void getPy(){
     Pythia_Be[i]->SetLineColor(kCyan);
   }
   
-  //auto outf = new TFile("PYTHIA_dndphi_ppy06_matt.root", "RECREATE");
+  auto outf = new TFile("PYTHIA_dndphi_ppy06_matt.root", "RECREATE");
 
   TH1F *hHFC_Corr[nbin];
   TH1F *hHFB_Corr[nbin];
   
-  auto c = new TCanvas();
-  c->Divide(2, 2);
-  for(int i = 4; i< nbin+1; i++){
-    c->cd(i-3);
+//  auto c = new TCanvas();
+//  c->Divide(2, 2);
+  for(int i = 1; i< nbin+1; i++){
+//    c->cd(i-3);
     bin1= hHF_PT->GetXaxis()->FindBin(binning[i-1]);
     bin2= hHF_PT->GetXaxis()->FindBin(binning[i]);
     
     hHFB->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
-    sprintf(name,"phy_pyhia_B_%i",i-4);
+    sprintf(name,"phy_pyhia_B_%i",i-1);
     hHFB_Corr[i-1] = (TH1F*)hHFB->ProjectionY();hHFB_Corr[i-1]->SetName(name);
     norm(hHFB_Corr[i-1],hHFB_PT->Integral(bin1,bin2));
     hHFB_Corr[i-1]->SetLineColor(kBlue);
     hHFB_Corr[i-1]->SetMarkerColor(kBlue);
     
     hHFC->GetXaxis()->SetRangeUser(binning[i-1],binning[i]);
-    sprintf(name,"phy_pyhia_D_%i",i-4);
+    sprintf(name,"phy_pyhia_D_%i",i-1);
     hHFC_Corr[i-1] = (TH1F*)hHFC->ProjectionY();hHFC_Corr[i-1]->SetName(name);
     norm(hHFC_Corr[i-1],hHFC_PT->Integral(bin1,bin2));
     hHFC_Corr[i-1]->SetLineColor(kRed);
     hHFC_Corr[i-1]->SetMarkerColor(kRed);
     
-    Pythia_Be[i-4]->GetYaxis()->SetRangeUser(0, Pythia_Be[i-4]->GetMaximum()*1.5);
-    Pythia_Be[i-4]->GetXaxis()->SetTitle("#Delta#phi");
-    Pythia_Be[i-4]->GetYaxis()->SetTitle("(1/N) dN/d#Delta#phi");
+//    Pythia_Be[i-4]->GetYaxis()->SetRangeUser(0, Pythia_Be[i-4]->GetMaximum()*1.5);
+//    Pythia_Be[i-4]->GetXaxis()->SetTitle("#Delta#phi");
+//    Pythia_Be[i-4]->GetYaxis()->SetTitle("(1/N) dN/d#Delta#phi");
 
-    Pythia_Be[i-4]->Draw();
-    Pythia_De[i-4]->Draw("same");
+//    Pythia_Be[i-4]->Draw();
+//    Pythia_De[i-4]->Draw("same");
     hHFC_Corr[i-1]->Rebin(4);
     hHFB_Corr[i-1]->Rebin(4);
-    hHFC_Corr[i-1]->Draw("same hist");
-    hHFB_Corr[i-1]->Draw("hist same");
+//    hHFC_Corr[i-1]->Draw("same hist");
+//    hHFB_Corr[i-1]->Draw("hist same");
   }
-  c->SaveAs("Matt_comp_py6.pdf");
-  //outf->cd();
-  //outf->Write();
-  //outf->Close();
+//  c->SaveAs("Matt_comp_py6.pdf");
+  outf->cd();
+  outf->Write();
+  outf->Close();
 }
 
 void norm(TH1F *h,double n){
