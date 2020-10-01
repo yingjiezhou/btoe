@@ -9,6 +9,7 @@ void DrawSysStat(TString FileName="Sep16_0927", bool oneParamFit = kFALSE){
   const int numPtBins = 9;
   auto fyj = new TFile("FFOutput/sys/sysChange_default_Sep16_FIT.root","READ");
   auto gr0 = (TGraphAsymmErrors *)fyj->Get("HT0");
+  auto grNormDef = (TGraphAsymmErrors *)fyj->Get("normsmall");
   
   Double_t Rb0[numPtBins];
   Double_t p00[numPtBins],p01[numPtBins], p10[numPtBins], p11[numPtBins];
@@ -67,7 +68,8 @@ void DrawSysStat(TString FileName="Sep16_0927", bool oneParamFit = kFALSE){
   //  auto newArray = new TGraphErrors[20];
   TGraphErrors *grc[20];
   TGraphAsymmErrors *gr[20];
-  
+  TGraphAsymmErrors *grNorm[20];
+
   int sysNum = 0;
   double tmp[9];
   for(int i = 0; i < 20; i++)
@@ -87,6 +89,9 @@ void DrawSysStat(TString FileName="Sep16_0927", bool oneParamFit = kFALSE){
     
     TGraphErrors* grcTemp = (TGraphErrors*)fSys->Get("sysChange"); //percent change
     grc[i] = (TGraphErrors*)grcTemp->Clone(Form("sysChange_%d", i));
+    
+    
+    grNorm[i] = (TGraphAsymmErrors*)((TGraphAsymmErrors*)fSys->Get("normfull"))->Clone(Form("normfull_%d", i));
     
     TGraphAsymmErrors* grTemp = (TGraphAsymmErrors*)fSys->Get("sysChange_stat");
     gr[i] = (TGraphAsymmErrors*)grTemp->Clone(Form("sysChange_stat_%d", i));
@@ -250,6 +255,59 @@ void DrawSysStat(TString FileName="Sep16_0927", bool oneParamFit = kFALSE){
   legc->SetNColumns(4);
   legc->Draw("same");
   pchange->SaveAs(Form("pic/allSys_%s.pdf", FileName.Data()));
+  
+  //============================================================================
+  
+  auto legwDef = new TLegend(.2,0.8,0.88,0.89);
+//  auto legc = new TLegend(.3,0.8,0.6,0.84); // for preliminary
+  legwDef->SetFillStyle (0);
+  legwDef->SetFillColor (0);
+  legwDef->SetBorderSize(0);
+  legwDef->SetNColumns(4);
+  
+  auto pchangeNorm = new TCanvas("pchangeNorm", "");
+  pchangeNorm->cd();
+  gPad->SetBottomMargin(0.15);
+  gPad->SetLeftMargin(0.12);
+  
+  grNorm[0]->SetTitle(" ");
+  grNorm[0]->GetXaxis()->SetTitle("NPE p_{T} (GeV/c)");
+  grNorm[0]->GetYaxis()->SetTitle("Norm parameter");
+  
+  grNorm[0]->GetXaxis()->SetTitleSize(0.06);
+  grNorm[0]->GetYaxis()->SetTitleSize(0.06);
+  grNorm[0]->GetXaxis()->SetTitleOffset(0.95);
+  grNorm[0]->GetYaxis()->SetTitleOffset(0.77);
+  grNorm[0]->GetXaxis()->SetLabelSize(0.05);
+  grNorm[0]->GetYaxis()->SetLabelSize(0.05);
+  grNorm[0]->SetLineColor(kRed);
+  grNorm[0]->SetMarkerColor(kRed);
+  grNorm[0]->GetXaxis()->SetLimits(0, 12);
+  grNorm[0]->GetYaxis()->SetRangeUser(0.7, 1.8);
+  grNorm[0]->GetYaxis()->SetNdivisions(505);
+  grNorm[0]->Draw("ape");
+  
+  legwDef->AddEntry(grNormDef, "Default","p");
+  legwDef->AddEntry(grNorm[0],filename[0],"p");
+
+  for(int i = 1; i < sysNum; i++){
+    grNorm[i]->SetTitle(" ");
+    grNorm[i]->SetLineColor(i);
+    grNorm[i]->SetMarkerColor(i);
+    if(i >7)grNorm[i]->GetYaxis()->SetRangeUser(-0.1,0.8);
+    if(i==5){grNorm[i]->SetMarkerColor(kGreen+2);grNorm[i]->SetLineColor(kGreen+2);}
+    if(i==2){grNorm[i]->SetMarkerColor(kRed+1);  grNorm[i]->SetLineColor(kRed+1);}
+    if(i==7){grNorm[i]->SetMarkerColor(46);      grNorm[i]->SetLineColor(46);}
+    if(i==0){grNorm[i]->SetMarkerColor(kRed);    grNorm[i]->SetLineColor(kRed);}
+    if(i==10){grNorm[i]->SetMarkerColor(kGreen+2);grNorm[i]->SetLineColor(kGreen+2);}
+    grNorm[i]->SetMarkerStyle(i+20);
+    grNorm[i]->SetMarkerSize(1.);
+    grNorm[i]->Draw("p same");
+    legwDef->AddEntry(grNorm[i],filename[i],"p");
+  }
+  legwDef->Draw("same");
+  grNormDef->Draw("same");
+  pchangeNorm->SaveAs(Form("pic/allSysNorm_%s.pdf", FileName.Data()));
   
   // Place canvases in order
   char name[1000];
